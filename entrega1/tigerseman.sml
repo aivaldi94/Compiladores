@@ -1,6 +1,5 @@
 structure tigerseman :> tigerseman =
 struct
-(* CooooOmentario *)
 open tigerabs
 open tigersres
 
