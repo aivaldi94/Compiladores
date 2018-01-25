@@ -1,3 +1,4 @@
+(* esto es un comentario *)
 structure tigerseman :> tigerseman =
 struct
 open tigerabs
