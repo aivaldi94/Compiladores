@@ -1,8 +1,9 @@
 structure tigerseman :> tigerseman =
 struct
+
 open tigerabs
 open tigersres
-(* esto es un comentario fsafasf*)
+
 type expty = {exp: unit, ty: Tipo}
 
 type venv = (string, EnvEntry) tigertab.Tabla
