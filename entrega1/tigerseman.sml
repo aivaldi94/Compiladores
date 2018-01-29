@@ -294,7 +294,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 		(* xs es una lista de tuplas*)		
 		| trdec (venv,tenv) (FunctionDec xs) =
 			let 
-			    val empty = Splayset.empty (fn (x,y) => EQUAL)
+			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
 		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  
 			    val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n")
