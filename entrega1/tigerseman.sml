@@ -296,7 +296,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			let 
 			    val empty = Splayset.empty (fn (x,y) => EQUAL)
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
-		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre",length xs) else()  
+		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  
 			    val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n")
 			    (* aux0 : Retorna la lista de Tipo correspondiente a la lista de fields, corroborando que los tipos estén en el entorno *) 
 			    fun aux0 (([], nl) : (field list * int)) : (Tipo list) = []
