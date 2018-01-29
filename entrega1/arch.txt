@@ -1,0 +1,750 @@
+EMPIEZA
+Good
+test1
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+arrtype = TArray of TInt
+int = TInt
+string = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ arrtype = TArray of TInt
+int = TInt
+string = TString
+arrtypebien!
+yeahh baby, everything is cool!
+0test2
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 3: Tipos con el mismo nombre
+
+test3
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+bien!
+yeahh baby, everything is cool!
+0test4
+Fail: ../tests/good/test4.tig no existe!
+test5
+Fail: ../tests/good/test5.tig no existe!
+test6
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 2: Tipos con el mismo nombre
+
+test7
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 2: Tipos con el mismo nombre
+
+test8
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+bien!
+yeahh baby, everything is cool!
+0test9
+Fail: ../tests/good/test9.tig no existe!
+test10
+Fail: ../tests/good/test10.tig no existe!
+test11
+Fail: ../tests/good/test11.tig no existe!
+test12
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+bien!
+yeahh baby, everything is cool!
+0test13
+Fail: ../tests/good/test13.tig no existe!
+test14
+Fail: ../tests/good/test14.tig no existe!
+test15
+Fail: ../tests/good/test15.tig no existe!
+test16
+Fail: ../tests/good/test16.tig no existe!
+test17
+Fail: ../tests/good/test17.tig no existe!
+test18
+Fail: ../tests/good/test18.tig no existe!
+test19
+Fail: ../tests/good/test19.tig no existe!
+test20
+Fail: ../tests/good/test20.tig no existe!
+test21
+Fail: ../tests/good/test21.tig no existe!
+test22
+Fail: ../tests/good/test22.tig no existe!
+test23
+Fail: ../tests/good/test23.tig no existe!
+test24
+Fail: ../tests/good/test24.tig no existe!
+test25
+Fail: ../tests/good/test25.tig no existe!
+test26
+Fail: ../tests/good/test26.tig no existe!
+test27
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+bien!
+yeahh baby, everything is cool!
+0test28
+Fail: ../tests/good/test28.tig no existe!
+test29
+Fail: ../tests/good/test29.tig no existe!
+test30
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Tipos con el mismo nombre
+
+test31
+Fail: ../tests/good/test31.tig no existe!
+test32
+Fail: ../tests/good/test32.tig no existe!
+test33
+Fail: ../tests/good/test33.tig no existe!
+test34
+Fail: ../tests/good/test34.tig no existe!
+test35
+Fail: ../tests/good/test35.tig no existe!
+test36
+Fail: ../tests/good/test36.tig no existe!
+test37
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+bien!
+yeahh baby, everything is cool!
+0test38
+Fail: ../tests/good/test38.tig no existe!
+test39
+Fail: ../tests/good/test39.tig no existe!
+test40
+Fail: ../tests/good/test40.tig no existe!
+test41
+Fail: ../tests/good/test41.tig no existe!
+test42
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 3: Tipos con el mismo nombre
+
+test43
+Fail: ../tests/good/test43.tig no existe!
+test44
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+bien!
+yeahh baby, everything is cool!
+0test45
+Fail: ../tests/good/test45.tig no existe!
+test46
+Fail: ../tests/good/test46.tig no existe!
+test47
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+NameTy int
+int = TInt
+string = TString
+a = TInt
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+a = TInt
+NameTy string
+int = TInt
+string = TString
+a = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+a = TString
+bien!
+yeahh baby, everything is cool!
+0test48
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+NameTy int
+int = TInt
+string = TString
+t = TInt
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+t = TInt
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+bien!
+yeahh baby, everything is cool!
+0test49
+Fail: ../tests/good/test49.tig no existe!
+test50
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+bien!
+yeahh baby, everything is cool!
+0test51
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+string = TString
+a = TRecord[TInt
+ 0 ]
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+a = TRecord[TInt
+ 0 ]
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TRecord[TInt
+ 0 ]
+bien!
+yeahh baby, everything is cool!
+0test52
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 5: Tipos con el mismo nombre
+
+test53
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+bien!
+yeahh baby, everything is cool!
+0test54
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+TIPO left: = TRecord[TString
+ 0 TInt
+ 1 ]
+TIPO right: = TNil
+bien!
+yeahh baby, everything is cool!
+0test55
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+string = TString
+any = TRecord[TInt
+ 0 ]
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+any = TRecord[TInt
+ 0 ]
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TRecord[TInt
+ 0 ]
+Fail: Error -- línea 2: Tipos con el mismo nombre
+
+test56
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+string = TString
+intArray = TArray of TInt
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+intArray = TArray of TInt
+intArrayintArrayintArrayintArrayFail: Error -- línea 2: Tipos con el mismo nombre
+
+test57
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+NameTy int
+int = TInt
+string = TString
+a = TInt
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+a = TInt
+NameTy string
+int = TInt
+string = TString
+a = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+a = TString
+bien!
+yeahh baby, everything is cool!
+0test58
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+TIPO left: = TInt
+TIPO right: = TInt
+bien!
+yeahh baby, everything is cool!
+0test59
+Fail: ../tests/good/test59.tig no existe!
+test60
+Fail: ../tests/good/test60.tig no existe!
+Type
+test1
+Fail: ../tests/type/test1.tig no existe!
+test2
+Fail: ../tests/type/test2.tig no existe!
+test3
+Fail: ../tests/type/test3.tig no existe!
+test4
+Fail: ../tests/type/test4.tig no existe!
+test5
+Fail: ../tests/type/test5.tig no existe!
+test6
+Fail: ../tests/type/test6.tig no existe!
+test7
+Fail: ../tests/type/test7.tig no existe!
+test8
+Fail: ../tests/type/test8.tig no existe!
+test9
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Error de tipos en if 184
+
+test10
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 3: El cuerpo de un while no puede devolver un valor
+
+test11
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Error de tipo en la condición
+
+test12
+Fail: ../tests/type/test12.tig no existe!
+test13
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Error de tipos
+
+test14
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 5: Tipos con el mismo nombre
+
+test15
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Error de tipos en if 191
+
+test16
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Tipos con el mismo nombre
+
+test17
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+test18
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+
+ Tipo: = TString
+Fail: Error -- línea 5: Funcion no existente
+
+test19
+Fail: escape?? a inexist.
+test20
+Fail: escape?? i inexist.
+test21
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+TIPO left: = TInt
+TIPO right: = TInt
+Fail: Error -- línea 8: Error de tipos
+
+test22
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Fail: Error -- línea 8: Campo inexistente
+
+test23
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Fail: Error -- línea 7: Tipos erroneos
+
+test24
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 6: Accediendo a un arreglo inexistente
+
+test25
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 6: Accediendo a un record inexistente
+
+test26
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Error de tipos
+
+test27
+Fail: ../tests/type/test27.tig no existe!
+test28
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Tipos con el mismo nombre
+
+test29
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: Tipos con el mismo nombre
+
+test30
+Fail: ../tests/type/test30.tig no existe!
+test31
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: La inicializacion no tiene el tipo de la variable
+
+test32
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+string = TString
+arrayty = TArray of TInt
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+arrayty = TArray of TInt
+arraytyFail: Error -- línea 7: size no es int o tpo de init incorrecto
+
+test33
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 3: Tipo inexistente (rectype)
+
+test34
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+
+ Tipo: = TString
+Fail: Error -- línea 5: Tipos erroneos
+
+test35
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+
+ Tipo: = TString
+Fail: Error -- línea 5: Argumentos extras o faltantes
+
+test36
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+
+ Tipo: = TString
+Fail: Error -- línea 5: Argumentos extras o faltantes
+
+test37
+Fail: ../tests/type/test37.tig no existe!
+test38
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 5: Tipos con el mismo nombre
+
+test39
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 2: Tipos con el mismo nombre
+
+test40
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+Fail: Error -- línea 4: Error en el cuerpo de la función
+
+test41
+Fail: ../tests/type/test41.tig no existe!
+test42
+Fail: ../tests/type/test42.tig no existe!
+test43
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 7: Error de tipos
+
+test44
+Fail: ../tests/type/test44.tig no existe!
+test45
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+rectype = TRecord[TString
+ 0 TInt
+ 1 ]
+string = TString
+Fail: Error -- línea 0: Error en el cuerpo de la función
+
+test46
+Fail: ../tests/type/test46.tig no existe!
+test47
+Fail: ../tests/type/test47.tig no existe!
+test48
+Fail: ../tests/type/test48.tig no existe!
+test49
+Fail: ../tests/type/test49.tig no existe!
+test50
+Fail: ../tests/type/test50.tig no existe!
+test51
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 0: Error en el cuerpo de la función
+
+test52
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+TIPO left: = TNil
+TIPO right: = TNil
+Fail: Error -- línea 2: Tipos no comparables
+
+test53
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+NameTy int
+int = TInt
+string = TString
+a = TInt
+Entro a trdec (venv, tenve) TypeDec 
+ Agregado 
+ 
+ 
+ int = TInt
+string = TString
+a = TInt
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+
+ Tipo: = TInt
+Fail: Error -- línea 6: No es variable. 242
+
+test54
+Entro a trdec (venv, tenve) FunctionDec 
+
+ Tipo: = TUnit
+Fail: Error -- línea 4: No es variable.Solo lectura
+
+test55
+Fail: ../tests/type/test55.tig no existe!
+test56
+Fail: ../tests/type/test56.tig no existe!
+test57
+Fail: ../tests/type/test57.tig no existe!
+test58
+Fail: ../tests/type/test58.tig no existe!
+test59
+Fail: ../tests/type/test59.tig no existe!
+test60
+Fail: ../tests/type/test60.tig no existe!
