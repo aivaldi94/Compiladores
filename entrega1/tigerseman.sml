@@ -226,7 +226,7 @@ fun transExp ((venv, tenv) : ( venv * tenv)) : (exp -> expty) =
 			let
 				val tinit = #ty (trexp init)
 				val tsize = #ty (trexp size)
-				val _ = print (typ)
+				(* val _ = print (typ) *)
 				val (r,r3) = case tabBusca (typ,tenv) of
 					(*NONE => ((print "hola";tigermuestratipos.printTTipos(tigertab.tabAList (tenv:  (string, Tipo) tigertab.Tabla)));error ("El tipo no se encuentra en el entorno 230", nl)) 	*)					
 					  NONE => error ("El tipo no se encuentra en el entorno 230", nl)
