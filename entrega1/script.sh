@@ -2,7 +2,7 @@
 
 #echo "EMPIEZA" > arch.txt
 
-echo -e "\n EMPIEZA GOOD \n" >> resultado.txt
+echo -e "\n EMPIEZA GOOD \n" > resultado.txt
 
 for (( i=1; i<=60; i++))
 	do
