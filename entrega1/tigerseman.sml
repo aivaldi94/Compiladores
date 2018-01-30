@@ -94,8 +94,8 @@ fun transExp ((venv, tenv) : ( venv * tenv)) : (exp -> expty) =
 			let
 				val {exp=_, ty=tyl} = trexp left
 				val {exp=_, ty=tyr} = trexp right
-				val _ = tigermuestratipos.printTipo ("TIPO left:",tyl,[])
-				val _ = tigermuestratipos.printTipo ("TIPO right:",tyr,[])
+				(* val _ = tigermuestratipos.printTipo ("TIPO left:",tyl,[])
+				val _ = tigermuestratipos.printTipo ("TIPO right:",tyr,[]) *)
 			in
 				if tiposIguales tyl tyr andalso not (tyl=TNil andalso tyr=TNil) andalso tyl<>TUnit then {exp=(), ty=TInt}
 					else error("Tipos no comparables", nl)
@@ -224,7 +224,7 @@ fun transExp ((venv, tenv) : ( venv * tenv)) : (exp -> expty) =
 			let
 				val tinit = #ty (trexp init)
 				val tsize = #ty (trexp size)
-				val _ = print (typ)
+				(* val _ = print (typ) *)
 				val (r,r3) = case tabBusca (typ,tenv) of
 					(*NONE => ((print "hola";tigermuestratipos.printTTipos(tigertab.tabAList (tenv:  (string, Tipo) tigertab.Tabla)));error ("El tipo no se encuentra en el entorno 230", nl)) 	*)					
 					  NONE => error ("El tipo no se encuentra en el entorno 230", nl)
@@ -297,7 +297,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
 		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  
-			    val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n")
+			    (* val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n") *)
 			    (* aux0 : Retorna la lista de Tipo correspondiente a la lista de fields, corroborando que los tipos estén en el entorno *) 
 			    fun aux0 (([], nl) : (field list * int)) : (Tipo list) = []
 			      | aux0 (f :: lf, nl) = case #typ f of
