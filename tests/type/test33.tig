@@ -1,6 +1,7 @@
-/* error : unknown type */
 let
-	var a := rectype {}
+   type a = int
+   var a : a := 2
+   function a (a : a) : a = a
 in
-	0
+   a (a + a); 0
 end

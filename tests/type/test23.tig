@@ -1,9 +1,6 @@
-/* error : type mismatch */
-
-let 
-	type rectype = {name : string , id : int}
-	var rec1 := rectype {name="aname", id=0}
+/* error : formals and actuals have different types */
+let
+	function g (a : int , b : string) : int = a
 in
-	rec1.name := 3;
-	rec1.id := "" 
+	g ("one", "two")
 end

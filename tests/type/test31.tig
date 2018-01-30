@@ -1,6 +1,2 @@
-/* error : type constraint and init value differ */
-let 
-	var a : int := " "
-in
-	a
-end
+/* error: break out of a loop. */
+if 1 then break

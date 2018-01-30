@@ -1,7 +1,6 @@
-/* error : variable not array */
-let 
-	var d :=0
+/* error : formals are more then actuals */
+let
+	function g (a : int , b : string) : int = a
 in
-	d[3]
+	g ("one")
 end
-

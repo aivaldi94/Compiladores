@@ -1,7 +1,6 @@
-/* error : variable not record */
-let 
-	var d :=0
+/* error : formals are fewer then actuals */
+let
+	function g (a : int , b : string) : int = a
 in
-	d.f 
+	g (3,"one",5)
 end
-

@@ -1,10 +1,9 @@
-/* error : procedure returns value  and procedure is used in arexpr */
+/* error : initializing exp and array type differ */
+
 let
-  /* calculate n! */
-  function nfactor (n : int) =
-    if  n = 0
-        then 1
-        else n * nfactor (n-1)
+	type arrayty = array of int
+
+	var a := arrayty [10] of " "
 in
-  nfactor (10)
+	0
 end

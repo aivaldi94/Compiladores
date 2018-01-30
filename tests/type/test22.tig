@@ -1,8 +1,6 @@
-/* error : field not in record type */
-
-let 
-	type rectype = {name : string , id : int}
-	var rec1 := rectype {name="Name", id=0}
+/* error : unknown type */
+let
+	var a := rectype {}
 in
-	rec1.nam := "asd"
+	0
 end

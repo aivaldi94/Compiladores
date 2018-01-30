@@ -1,15 +1,10 @@
-/* error : definition of recursive functions is interrupted */
+/* error : different record types */
+
 let
+	type rectype1 = {name : string , id : int}
+	type rectype2 = {name : string , id : int}
 
-function do_nothing1 (a : int, b : string) : int=
-		 (do_nothing2 (a+1);0)
-
-var d :=0
-
-function do_nothing2 (d : int) : string =
-		 (do_nothing1 (d, "str");" ")
-
+	var rec1 : rectype1 := rectype2 {name="Name", id=0}
 in
-	do_nothing1 (0, "str2")
+	rec1
 end
-
