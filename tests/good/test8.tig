@@ -1,2 +1,8 @@
-/* correct if */
-if (10 > 20) then 30 else 40	
+/* locals hide globals */
+let
+	var a :=0
+
+	function g (a : int) : int = a 
+in
+ g (2)
+end

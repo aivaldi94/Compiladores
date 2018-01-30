@@ -1,13 +1,7 @@
-/* define valid mutually recursive functions */
+/* valid for and let */
+
 let
-
-function do_nothing1 (a : int, b : string) : int=
-		 (do_nothing2 (a+1);0)
-
-function do_nothing2 (d : int) : string =
-		 (do_nothing1 (d, "str");" ")
-
-in
-	do_nothing1 (0, "str2")
+	var a := 0
+in 
+	for i :=0 to 100 do (a :=a+1; ()); 0
 end
-
