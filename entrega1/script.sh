@@ -2,12 +2,12 @@
 
 #echo "EMPIEZA" > arch.txt
 
-#echo "Good" >> arch.txt
-echo -e "EMPIEZA GOOD \n" >> resultado.txt
+echo -e "\n EMPIEZA GOOD \n" >> resultado.txt
 
 for (( i=1; i<=60; i++))
 	do
-		echo "test"$i >> resultado.txt
+		echo "TEST"$i >> resultado.txt
+		echo "\n" >> resultado.txt
 		./tiger ../tests/good/test$i.tig >> resultado.txt
 	done
 
