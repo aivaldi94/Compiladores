@@ -347,7 +347,7 @@ and ty = NameTy of symbol
 		| trdec (venv,tenv) (TypeDec ts) = let 
 		                                        val empty = Splayset.empty String.compare
 		                                        val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
-		                                        val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre ERROR", #2 (hd ts))
+		                                        val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre 350", #2 (hd ts))
 		                                        in (venv, tenv', []) before (print"Entro a trdec (venv, tenve) TypeDec \n Agregado \n \n \n ";tigermuestratipos.printTTipos(tigertab.tabAList (tenv': (string, Tipo) tigertab.Tabla))) end
 
 (*
