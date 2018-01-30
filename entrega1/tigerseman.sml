@@ -157,7 +157,7 @@ fun transExp ((venv, tenv) : ( venv * tenv)) : (exp -> expty) =
 				val exprs = map (fn{exp, ty} => exp) lexti
 				val {exp, ty=tipo} = hd(rev lexti)
 			in	{ exp=(), ty=tipo } end
-		| trexp(AssignExp({var=SimpleVar s, exp}, nl)) = (*COMPLETADO*)
+		| trexp(AssignExp({var=SimpleVar s, exp}, nl)) = 
 			let
 				val r = case tabBusca(s, venv) of
 							NONE => error("Variable no existente 159",nl)
@@ -342,36 +342,12 @@ and dec = FunctionDec of ({name: symbol, params: field list,
            (* val _ = (print ("probando algo: ");tigermuestratipos.printTTipos(tigertab.tabAList (tenv: (string, Tipo) tigertab.Tabla))) *)
 			val ok = aux5 (ListPair.zip (ListPair.zip(lp,tipos), List.map (fn (_,n) => n) xs))
 			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end
-(* 	| TypeDec of ({name: symbol, ty: ty} * pos) list
-and ty = NameTy of symbol
-	| RecordTy of field list
-	| ArrayTy of symbol *)			
+					
 		| trdec (venv,tenv) (TypeDec ts) = let 
 		                                        val empty = Splayset.empty String.compare
 		                                        val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
-		                                        val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre 350", #2 (hd ts))
+		                                        val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre", #2 (hd ts))
 		                                        in (venv, tenv', []) (* before (print"Entro a trdec (venv, tenve) TypeDec \n Agregado \n \n \n ";tigermuestratipos.printTTipos(tigertab.tabAList (tenv': (string, Tipo) tigertab.Tabla))) *) end
-
-(*
-    let
-      (* aux0  ver el int*)
-        fun aux0 (({name = s, typ = t, ...},n) : field * pos) : (string * Tipo ref * int) = (s,ref (#2 (tytoTipo ({name = s, ty = t},n))),3)
-      (* aux1 : *)
-      and tytoTipo (({name = s, ty = NameTy nt}, n) : rectype * pos) : (symbol * Tipo) = (case tabBusca (nt,tenv) of
-                                                                        NONE => (s,TTipo nt)
-                                                                      | SOME t => (s,t))
-          |tytoTipo ({name = s, ty = RecordTy fs}, n) = (s,TRecord (List.map aux0 (List.map (fn f => (f,n)) fs ), ref ()) )
-          |tytoTipo (({name = s, ty = ArrayTy nt}, n) : rectype * pos) = (case tabBusca (nt,tenv) of
-                                                                        NONE => (s,TArray (ref (TTipo nt), ref () ))
-                                                                      | SOME t => (s,TArray (ref t, ref ())))
-        
-      val tl = List.map tytoTipo ts : (symbol * Tipo) list
-      fun aux1 ( [] : (symbol * Tipo) list) : tenv = tenv
-        | aux1 ((s,t):: sts) = tabRInserta(s,t, aux1 sts)
-      val tenv1 = aux1 tl : tenv
-	 (* TRecord of (string * Tipo ref * int) list * unique*)
-    in (venv, tenv, []) end 
-*)
     in trexp end
 
 
