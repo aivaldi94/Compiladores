@@ -94,8 +94,10 @@ fun transExp ((venv, tenv) : ( venv * tenv)) : (exp -> expty) =
 			let
 				val {exp=_, ty=tyl} = trexp left
 				val {exp=_, ty=tyr} = trexp right
+				(*
 				val _ = tigermuestratipos.printTipo ("TIPO left:",tyl,[])
 				val _ = tigermuestratipos.printTipo ("TIPO right:",tyr,[])
+			*)
 			in
 				if tiposIguales tyl tyr andalso not (tyl=TNil andalso tyr=TNil) andalso tyl<>TUnit then {exp=(), ty=TInt}
 					else error("Tipos no comparables", nl)
@@ -295,7 +297,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
 		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  
-			    val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n")
+			    (* val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n") *)
 			    (*
 			    aux0 : Retorna la lista de Tipo correspondiente a la lista de fields, corroborando que los tipos estén en el entorno*) 			    
 			    fun aux0 (([], nl) : (field list * int)) : (Tipo list) = []
@@ -313,7 +315,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			    (* aux1 inserta las funciones al entorno*) 
 			    fun aux1 (([], venv) :((recfun * int) list * venv)) : venv = venv
 		    	      | aux1 ((r, n) :: rns, venv) =  let
-		    	                                            val _ = tigermuestratipos.printTTipos (List.map (fn t => ("\n Tipo:", t)) (TUnit :: aux0 (#params r, n) ))
+		    	                                            (* val _ = tigermuestratipos.printTTipos (List.map (fn t => ("\n Tipo:", t)) (TUnit :: aux0 (#params r, n) )) *)
 		    	                                    in aux1 (rns, tabRInserta (#name r, Func {level = (), label = "hola", formals = aux0 (#params r, n), result = decideResult(#result r, n), extern = false}, venv) )	end	
 		    	                                                 
 			    val env1 = aux1 (xs, venv) (* Este es el entorno en donde ya agregué las funciones *)
