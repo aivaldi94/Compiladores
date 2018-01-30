@@ -314,7 +314,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			    (* aux1 inserta las funciones al entorno*) 
 			    fun aux1 (([], venv) :((recfun * int) list * venv)) : venv = venv
 		    	      | aux1 ((r, n) :: rns, venv) =  let
-		    	                                            val _ = tigermuestratipos.printTTipos (List.map (fn t => ("\n Tipo:", t)) (TUnit :: aux0 (#params r, n) ))
+		    	                                           (* val _ = tigermuestratipos.printTTipos (List.map (fn t => ("\n Tipo:", t)) (TUnit :: aux0 (#params r, n) )) *)
 		    	                                    in aux1 (rns, tabRInserta (#name r, Func {level = (), label = "hola", formals = aux0 (#params r, n), result = decideResult(#result r, n), extern = false}, venv) )	end	
 		    	                                                 
 			    val env1 = aux1 (xs, venv) (* Este es el entorno en donde ya agregué las funciones *)
