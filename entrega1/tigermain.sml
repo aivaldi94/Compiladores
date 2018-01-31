@@ -34,7 +34,7 @@ fun main(args) =
 	in
 		transProg(expr);
 		print "yeahh baby, everything is cool!\n";
-		(* print(Int.toString(size)) *)
+		print(Int.toString(size))
 	end	handle Fail s => print("Fail: "^s^"\n")
 
 val _ = main(CommandLine.arguments())
