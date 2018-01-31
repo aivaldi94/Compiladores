@@ -75,7 +75,7 @@ fun transExp ((venv, tenv) : ( venv * tenv)) : (exp -> expty) =
 		| trexp(NilExp _)= {exp=(), ty=TNil}
 		| trexp(IntExp(i, _)) = {exp=(), ty=TInt}
 		| trexp(StringExp(s, _)) = {exp=(), ty=TString}
-		| trexp(CallExp({func, args}, nl)) = (*COMPLETADO*)		
+		| trexp(CallExp({func, args}, nl)) = 	
 			let 
 				val (ts,t) = case tabBusca(func, venv) of
 							NONE => error("Funcion no existente",nl)
