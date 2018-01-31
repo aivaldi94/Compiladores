@@ -67,6 +67,7 @@ fun tiposIguales (TRecord _) TNil = true
 		(* 	tiposIguales a b *)
 		(* end *)raise Fail "No debería pasar! (2)"
   | tiposIguales a b = (a=b)
+  
 (* transExp : ( ? Tabla * ? Tabla ) -> ( Exp -> {exp : Unit , ty : Tipo})  *)
 fun transExp ((venv, tenv) : ( venv * tenv)) : (exp -> expty) =
 	let fun error(s, p) = raise Fail ("Error -- línea "^Int.toString(p)^": "^s^"\n")
