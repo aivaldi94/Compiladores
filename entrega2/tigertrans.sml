@@ -138,8 +138,7 @@ fun nilExp() = Ex (CONST 0)
 
 fun intExp i = Ex (CONST i)
 
-(*fun simpleVar ((acc, nivel) : access * level) : exp =*)
-fun simpleVar (acc, nivel) =
+fun simpleVar ((acc, nivel) : (access * level)) : exp =
 	Ex (CONST 0) (*COMPLETAR*)
 
 fun varDec(acc) = simpleVar(acc, getActualLev())
