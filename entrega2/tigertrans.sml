@@ -139,7 +139,7 @@ fun nilExp() = Ex (CONST 0)
 fun intExp i = Ex (CONST i)
 
 fun simpleVar ((acc, nivel) : (access * level)) : exp =
-	unEx (exp acc nivel) 
+	Ex (exp acc nivel) 
 	(*(exp acc nivel) devuelve tipo tigertree*)
 
 fun varDec(acc) = simpleVar(acc, getActualLev())
