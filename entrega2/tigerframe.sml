@@ -15,6 +15,7 @@
 		|   localn   |	fp-4*n
 *)
 
+(*oladfgdfgdfg*)
 structure tigerframe :> tigerframe = struct
 
 open tigertree
@@ -82,7 +83,7 @@ fun allocLocal (f: frame) b =
 		in	#actualLocal f:=(!(#actualLocal f)-1); ret end
 	| false => InReg(tigertemp.newtemp())
 fun exp(InFrame k) e = MEM(BINOP(PLUS, TEMP(fp), CONST k))
-| exp(InReg l) e = TEMP l
+| exp (InReg l) e = TEMP l
 fun externalCall(s, l) = CALL(NAME s, l)
 
 fun procEntryExit1 (frame,body) = body

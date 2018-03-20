@@ -3,7 +3,6 @@ struct
 
 open tigerabs
 open tigersres
-open tigertrans
 
 type expty = {exp: unit, ty: Tipo}
 
