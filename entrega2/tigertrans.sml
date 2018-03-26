@@ -9,6 +9,7 @@ exception breakexc
 exception divCero
 	
 type level = {parent:frame option , frame: frame, level: int}
+(*datatype access = InFrame of int | InReg of tigertemp.label*)
 type access = tigerframe.access
 
 type frag = tigerframe.frag
@@ -138,13 +139,15 @@ fun nilExp() = Ex (CONST 0)
 
 fun intExp i = Ex (CONST i)
 
-fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (CONST 0) (* tigerframe.exp (acc) (TEMP tigerframe.fp)*)
+(*datatype access = InFrame of int | InReg of tigertemp.label*)
+fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (tigerframe.exp (acc) (TEMP tigerframe.fp))
 
 fun varDec(acc) = simpleVar(acc, getActualLev())
 
 fun fieldVar(var, field) = 
 	Ex (CONST 0) (*COMPLETAR*)
 
+(* arr tiene que tener tipo TArray (lo obtenés luego de aplicar trvar), ind es una expresión que debe tener tipo TInt *)
 fun subscriptVar(arr, ind) =
 let
 	val a = unEx arr
