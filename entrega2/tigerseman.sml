@@ -247,15 +247,15 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
           | SOME _ => error ("El arreglo no es de tipo arreglo", nl)
 			in if (tiposIguales tinit r) andalso tsize = TInt then {exp = (),ty = TArray (ref r, r3 )} else error ("size no es int o tpo de init incorrecto",nl)
 			end	*)
-and trvar(SimpleVar s, nl) = {exp= unitExp(), ty=TUnit}
-			(*let 
+and trvar(SimpleVar s, nl) = (*{exp= unitExp(), ty=TUnit}*)
+			let 
 			val r = case tabBusca(s,venv) of
 				NONE => error("La variable no se encuentra en el entorno 238",nl)
-				| SOME (VIntro) => {exp = (), ty = TInt} 
-				| SOME (Var {ty = tip}) => {exp = (), ty = tip} 
-				| SOME (Func {level=_, label=_, formals=_,result=_, extern=_})  => error("No es variable. 242",nl)
+				| SOME (VIntro {access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl)), ty = TInt} 
+				| SOME (Var {ty = tip, access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl) ), ty = tip} 
+				| SOME (Func _)  => error("No es variable. 242",nl)
 
-			in r end*)
+			in r end
 		| trvar(FieldVar(v, s), nl) = {exp= unitExp(), ty=TUnit}
 			(*let 
 				val tip = #ty (trvar (v,nl))

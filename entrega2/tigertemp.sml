@@ -1,5 +1,7 @@
 structure tigertemp :> tigertemp = struct
+(* nombres abstractos para direcciones de memoria estáticas *)
 type label = string
+(* nombres abstractos para variables locales*)
 type temp = string
 fun makeString s = s
 local

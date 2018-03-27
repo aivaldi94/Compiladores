@@ -76,15 +76,20 @@ fun allocArg (f: frame) b =
 			val _ = #actualArg f := !(#actualArg f)+1
 		in	InFrame ret end
 	| false => InReg(tigertemp.newtemp())
+	(* malloc *)
 fun allocLocal (f: frame) b = 
 	case b of
 	true =>
 		let	val ret = InFrame(!(#actualLocal f)+localsGap)
 		in	#actualLocal f:=(!(#actualLocal f)-1); ret end
 	| false => InReg(tigertemp.newtemp())
-(* Es raro que TEMP(fp) no sea e *)
-fun exp(InFrame k) e = MEM(BINOP(PLUS, TEMP(fp), CONST k))
-| exp (InReg l) e = TEMP l
+
+(* Habría que verificar que esto ande correctamente *)	
+fun getFrame 0 = TEMP(fp)
+	| getFrame n = MEM(BINOP(PLUS, (getFrame (n-1)), CONST fpPrev))
+
+fun exp (InFrame k) e = MEM(BINOP(PLUS, getFrame e, CONST k))
+  | exp (InReg l) e = TEMP l
 
 fun externalCall(s, l) = CALL(NAME s, l)
 

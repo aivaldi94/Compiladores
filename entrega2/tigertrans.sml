@@ -140,7 +140,9 @@ fun nilExp() = Ex (CONST 0)
 fun intExp i = Ex (CONST i)
 
 (*datatype access = InFrame of int | InReg of tigertemp.label*)
-fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (tigerframe.exp (acc) (TEMP tigerframe.fp))
+(* A la función tigergrame.exp le paso la cantidad de niveles que debe saltar para llegar al frame donde la variable está definida*)
+(* Habría que verificar que esto ande correctamente *)	
+fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (tigerframe.exp acc (getActualLev() - nivel))
 
 fun varDec(acc) = simpleVar(acc, getActualLev())
 
