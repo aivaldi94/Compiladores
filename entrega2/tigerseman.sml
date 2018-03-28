@@ -256,25 +256,27 @@ and trvar(SimpleVar s, nl) = (*{exp= unitExp(), ty=TUnit}*)
 				| SOME (Func _)  => error("No es variable. 242",nl)
 
 			in r end
-		| trvar(FieldVar(v, s), nl) = {exp= unitExp(), ty=TUnit}
-			(*let 
-				val tip = #ty (trvar (v,nl))
+		| trvar(FieldVar(v, s), nl) = (*{exp= unitExp(), ty=TUnit}*)
+			let 
+				val {exp=expfield, ty=tip} = trvar (v,nl)
 				val r = case tip of 
+					(* Supongo que el int del TRecord es el número de campo *)
 					(TRecord (l,_)) => List.filter (fn (a,_,_) => a = s) l
 					| _ => error("Accediendo a un record inexistente",nl)
-			in if length r = 1 then  {exp=(),ty= (!(#2 (hd r)))}  else error("Campo inexistente",nl) end
-			*)
-		| trvar(SubscriptVar(v, e), nl) = {exp= unitExp(), ty=TUnit}
-			(*let 
-				val {exp=_,ty=tipex} = trexp e
+			in if length r = 1 then  {exp=tigertrans.fieldVar (expfield, #3 (hd r)),ty= (#2 (hd r))}  else error("Campo inexistente",nl) end
+			
+		| trvar(SubscriptVar(v, e), nl) = (*{exp= unitExp(), ty=TUnit}*)
+			let 
+				val {exp=expint,ty=tipex} = trexp e
 				val r1 = case tipex of
 					TInt => ()
 					| _ => error("El indice no es un int",nl)
-				val tip = #ty (trvar (v,nl))
+				val {exp=exparr, ty=tip} = trvar (v,nl)
 				val r = case tip of 
-					(TArray (tr,_)) => {exp=(),ty=(!tr)} 
+					(* Saqué la referencia. Ahora TArray tiene un TTipo y no una referencia a *)
+					(TArray (tr,_)) => {exp=(tigertrans.subscriptVar (exparr, expint)),ty=(tr)} 
 					| _ => error("Accediendo a un arreglo inexistente",nl)
-			in r end*)
+			in r end
 
 (*
 and dec = FunctionDec of ({name: symbol, params: field list,

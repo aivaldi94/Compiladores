@@ -147,7 +147,18 @@ fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (tigerframe.exp acc (ge
 fun varDec(acc) = simpleVar(acc, getActualLev())
 
 fun fieldVar(var, field) = 
-	Ex (CONST 0) (*COMPLETAR*)
+let
+	val a = unEx var
+	val i = CONST field
+	val ra = newtemp()
+	val ri = newtemp()
+in
+	Ex( ESEQ(seq[MOVE(TEMP ra, a),
+		MOVE(TEMP ri, i),
+		EXP(externalCall("_checkindex", [TEMP ra, TEMP ri]))],
+		MEM(BINOP(PLUS, TEMP ra,
+			BINOP(MUL, TEMP ri, CONST tigerframe.wSz)))))
+end
 
 (* arr tiene que tener tipo TArray (lo obtenés luego de aplicar trvar), ind es una expresión que debe tener tipo TInt *)
 fun subscriptVar(arr, ind) =
