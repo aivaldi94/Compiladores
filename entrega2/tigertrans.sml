@@ -120,9 +120,11 @@ fun stringExp(s: string) =
 		val str = ".string \""^s^"\""
 		val _ = datosGlobs:=(!datosGlobs @ [STRING(l, len), STRING("", str)])
 	in	Ex(NAME l) end
+	
 fun preFunctionDec() =
 	(pushSalida(NONE);
 	actualLevel := !actualLevel+1)
+
 fun functionDec(e, l, proc) =
 	let	val body =
 				if proc then unNx e
@@ -130,6 +132,7 @@ fun functionDec(e, l, proc) =
 		val body' = procEntryExit1(#frame l, body)
 		val () = procEntryExit{body=Nx body', level=l}
 	in	Ex(CONST 0) end
+	
 fun postFunctionDec() =
 	(popSalida(); actualLevel := !actualLevel-1)
 
@@ -232,13 +235,50 @@ fun forExp {lo, hi, var, body} =
 	Ex (CONST 0) (*COMPLETAR*)
 
 fun ifThenExp{test, then'} =
-	Ex (CONST 0) (*COMPLETAR*)
+let
+	val cf = unCx test
+	val expthen = unNx then'
+	val (t,f) = (newlabel(), newlabel())
+in
+	Nx (seq[cf(t,f),
+		LABEL t,
+		expthen,
+		LABEL f])
+		
+end
+ (*COMPLETADO*)
 
 fun ifThenElseExp {test,then',else'} =
-	Ex (CONST 0) (*COMPLETAR*)
+let
+	val cf = unCx test
+	val expthen = unEx then'
+	val expelse = unEx else'
+	val (t,f,r) = (newlabel(), newlabel(), newtemp())
+in
+	Ex (ESEQ(seq[MOVE(TEMP r, expthen),
+			cf(t,f),
+		    LABEL f,
+		    MOVE(TEMP r, expelse),
+		    LABEL t],
+		    TEMP r))
+end
+(*COMPLETADO - DISTINTO A LA CARPETA*)
 
 fun ifThenElseExpUnit {test,then',else'} =
-	Ex (CONST 0) (*COMPLETAR*)
+let
+	val cf = unCx test
+	val expthen = unNx then'
+	val expelse = unNx else'
+	val (t,f) = (newlabel(), newlabel())
+in
+	Nx (seq[cf(t,f),
+		LABEL t,
+		expthen,
+		LABEL f,
+		expelse])
+		
+end
+(*COMPLETADO*)
 
 fun assignExp{var, exp} =
 let

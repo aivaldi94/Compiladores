@@ -235,18 +235,18 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 			end
 		| trexp(BreakExp nl) =
 			{exp=nilExp(), ty=TUnit}
-		| trexp(ArrayExp({typ, size, init}, nl)) = {exp= unitExp(), ty=TUnit}
-			(*let
-				val tinit = #ty (trexp init)
-				val tsize = #ty (trexp size)
+		| trexp(ArrayExp({typ, size, init}, nl)) = (*{exp= unitExp(), ty=TUnit}*)
+			let
+				val {exp=einit, ty=tinit}  = trexp init
+				val {exp=esize, ty=tsize} = trexp size
 				(* val _ = print (typ) *)
 				val (r,r3) = case tabBusca (typ,tenv) of
 					(*NONE => ((print "hola";tigermuestratipos.printTTipos(tigertab.tabAList (tenv:  (string, Tipo) tigertab.Tabla)));error ("El tipo no se encuentra en el entorno 230", nl)) 	*)					
 					  NONE => error ("El tipo no se encuentra en el entorno 230", nl)
-					| SOME (TArray (tipo,r2)) =>  (!tipo,r2)
-          | SOME _ => error ("El arreglo no es de tipo arreglo", nl)
-			in if (tiposIguales tinit r) andalso tsize = TInt then {exp = (),ty = TArray (ref r, r3 )} else error ("size no es int o tpo de init incorrecto",nl)
-			end	*)
+					| SOME (TArray (tipo,r2)) =>  (tipo,r2)
+					| SOME _ => error ("El arreglo no es de tipo arreglo", nl)
+			in if (tiposIguales tinit r) andalso tsize = TInt then {exp = tigertrans.arrayExp({init=einit, size=esize}),ty = TArray (r, r3 )} else error ("size no es int o tipo de init incorrecto",nl)
+			end	
 and trvar(SimpleVar s, nl) = (*{exp= unitExp(), ty=TUnit}*)
 			let 
 			val r = case tabBusca(s,venv) of
