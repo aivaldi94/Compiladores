@@ -179,7 +179,12 @@ in
 end
 
 fun recordExp l =
-	Ex (CONST 0) (*COMPLETAR*)
+let
+	val s = CONST (length l)
+	val is = map (fn (e,n) => unEx e) l
+in
+	Ex (externalCall("allocRecord", s :: is))
+end
 
 fun arrayExp{size, init} =
 let
@@ -196,7 +201,11 @@ fun letExp ([], body) = Ex (unEx body)
  |  letExp (inits, body) = Ex (ESEQ(seq inits,unEx body))
 
 fun breakExp() = 
-	Ex (CONST 0) (*COMPLETAR*)
+let
+	val s = topSalida()
+in
+	Nx (JUMP (NAME s, [s]))
+end (*COMPLETADO*)
 
 fun seqExp ([]:exp list) = Nx (EXP(CONST 0))
 	| seqExp (exps:exp list) =
@@ -230,9 +239,27 @@ in
 		JUMP(NAME l1, [l1]),
 		LABEL l3])
 end
-
+(* REVISAR *)
 fun forExp {lo, hi, var, body} =
-	Ex (CONST 0) (*COMPLETAR*)
+let
+	val var = unEx var
+	val hi = unEx hi 
+	val lo = unEx lo
+	val body = unNx body
+	val tmp = newtemp()
+	val (sigue, sigue1, salida) = (newlabel(), newlabel(), topSalida())
+in	 
+	Nx (seq [MOVE (var,lo), 
+		MOVE (TEMP tmp, hi),
+		CJUMP (LE, var, TEMP tmp, sigue, salida),
+		LABEL sigue, 
+		body, 
+		CJUMP (EQ, var, TEMP tmp, salida, sigue1),
+		LABEL sigue1, 
+		MOVE (var, BINOP (PLUS, var, CONST 1)),
+		JUMP (NAME sigue, [sigue]),
+		LABEL salida])
+end
 
 fun ifThenExp{test, then'} =
 let

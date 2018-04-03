@@ -134,7 +134,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 						| _ => raise Fail "No debería pasar! (3)"
 				else error("Error de tipos", nl)
 			end
-		| trexp(RecordExp({fields, typ}, nl)) =
+		| trexp(RecordExp({fields : (symbol * tigerabs.exp) list, typ : symbol}, nl)) =
 			let
 				(* Traducir cada expresión de fields *)
 				val tfields = map (fn (sy,ex) => (sy, trexp ex)) fields
@@ -142,7 +142,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				(* Buscar el tipo *)
 				val (tyr, cs) = case tabBusca(typ, tenv) of
 					SOME t => (case tipoReal t of
-						TRecord (cs, u) => (TRecord (cs, u), cs)
+						TRecord (cs, u) => (TRecord (cs : (string * Tipo * int) list , u), cs)
 						| _ => error(typ^" no es de tipo record", nl))
 					| NONE => error("Tipo inexistente ("^typ^")", nl)
 				
@@ -202,7 +202,9 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 		| trexp(WhileExp({test, body}, nl)) =
 			let
 				val ttest = trexp test
+				val _ = preWhileForExp ()
 				val tbody = trexp body
+				val _ = postWhileForExp()
 			in
 				if tipoReal (#ty ttest) = TInt andalso #ty tbody = TUnit then {exp=whileExp {test=(#exp ttest), body=(#exp tbody), lev=topLevel()}, ty=TUnit}
 				else if tipoReal (#ty ttest) <> TInt then error("Error de tipo en la condición", nl)
@@ -234,26 +236,26 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				{exp=seqExp(expdecs@[expbody]), ty=tybody}
 			end
 		| trexp(BreakExp nl) =
-			{exp=nilExp(), ty=TUnit}
-		| trexp(ArrayExp({typ, size, init}, nl)) = (*{exp= unitExp(), ty=TUnit}*)
+			{exp=breakExp(), ty=TUnit}
+		| trexp(ArrayExp({typ, size, init}, nl)) = 
 			let
 				val {exp=einit, ty=tinit}  = trexp init
 				val {exp=esize, ty=tsize} = trexp size
 				(* val _ = print (typ) *)
 				val (r,r3) = case tabBusca (typ,tenv) of
 					(*NONE => ((print "hola";tigermuestratipos.printTTipos(tigertab.tabAList (tenv:  (string, Tipo) tigertab.Tabla)));error ("El tipo no se encuentra en el entorno 230", nl)) 	*)					
-					  NONE => error ("El tipo no se encuentra en el entorno 230", nl)
+					  NONE => error ("El tipo no se encuentra en el entorno", nl)
 					| SOME (TArray (tipo,r2)) =>  (tipo,r2)
 					| SOME _ => error ("El arreglo no es de tipo arreglo", nl)
 			in if (tiposIguales tinit r) andalso tsize = TInt then {exp = tigertrans.arrayExp({init=einit, size=esize}),ty = TArray (r, r3 )} else error ("size no es int o tipo de init incorrecto",nl)
 			end	
-and trvar(SimpleVar s, nl) = (*{exp= unitExp(), ty=TUnit}*)
+and trvar(SimpleVar s, nl) = 
 			let 
 			val r = case tabBusca(s,venv) of
-				NONE => error("La variable no se encuentra en el entorno 238",nl)
+				NONE => error("La variable no se encuentra en el entorno",nl)
 				| SOME (VIntro {access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl)), ty = TInt} 
 				| SOME (Var {ty = tip, access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl) ), ty = tip} 
-				| SOME (Func _)  => error("No es variable. 242",nl)
+				| SOME (Func _)  => error("No es variable",nl)
 
 			in r end
 		| trvar(FieldVar(v, s), nl) = (*{exp= unitExp(), ty=TUnit}*)
@@ -265,7 +267,7 @@ and trvar(SimpleVar s, nl) = (*{exp= unitExp(), ty=TUnit}*)
 					| _ => error("Accediendo a un record inexistente",nl)
 			in if length r = 1 then  {exp=tigertrans.fieldVar (expfield, #3 (hd r)),ty= (#2 (hd r))}  else error("Campo inexistente",nl) end
 			
-		| trvar(SubscriptVar(v, e), nl) = (*{exp= unitExp(), ty=TUnit}*)
+		| trvar(SubscriptVar(v, e), nl) = 
 			let 
 				val {exp=expint,ty=tipex} = trexp e
 				val r1 = case tipex of
