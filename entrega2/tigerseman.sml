@@ -82,13 +82,15 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 							| SOME (VIntro _) => error("No es funcion",nl)
 							| SOME (Var _) => error("No es funcion",nl)
 							| SOME (Func {formals=l, result=tip, ...})  => (l,tip)
+							(* SOME (Func {level=lev, label=lab,formals=l,result=tip,extern=ext})  => (l,tip)*)
 							
 				val _ = if (length ts <> length args) then error("Argumentos extras o faltantes",nl) else ()
 				val m = ListPair.zip (map (fn x => #ty (trexp x)) args : Tipo list, ts) : (Tipo * Tipo) list
 				fun equalList ([] : (Tipo * Tipo) list) : bool = true
-				 | equalList ((t1, t2) :: tss) = if (tiposIguales t1 t2) then equalList tss else false			
+				 | equalList ((t1, t2) :: tss) = if (tiposIguales t1 t2) then equalList tss else false	
+				(* En algun momento no habria que encontrar el exp de los argumentos? para pasarle a CALL en tigertrans *)						
 			in
-				if equalList m then {exp=unitExp(), ty= t} else error("Tipos erroneos",nl) (*COMPLETAR*)
+				if equalList m then {exp=unitExp(), ty= t} else error("Tipos erroneos",nl) (*exp=callExp(func,ext,..,lev,calcular static link)*)
 			end
 		| trexp(OpExp({left, oper=EqOp, right}, nl)) =
 			let

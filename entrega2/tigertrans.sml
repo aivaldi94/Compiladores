@@ -195,7 +195,7 @@ in
 end
 
 fun callExp (name,external,isproc,lev:level,ls) = 
-	Ex (CONST 0) (*COMPLETAR*)
+	Ex (CONST 0) (*CALL (NAME name, [ls,] ])*)
 
 fun letExp ([], body) = Ex (unEx body)
  |  letExp (inits, body) = Ex (ESEQ(seq inits,unEx body))
