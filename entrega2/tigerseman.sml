@@ -168,10 +168,10 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 		| trexp(AssignExp({var=SimpleVar s, exp}, nl)) = 
 			let
 				val r = case tabBusca(s, venv) of
-							NONE => error("Variable no existente 159",nl)
+							NONE => error("Variable no existente",nl)
 							| SOME (VIntro _) => error("No es variable.Solo lectura",nl)
 							| SOME (Var {ty = tip,...}) => tip 
-							| SOME (Func _)  => raise Fail "No es variable. 164"
+							| SOME (Func _)  => raise Fail "No es variable."
 				val texp = (#ty (trexp exp))
 			in if (tiposIguales texp r) then {exp=unitExp(),ty= TUnit} else error("Tipos erroneos",nl) end	(*COMPLETAR*)			
 
