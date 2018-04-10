@@ -315,12 +315,93 @@ in
 	Nx (MOVE(v,vl))
 end
 
-fun binOpIntExp {left, oper, right} = 
-	Ex (CONST 0) (*COMPLETAR*)
+fun binOpIntExp {left, oper = PlusOp, right} = 
+let
+	val l = unEx left
+	val r = unEx right
+in
+	Ex (BINOP(PLUS,l,r))
+end
+	| binOpIntExp {left, oper = MinusOp, right} = 
+let
+	val l = unEx left
+	val r = unEx right
+in
+	Ex (BINOP(MINUS,l,r))
+end
+	| binOpIntExp {left, oper = TimesOp, right} = 
+let
+	val l = unEx left
+	val r = unEx right
+in
+	Ex (BINOP(MUL,l,r))
+end
+	| binOpIntExp {left, oper = DivideOp, right} = 
+let
+	val l = unEx left
+	val r = unEx right
+in
+	if (r = CONST 0) then raise Fail "División por cero" else Ex (BINOP(DIV,l,r))
+end
+	| binOpIntExp {left, oper, right} = raise Fail "Error" 
+		(*COMPLETADO - VER LO DE LA DIVISIÓN POR CERO - VER LA EXAUSTIVIDAD*)
 
-fun binOpIntRelExp {left,oper,right} =
-	Ex (CONST 0) (*COMPLETAR*)
 
+fun binOpIntRelExp {left,oper = LtOp,right} =
+let
+	val l = unEx left
+	val r = unEx right
+	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
+in
+	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
+			CJUMP(LT,l,r,t,f),
+		    LABEL f,
+		    MOVE(TEMP tmp, CONST 0),
+		    LABEL t],
+		    TEMP tmp))
+end	
+	| binOpIntRelExp {left,oper = LeOp,right} =
+let
+	val l = unEx left
+	val r = unEx right
+	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
+in
+	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
+			CJUMP(LE,l,r,t,f),
+		    LABEL f,
+		    MOVE(TEMP tmp, CONST 0),
+		    LABEL t],
+		    TEMP tmp))
+end	
+	| binOpIntRelExp {left,oper = GtOp,right} =
+let
+	val l = unEx left
+	val r = unEx right
+	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
+in
+	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
+			CJUMP(GT,l,r,t,f),
+		    LABEL f,
+		    MOVE(TEMP tmp, CONST 0),
+		    LABEL t],
+		    TEMP tmp))
+end	
+	| binOpIntRelExp {left,oper = GeOp,right} =
+let
+	val l = unEx left
+	val r = unEx right
+	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
+in
+	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
+			CJUMP(GE,l,r,t,f),
+		    LABEL f,
+		    MOVE(TEMP tmp, CONST 0),
+		    LABEL t],
+		    TEMP tmp))
+end	
+	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
+	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
+	
 fun binOpStrExp {left,oper,right} =
 	Ex (CONST 0) (*COMPLETAR*)
 
