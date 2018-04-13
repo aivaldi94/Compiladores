@@ -194,8 +194,15 @@ in
 	Ex (externalCall("allocArray", [s, i]))
 end
 
-fun callExp (name,external,isproc,lev:level,ls) = 
-	Ex (CONST 0) (*CALL (NAME name, [ls,] ])*)
+fun callExp(name,ext,isproc,lev, ls : exp list) = 
+let
+	val sl = CONST 0
+	val ls = map unEx ls
+in
+	case isproc of
+		true => Nx (EXP (CALL (NAME name, sl :: ls)))
+		| false => Ex (CALL (NAME name, sl :: ls))
+end
 
 fun letExp ([], body) = Ex (unEx body)
  |  letExp (inits, body) = Ex (ESEQ(seq inits,unEx body))

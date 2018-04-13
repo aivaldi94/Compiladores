@@ -77,20 +77,21 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 		| trexp(StringExp(s, _)) = {exp=stringExp(s), ty=TString}
 		| trexp(CallExp({func, args}, nl)) = 	
 			let 
-				val (ts,t) = case tabBusca(func, venv) of
+				val (ts,t,lab,lev,ext) = case tabBusca(func, venv) of
 							NONE => error("Funcion no existente",nl)
 							| SOME (VIntro _) => error("No es funcion",nl)
 							| SOME (Var _) => error("No es funcion",nl)
-							| SOME (Func {formals=l, result=tip, ...})  => (l,tip)
-							(* SOME (Func {level=lev, label=lab,formals=l,result=tip,extern=ext})  => (l,tip)*)
+							| SOME (Func {level=lev, label=lab,formals=l,result=tip,extern=ext})  => (l,tip,lab,lev,ext)
 							
 				val _ = if (length ts <> length args) then error("Argumentos extras o faltantes",nl) else ()
 				val m = ListPair.zip (map (fn x => #ty (trexp x)) args : Tipo list, ts) : (Tipo * Tipo) list
 				fun equalList ([] : (Tipo * Tipo) list) : bool = true
 				 | equalList ((t1, t2) :: tss) = if (tiposIguales t1 t2) then equalList tss else false	
-				(* En algun momento no habria que encontrar el exp de los argumentos? para pasarle a CALL en tigertrans *)						
+				val argsExp = map (fn x => #exp (trexp x)) args : (tigertrans.exp list)			
 			in
-				if equalList m then {exp=unitExp(), ty= t} else error("Tipos erroneos",nl) (*exp=callExp(func,ext,..,lev,calcular static link)*)
+				case t of
+					TUnit => if equalList m then {exp=callExp(func,ext,true,lev,argsExp) : tigertrans.exp, ty= t} else error("Tipos erroneos",nl)
+				    | _ => if equalList m then {exp=callExp(func,ext,false,lev,argsExp) : tigertrans.exp, ty= t} else error("Tipos erroneos",nl) 
 			end
 		| trexp(OpExp({left, oper=EqOp, right}, nl)) =
 			let
