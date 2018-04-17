@@ -46,13 +46,11 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
   | tipoReal t = t
 *)
-
-fun tipoReal (TTipo s, (env : tenv)) : Tipo = 
-    (case tabBusca(s , env) of 
+fun tipoReal (TTipo (s, ref (SOME (t)))) =
+	(case tabBusca(s , env) of 
          NONE => raise Fail "tipoReal Ttipo"
        | SOME t => t)
-  | tipoReal (t, _) = t
-  
+
 fun tiposIguales (TRecord _) TNil = true
   | tiposIguales TNil (TRecord _) = true 
   | tiposIguales (TRecord (_, u1)) (TRecord (_, u2 )) = (u1=u2)
