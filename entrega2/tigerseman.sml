@@ -221,7 +221,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val tlo = trexp lo
 				val thi = trexp hi
 				(* val venv' = venv  *)
-				val venv' = tabRInserta (var, VIntro {access = (tigertrans.allocLocal {parent = Nothing, frame = (#frame outermost) : frame,  level = 0} escape) : tigertrans.access, level = 0}, venv) 
+				val venv' = tabRInserta (var, VIntro (tigertrans.allocLocal 0 escape) 0, venv) 
 				val tbody =  transExp (venv', tenv) body 
 			in
 				if tipoReal(#ty tlo, tenv) = TInt andalso tipoReal(#ty thi, tenv) = TInt andalso (#ty tbody) = TUnit then {exp= unitExp(), ty=TUnit}
