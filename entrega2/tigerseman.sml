@@ -42,14 +42,16 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 	("exit", Func{level=topLevel(), label="exit",
 		formals=[TInt], result=TUnit, extern=true})
 	])
-(*
+
 fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
   | tipoReal t = t
-*)
+
+(*
 fun tipoReal (TTipo (s, ref (SOME (t)))) =
 	(case tabBusca(s , venv) of 
          NONE => raise Fail "tipoReal Ttipo"
        | SOME t => t)
+*)
 
 fun tiposIguales (TRecord _) TNil = true
   | tiposIguales TNil (TRecord _) = true 
@@ -221,8 +223,8 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				else if tipoReal (#ty ttest) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un while no puede devolver un valor", nl)
 			end
-		| trexp(ForExp({var, escape, lo, hi, body}, nl)) = (* {exp= unitExp(), ty=TUnit} *)
-			let
+		| trexp(ForExp({var, escape, lo, hi, body}, nl)) =  {exp= unitExp(), ty=TUnit}
+			(* let
 				val tlo = trexp lo
 				val thi = trexp hi				
 				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
@@ -232,6 +234,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				else if tipoReal(#ty tlo, tenv) <> TInt orelse tipoReal(#ty thi, tenv) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un while no puede devolver un valor", nl)   
 			end
+		*)
 		| trexp(LetExp({decs, body}, _)) =
 			let
 				fun aux (d, (v, t, exps1)) =
