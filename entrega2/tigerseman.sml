@@ -219,10 +219,8 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 		| trexp(ForExp({var, escape, lo, hi, body}, nl)) = (* {exp= unitExp(), ty=TUnit} *)
 			let
 				val tlo = trexp lo
-				val thi = trexp hi
-				(* val venv' = venv  
-				type level = {parent:frame option , frame: frame, level: int} *)				
-				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= outermost}, venv) 
+				val thi = trexp hi				
+				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
 				val tbody =  transExp (venv', tenv) body 
 			in
 				if tipoReal(#ty tlo, tenv) = TInt andalso tipoReal(#ty thi, tenv) = TInt andalso (#ty tbody) = TUnit then {exp= unitExp(), ty=TUnit}
