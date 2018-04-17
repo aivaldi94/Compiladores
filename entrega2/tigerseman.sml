@@ -222,7 +222,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val thi = trexp hi
 				(* val venv' = venv  
 				type level = {parent:frame option , frame: frame, level: int} *)
-				val lev = {parent= Nothing, frame= #frame outermost, level= 0} : tigertrans.level
+				val lev = {parent= NONE, frame= #frame outermost, level= 0} : tigertrans.level
 				val venv' = tabRInserta (var, VIntro (tigertrans.allocLocal lev escape) 0, venv) 
 				val tbody =  transExp (venv', tenv) body 
 			in
