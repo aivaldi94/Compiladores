@@ -47,7 +47,7 @@ fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
   | tipoReal t = t
 *)
 fun tipoReal (TTipo (s, ref (SOME (t)))) =
-	(case tabBusca(s , env) of 
+	(case tabBusca(s , venv) of 
          NONE => raise Fail "tipoReal Ttipo"
        | SOME t => t)
 
