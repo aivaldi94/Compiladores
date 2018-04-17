@@ -1,6 +1,6 @@
 # Unix makefile for tigermain example
-
-HOME=/local/bin
+# HOME=/usr/local/bin
+HOME=/bin
 MOSMLHOME=${HOME}
 MOSMLTOOLS=camlrunm /usr/local/share/mosml/tools
 MOSMLLEX=mosmllex
