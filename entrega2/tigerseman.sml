@@ -43,7 +43,7 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 		formals=[TInt], result=TUnit, extern=true})
 	])
 
-fun tipoReal (TTipo (s, ref (SOME (t)))), (env : tenv) = 
+fun tipoReal (TTipo (s, ref (SOME (t))), (env : tenv)) = 
 	case tabBusca(s , env) of 
          NONE => raise Fail "tipoReal Ttipo"
        | SOME ty => if tiposIguales t ty then ty else raise Fail "tipoReal no son tipos iguales"
