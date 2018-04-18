@@ -47,10 +47,12 @@ fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
   | tipoReal t = t
 
 (*
-fun tipoReal (TTipo (s, ref (SOME (t)))) =
-	(case tabBusca(s , venv) of 
+  De entrega1:
+    fun tipoReal (TTipo s, (env : tenv)) : Tipo = 
+    (case tabBusca(s , env) of 
          NONE => raise Fail "tipoReal Ttipo"
        | SOME t => t)
+  | tipoReal (t, _) = t
 *)
 
 fun tiposIguales (TRecord _) TNil = true
