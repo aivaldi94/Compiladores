@@ -408,9 +408,8 @@ in
 end	
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
-	
+
 fun binOpStrExp {left,oper,right} =
-	fun binOpStrExp {left,oper,right} =
 	let
 		val l = unEx left
 		val r = unEx right
