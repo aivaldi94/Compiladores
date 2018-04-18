@@ -410,10 +410,14 @@ end
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
 fun binOpStrExp {left,oper,right} =
+	Ex(CONST 0)
+(*
+
 	let
 		val l = unEx left
 		val r = unEx right
 	in 
 		Ex (externalCall("_stringCompare", l , r))
 	end
+*)
 end
