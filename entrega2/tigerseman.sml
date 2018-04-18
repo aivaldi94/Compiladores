@@ -43,7 +43,8 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 		formals=[TInt], result=TUnit, extern=true})
 	])
 
-fun tipoReal (TTipo (s, ref (SOME (t))), (env : tenv)) = t
+fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
+  | tipoReal t = t
 
 (*
   De entrega1:
@@ -231,14 +232,13 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
 				val tbody =  transExp (venv', tenv) body 
 			in
-			(*
+				{exp= unitExp(), ty=TUnit}
+				(*
 				if tipoReal(#ty tlo, tenv) = TInt andalso tipoReal(#ty thi, tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp(), ty=TUnit}
 				else if tipoReal(#ty tlo, tenv) <> TInt orelse tipoReal(#ty thi, tenv) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un for no puede devolver un valor", nl)   
-			*)
-			{exp= unitExp(), ty=TUnit}
-			end
-		
+				*)
+			end		
 		| trexp(LetExp({decs, body}, _)) =
 			let
 				fun aux (d, (v, t, exps1)) =
