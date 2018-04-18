@@ -414,5 +414,5 @@ fun binOpStrExp {left,oper,right} =
 		val l = unEx left
 		val r = unEx right
 	in 
-		Ex (externalCall("_stringCompare", l,r))
+		Ex (EXP(externalCall("_stringCompare", l,r))
 	end
