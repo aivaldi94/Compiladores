@@ -43,20 +43,6 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 		formals=[TInt], result=TUnit, extern=true})
 	])
 
-fun tipoReal (TTipo (s, ref (SOME (t))), (env : tenv)) = 
-	case tabBusca(s , env) of 
-         NONE => raise Fail "tipoReal Ttipo"
-       | SOME ty => if tiposIguales t ty then ty else raise Fail "tipoReal no son tipos iguales"
-
-(*
-  De entrega1:
-    fun tipoReal (TTipo s, (env : tenv)) : Tipo = 
-    (case tabBusca(s , env) of 
-         NONE => raise Fail "tipoReal Ttipo"
-       | SOME t => t)
-  | tipoReal (t, _) = t
-*)
-
 fun tiposIguales (TRecord _) TNil = true
   | tiposIguales TNil (TRecord _) = true 
   | tiposIguales (TRecord (_, u1)) (TRecord (_, u2 )) = (u1=u2)
@@ -78,6 +64,20 @@ fun tiposIguales (TRecord _) TNil = true
 			tiposIguales a b
 		end
   | tiposIguales a b = (a=b)
+
+fun tipoReal (TTipo (s, ref (SOME (t))), (env : tenv)) = 
+	case tabBusca(s , env) of 
+         NONE => raise Fail "tipoReal Ttipo"
+       | SOME ty => if tiposIguales t ty then ty else raise Fail "tipoReal no son tipos iguales"
+
+(*
+  De entrega1:
+    fun tipoReal (TTipo s, (env : tenv)) : Tipo = 
+    (case tabBusca(s , env) of 
+         NONE => raise Fail "tipoReal Ttipo"
+       | SOME t => t)
+  | tipoReal (t, _) = t
+*)
 
 fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 	let fun error(s, p) = raise Fail ("Error -- línea "^Int.toString(p)^": "^s^"\n")
