@@ -225,18 +225,21 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				else if tipoReal (#ty ttest) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un while no puede devolver un valor", nl)
 			end
-		| trexp(ForExp({var, escape, lo, hi, body}, nl)) =  {exp= unitExp(), ty=TUnit}
-			(* let
+		| trexp(ForExp({var, escape, lo, hi, body}, nl)) =  
+			let
 				val tlo = trexp lo
 				val thi = trexp hi				
 				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
 				val tbody =  transExp (venv', tenv) body 
 			in
+			(*
 				if tipoReal(#ty tlo, tenv) = TInt andalso tipoReal(#ty thi, tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp(), ty=TUnit}
 				else if tipoReal(#ty tlo, tenv) <> TInt orelse tipoReal(#ty thi, tenv) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un while no puede devolver un valor", nl)   
+			*)
+			{exp= unitExp(), ty=TUnit}
 			end
-		*)
+		
 		| trexp(LetExp({decs, body}, _)) =
 			let
 				fun aux (d, (v, t, exps1)) =
