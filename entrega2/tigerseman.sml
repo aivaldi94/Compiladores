@@ -326,21 +326,32 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
 		(* xs es una lista de tuplas*)		
 		| trdec (venv,tenv) (FunctionDec xs) = (venv,tenv,[])
-			(* emprolijar
-			
-			val listNames = map (fn ({name=nombreFun, ..},nl) => nombreFun) xs
-			val listlistParams = map (fn ({params=paramsFun, ..},nl) => paramsFun) xs
-			val listResult = map (fn ({result=resultsFun, ..},nl) => resultsFun) xs
-			val listEscapes = map (fn {name=_,escape=b,typ=_} => b) listParams
-			val listLabels = map uniqueString listNames
-			val listTipos = map (fn {name=_, escape=_, typ=tipo} => tipo) listParams
-			
-			val listLev = map (fn ({name=nombreFun, params= paramsFun, ..},nl) =>
-			                       tigertrans.newLevel ({parent= getActualLevel(),
-			                                             name= uniqueString nombreFun,
-			                                             formals= map (fn {name=_,escape=b,typ=_} => b) paramsFun})
-			                  ) xs		
-				
+			(* emprolijar			
+			let
+				val listNames = map (fn ({name=nombreFun, ..},nl) => nombreFun) xs
+				val listlistParams = map (fn ({params=paramsFun, ..},nl) => paramsFun) xs
+				val listResult = map (fn ({result=resultsFun, ..},nl) => resultsFun) xs
+				val listLabels = map uniqueString listNames
+				val listlistTipos = map (fn x => map (fn {name=_, escape=_,typ=t} => t) x)) listlistParams		
+				extern??? false porque no son de libreria?
+
+				val listLev = map (fn ({name=nombreFun, params= paramsFun, ..},nl) =>
+				                       tigertrans.newLevel ({parent= getActualLevel(),
+				                                             name= uniqueString nombreFun,
+				                                             formals= map (fn {name=_,escape=b,typ=_} => b) paramsFun})
+				                  ) xs	
+
+				fun unir [] bs css ds total = total
+				   |unir (a:as) (b:bs) (cs:css) (d:ds) total = (Func {level=a, label=b,formals=cs,result=d, extern=}) :: total 
+				val listaDeFunEntrys = unir listLev listLabels listlistTipos listResult []
+				val auxListaDeFunEntrys = zip listNames listaDeFunEntrys
+				NECESARIO? val auxListaNombresTipos = zip listNames listResult
+				val venv' = map (fn (x,y) => tabRinserta (x,y,venv)) auxListadeFunEntrys
+				NECESARIO? val tenv' = map () auxListNombresTipos
+			in			
+			   (venv', tenv, ???)
+
+
 			let 
 			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
