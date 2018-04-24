@@ -326,12 +326,20 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
 		(* xs es una lista de tuplas*)		
 		| trdec (venv,tenv) (FunctionDec xs) = (venv,tenv,[])
-			(*
+			(* emprolijar
+			
+			val listNames = map (fn ({name=nombreFun, ..},nl) => nombreFun) xs
+			val listlistParams = map (fn ({params=paramsFun, ..},nl) => paramsFun) xs
+			val listResult = map (fn ({result=resultsFun, ..},nl) => resultsFun) xs
+			val listEscapes = map (fn {name=_,escape=b,typ=_} => b) listParams
+			val listLabels = map uniqueString listNames
+			val listTipos = map (fn {name=_, escape=_, typ=tipo} => tipo) listParams
+			
 			val listLev = map (fn ({name=nombreFun, params= paramsFun, ..},nl) =>
 			                       tigertrans.newLevel ({parent= getActualLevel(),
 			                                             name= uniqueString nombreFun,
 			                                             formals= map (fn {name=_,escape=b,typ=_} => b) paramsFun})
-			                  ) xs			
+			                  ) xs		
 				
 			let 
 			    val empty = Splayset.empty String.compare

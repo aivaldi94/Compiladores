@@ -20,13 +20,17 @@ fun getActualLev() = !actualLevel
 
 val outermost: level = {parent=NONE,
 	frame=newFrame{name="_tigermain", formals=[]}, level=getActualLev()}
+
 fun newLevel{parent={parent, frame, level}, name, formals} =
 	{
 	parent=SOME frame,
 	frame=newFrame{name=name, formals=formals},
 	level=level+1}
+
 fun allocArg{parent, frame, level} b = tigerframe.allocArg frame b
+
 fun allocLocal{parent, frame, level} b = tigerframe.allocLocal frame b
+
 fun formals{parent, frame, level} = tigerframe.formals frame
 
 datatype exp =
@@ -86,6 +90,7 @@ fun Ir(e) =
 		fun aux3 [] = ""
 		| aux3(h::t) = (aux2 h)^(aux3 t)
 	in	aux3 e end
+	
 fun nombreFrame frame = print(".globl " ^ tigerframe.name frame ^ "\n")
 
 (* While y for necesitan la u'ltima etiqueta para un break *)
