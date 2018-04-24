@@ -103,12 +103,12 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				    | _ => if equalList m then {exp=callExp(func,ext,false,lev,argsExp) : tigertrans.exp, ty= t} else error("Tipos erroneos",nl) 
 			end
 		| trexp(OpExp({left, oper=EqOp, right}, nl)) =
-			let
-				val {exp=expl, ty=tyl} = trexp left
-				val {exp=expr, ty=tyr} = trexp right
-			in
-				if tiposIguales tyl tyr andalso not (tyl=TNil andalso tyr=TNil) andalso tyl<>TUnit then 
-					{exp=if tiposIguales tyl TString then binOpStrExp {left=expl,oper=EqOp,right=expr} else binOpIntRelExp {left=expl,oper=EqOp,right=expr}, ty=TInt}
+			let 
+				val {exp= expl, ty=tyl} = trexp left
+				val {exp= expr, ty=tyr} = trexp right
+			in 
+				if tiposI guales tyl tyr andalso not (tyl=TNil andalso tyr=TNil) andalso tyl<>TUnit then 
+					{exp= if tiposIguales tyl TString then binOpStrExp {left=expl,oper=EqOp,right=expr} else binOpIntRelExp {left=expl,oper=EqOp,right=expr}, ty=TInt}
 					else error("Tipos no comparables", nl)
 			end
 		| trexp(OpExp({left, oper=NeqOp, right}, nl)) = 
@@ -326,7 +326,14 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
 		(* xs es una lista de tuplas*)		
 		| trdec (venv,tenv) (FunctionDec xs) = (venv,tenv,[])
-			(*let 
+			(*
+			val listLev = map (fn ({name=nombreFun, params= paramsFun, ..},nl) =>
+			                       tigertrans.newLevel ({parent= getActualLevel(),
+			                                             name= uniqueString nombreFun,
+			                                             formals= map (fn {name=_,escape=b,typ=_} => b) paramsFun})
+			                  ) xs			
+				
+			let 
 			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
 		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  

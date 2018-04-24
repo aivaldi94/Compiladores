@@ -66,10 +66,12 @@ fun name(f: frame) = #name f
 (* Representación de Tiger de un string
    "3dia\n"*)
 fun string(l, s) = l^tigertemp.makeString(s)^"\n"
+
 fun formals({formals=f, ...}: frame) = 
 	let	fun aux(n, []) = []
 		| aux(n, h::t) = InFrame(n)::aux(n+argsGap, t)
 	in aux(argsInicial, f) end
+
 fun maxRegFrame(f: frame) = !(#actualReg f)
 fun allocArg (f: frame) b = 
 	case b of
