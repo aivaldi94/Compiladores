@@ -107,7 +107,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val {exp= expl, ty=tyl} = trexp left
 				val {exp= expr, ty=tyr} = trexp right
 			in 
-				if tiposI guales tyl tyr andalso not (tyl=TNil andalso tyr=TNil) andalso tyl<>TUnit then 
+				if tiposIguales tyl tyr andalso not (tyl=TNil andalso tyr=TNil) andalso tyl<>TUnit then 
 					{exp= if tiposIguales tyl TString then binOpStrExp {left=expl,oper=EqOp,right=expr} else binOpIntRelExp {left=expl,oper=EqOp,right=expr}, ty=TInt}
 					else error("Tipos no comparables", nl)
 			end
