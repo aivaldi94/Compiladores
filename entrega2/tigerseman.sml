@@ -232,8 +232,11 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
 				val tbody =  transExp (venv', tenv) body 
 			in
-				{exp= unitExp(), ty=TUnit}
+				if tipoReal(#ty tlo) = TInt andalso tipoReal(#ty thi) = TInt andalso (#ty tbody) = TUnit then {exp= forExp(), ty=TUnit}
+				else if tipoReal(#ty tlo) <> TInt orelse tipoReal(#ty thi) <> TInt then error("Error de tipo en la condición", nl)
+				else error("El cuerpo de un for no puede devolver un valor", nl)   
 				(*
+				{exp= unitExp(), ty=TUnit}				
 				if tipoReal(#ty tlo, tenv) = TInt andalso tipoReal(#ty thi, tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp(), ty=TUnit}
 				else if tipoReal(#ty tlo, tenv) <> TInt orelse tipoReal(#ty thi, tenv) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un for no puede devolver un valor", nl)   
@@ -403,11 +406,11 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end*)
 					
 		| trdec (venv,tenv) (TypeDec ts) = (venv,tenv,[])
-												(*let 
-		                                        val empty = Splayset.empty String.compare
-		                                        val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
-		                                        val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre", #2 (hd ts))
-		                                        in (venv, tenv', []) (* before (print"Entro a trdec (venv, tenve) TypeDec \n Agregado \n \n \n ";tigermuestratipos.printTTipos(tigertab.tabAList (tenv': (string, Tipo) tigertab.Tabla))) *) end*)
+			(*let 
+            val empty = Splayset.empty String.compare
+            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
+            val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre", #2 (hd ts))
+            in (venv, tenv', []) (* before (print"Entro a trdec (venv, tenve) TypeDec \n Agregado \n \n \n ";tigermuestratipos.printTTipos(tigertab.tabAList (tenv': (string, Tipo) tigertab.Tabla))) *) end*)
     in trexp end
 
 fun transProg ex =
