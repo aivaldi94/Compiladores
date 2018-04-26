@@ -231,8 +231,9 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val thi = trexp hi				
 				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
 				val tbody =  transExp (venv', tenv) body 
+				val evar = trvar (SimpleVar var)
 			in
-				if tipoReal(#ty tlo) = TInt andalso tipoReal(#ty thi) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp hi,var= #exp var,body= #exp body}, ty=TUnit}
+				if tipoReal(#ty tlo) = TInt andalso tipoReal(#ty thi) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, ty=TUnit}
 				else if tipoReal(#ty tlo) <> TInt orelse tipoReal(#ty thi) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un for no puede devolver un valor", nl)   
 				(*
