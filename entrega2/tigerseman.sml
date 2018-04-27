@@ -46,7 +46,7 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 fun tipoReal (TTipo (s, ref (SOME (t)))) = 
 	case tabBusca(s , tenv) of 
          NONE => raise Fail "tipoReal Ttipo"
-       | SOME ti => ti)
+       | SOME ti => ti
 
 (*
   De entrega1:
