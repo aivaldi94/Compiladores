@@ -8,10 +8,10 @@ open tigerabs
 exception breakexc
 exception divCero
 	
-val uniqueLabel = ref ~0
+val uniqueLabel: int = ref ~0
+
 fun generateUniqueLab i = 
-	let
-		uniqueLabel := !uniqueLabel+1
+	let val uniqueLabel := !uniqueLabel+1
 	in Int.toString (uniqueLabel)
 	end
 
