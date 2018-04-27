@@ -12,7 +12,10 @@ val uniqueLabel: int ref = ref ~0
 
 fun sumUniqueLabel () = uniqueLabel := !uniqueLabel+1
 
-fun generateUniqueLab i = Int.toString (!uniqueLabel)
+fun generateUniqueLab i = 
+	let val _ = sumUniqueLabel ()
+	in Int.toString (!uniqueLabel)
+end
 	
 type level = {parent:frame option , frame: frame, level: int}
 (*datatype access = InFrame of int | InReg of tigertemp.label*)
