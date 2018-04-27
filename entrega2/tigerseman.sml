@@ -43,8 +43,10 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 		formals=[TInt], result=TUnit, extern=true})
 	])
 
-fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
-  | tipoReal t = t
+fun tipoReal (TTipo (s, ref (SOME (t)))) = 
+	case tabBusca(s , tenv) of 
+         NONE => raise Fail "tipoReal Ttipo"
+       | SOME ti => ti)
 
 (*
   De entrega1:
