@@ -45,7 +45,7 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 (*)
 fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
   | tipoReal t = t
-
+REVISAR
 *)
 
 fun tipoReal ((TTipo (s, ref (SOME (t)))),(env : tenv)) =
