@@ -44,12 +44,8 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 	])
 
 fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
-(*
-fun tipoReal ((TTipo (s, ref (SOME (t)))),(env : tenv)) = 
-	case tabBusca(s , env) of 
-         NONE => raise Fail "tipoReal Ttipo"
-       | SOME ti => ti
-*)
+  | tipoReal t = t
+
 (*
   De entrega1:
     fun tipoReal (TTipo s, (env : tenv)) : Tipo = 
@@ -344,9 +340,8 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 				extern??? false porque no son de libreria?
 
 				val listLev = map (fn ({name=nombreFun, params= paramsFun, ..},nl) =>
-				                       tigertrans.newLevel ({parent= 
-				                       	getActualLevel(),
-				                                             name= generateUniqueLabel,
+				                       tigertrans.newLevel ({parent= getActualLevel(),
+				                                             name= uniqueString nombreFun,
 				                                             formals= map (fn {name=_,escape=b,typ=_} => b) paramsFun})
 				                  ) xs	
 
@@ -359,6 +354,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 				NECESARIO? val tenv' = map () auxListNombresTipos
 			in			
 			   (venv', tenv, ???)
+
 
 			let 
 			    val empty = Splayset.empty String.compare
