@@ -12,6 +12,7 @@ val uniqueLabel = ref ~0
 fun generateUniqueLab i = 
 	let uniqueLabel := !uniqueLabel+1
 	in Int.toString (uniqueLabel)
+end
 
 type level = {parent:frame option , frame: frame, level: int}
 (*datatype access = InFrame of int | InReg of tigertemp.label*)
