@@ -46,6 +46,8 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
   | tipoReal t = t
 
+
+
 (*
   De entrega1:
     fun tipoReal (TTipo s, (env : tenv)) : Tipo = 
