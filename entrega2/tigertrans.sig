@@ -15,6 +15,8 @@ val allocArg : level -> bool -> access
 val allocLocal : level -> bool -> access
 
 val generateUniqueLab: int -> string
+val sumUniqueLabel: unit -> unit
+val uniqueLabel: int ref
 
 type exp 
 val procEntryExit : {level: level, body: exp} -> unit
