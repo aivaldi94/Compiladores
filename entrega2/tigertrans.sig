@@ -14,6 +14,8 @@ val getActualLev : unit -> int
 val allocArg : level -> bool -> access
 val allocLocal : level -> bool -> access
 
+val generateUniqueLab: int -> string
+
 type exp 
 val procEntryExit : {level: level, body: exp} -> unit
 val getResult : unit -> frag list

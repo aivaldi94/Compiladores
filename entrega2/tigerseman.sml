@@ -95,7 +95,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val _ = if (length ts <> length args) then error("Argumentos extras o faltantes",nl) else ()
 				val m = ListPair.zip (map (fn x => #ty (trexp x)) args : Tipo list, ts) : (Tipo * Tipo) list
 				fun equalList ([] : (Tipo * Tipo) list) : bool = true
-				 | equalList ((t1, t2) :: tss) = if (tiposIguales t1 t2) then equalList tss else false	
+				 | equalList ((t1, t2) :: tss) = if (tiposIguales0 t1 t2) then equalList tss else false	
 				val argsExp = map (fn x => #exp (trexp x)) args : (tigertrans.exp list)			
 			in
 				case t of
@@ -329,8 +329,8 @@ and dec = FunctionDec of ({name: symbol, params: field list,
           val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) *)
 				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
 		(* xs es una lista de tuplas*)		
-		| trdec (venv,tenv) (FunctionDec xs) = (venv,tenv,[])
-			(* emprolijar			
+		| trdec (venv,tenv) (FunctionDec xs) = (venv,tenv,[])		
+		(*
 			let
 				val listNames = map (fn ({name=nombreFun, ..},nl) => nombreFun) xs
 				val listlistParams = map (fn ({params=paramsFun, ..},nl) => paramsFun) xs
