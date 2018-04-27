@@ -8,13 +8,12 @@ open tigerabs
 exception breakexc
 exception divCero
 	
-val uniqueLabel: int = ref ~0
+val uniqueLabel: int ref = ref ~0
 
-fun generateUniqueLab i = 
-	let val uniqueLabel := !uniqueLabel+1
-	in Int.toString (!uniqueLabel)
-	end
+fun sumUniqueLabel = uniqueLabel := !uniqueLabel+1
 
+fun generateUniqueLab i = Int.toString (!uniqueLabel)
+	
 type level = {parent:frame option , frame: frame, level: int}
 (*datatype access = InFrame of int | InReg of tigertemp.label*)
 type access = tigerframe.access
