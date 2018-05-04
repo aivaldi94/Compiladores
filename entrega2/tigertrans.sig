@@ -14,7 +14,7 @@ val getActualLev : unit -> int
 val allocArg : level -> bool -> access
 val allocLocal : level -> bool -> access
 
-val generateUniqueLab: int -> string
+val generateUniqueLab: unit -> tigertemp.label
 val sumUniqueLabel: unit -> unit
 val uniqueLabel: int ref
 

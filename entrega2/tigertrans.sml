@@ -12,7 +12,7 @@ val uniqueLabel: int ref = ref ~0
 
 fun sumUniqueLabel () = uniqueLabel := !uniqueLabel+1
 
-fun generateUniqueLab i = 
+fun generateUniqueLab () = 
 	let val _ = sumUniqueLabel ()
 	in Int.toString (!uniqueLabel)
 end

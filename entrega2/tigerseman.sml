@@ -6,6 +6,8 @@ open tigersres
 open tigertrans
 
 type expty = {exp: tigertrans.exp, ty: Tipo}
+type recfun = {name: symbol, params: field list, result: symbol option, body: exp}
+type rectype = {name: symbol, ty: ty}
 
 type venv = (string, EnvEntry) tigertab.Tabla
 type tenv = (string, Tipo) tigertab.Tabla
@@ -86,7 +88,7 @@ fun tiposIguales (TRecord _) TNil = true
 		end
   | tiposIguales a b = (a=b)
 
-fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
+fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tigerabs.exp -> expty) =
 	let fun error(s, p) = raise Fail ("Error -- línea "^Int.toString(p)^": "^s^"\n")
 		fun trexp(VarExp v) = trvar(v)
 		| trexp(UnitExp _) = {exp=unitExp(), ty=TUnit}
@@ -239,7 +241,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 				val tlo = trexp lo
 				val thi = trexp hi				
 				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
-				val tbody =  transExp (venv', tenv) body 
+				val tbody =  transExp (venv', tenv,levNest) body 
 				val evar = trvar ((SimpleVar var),nl)
 			in
 				if tipoReal ((#ty tlo),tenv) = TInt andalso tipoReal((#ty thi),tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, ty=TUnit}
@@ -261,7 +263,7 @@ fun transExp((venv, tenv) : ( venv * tenv)) : (tigerabs.exp -> expty) =
 					(v', t', exps1@exps2)
 				end
 				val (venv', tenv', expdecs) = List.foldl aux (venv, tenv, []) decs
-				val {exp=expbody,ty=tybody}=transExp (venv', tenv') body
+				val {exp=expbody,ty=tybody}=transExp (venv', tenv',levNest) body
 			in 
 				{exp=seqExp(expdecs@[expbody]), ty=tybody}
 			end
@@ -327,10 +329,10 @@ and dec = FunctionDec of ({name: symbol, params: field list,
     result será el result de FunctionDec en caso de que esté presente, sino será TUnit (las funciones siempre deben indicar su tipo)
     extern por ahora siempre será false. Será true con funciones de librería
 *)
-		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = (venv,tenv,[])(*(tabRInserta (name, Var {ty = #ty(transExp (venv, tenv) init)}, venv),tenv,[])*)
+		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = (venv,tenv,[])(*(tabRInserta (name, Var {ty = #ty(transExp (venv, tenv,levNest) init)}, venv),tenv,[])*)
 	            | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =	(venv,tenv,[])	
 				(*let
-					val texp = #ty(transExp (venv, tenv) init)
+					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val r = case tabBusca (t,tenv) of
 						NONE => error ("El tipo no se encuentra en el entorno", nl) 						
 						| SOME tipo => tipo
@@ -338,34 +340,12 @@ and dec = FunctionDec of ({name: symbol, params: field list,
           val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) *)
 				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
 		(* xs es una lista de tuplas*)		
-		| trdec (venv,tenv) (FunctionDec xs) = (venv,tenv,[])		
-		(*
+		| trdec (venv,tenv) (FunctionDec xs) =  
 			let
-				val listNames = map (fn ({name=nombreFun, ..},nl) => nombreFun) xs
-				val listlistParams = map (fn ({params=paramsFun, ..},nl) => paramsFun) xs
-				val listResult = map (fn ({result=resultsFun, ..},nl) => resultsFun) xs
-				val listLabels = map uniqueString listNames
-				val listlistTipos = map (fn x => map (fn {name=_, escape=_,typ=t} => t) x)) listlistParams		
-				extern??? false porque no son de libreria?
+				val _ = tigertrans.preFunctionDec() (* Aumenta el nivel actual *)
+				val listlistParams = map (fn ({params=paramsFun,...},nl) => paramsFun) xs
+				val listEscapes = map (fn xs => (map (fn {escape=e,...} => !e) xs)) listlistParams : bool list list										
 
-				val listLev = map (fn ({name=nombreFun, params= paramsFun, ..},nl) =>
-				                       tigertrans.newLevel ({parent= getActualLevel(),
-				                                             name= uniqueString nombreFun,
-				                                             formals= map (fn {name=_,escape=b,typ=_} => b) paramsFun})
-				                  ) xs	
-
-				fun unir [] bs css ds total = total
-				   |unir (a:as) (b:bs) (cs:css) (d:ds) total = (Func {level=a, label=b,formals=cs,result=d, extern=}) :: total 
-				val listaDeFunEntrys = unir listLev listLabels listlistTipos listResult []
-				val auxListaDeFunEntrys = zip listNames listaDeFunEntrys
-				NECESARIO? val auxListaNombresTipos = zip listNames listResult
-				val venv' = map (fn (x,y) => tabRinserta (x,y,venv)) auxListadeFunEntrys
-				NECESARIO? val tenv' = map () auxListNombresTipos
-			in			
-			   (venv', tenv, ???)
-
-
-			let 
 			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
 		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  
@@ -381,14 +361,14 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			    (* decideResult : (Symbol Option) Int -> Tipo *)
 			    fun decideResult ((NONE, nl) : (symbol option * int)) : Tipo  = TUnit
 			      | decideResult ((SOME t, nl) : (symbol option * int)) : Tipo = 
-				case tabBusca (t,tenv) of
+						case tabBusca (t,tenv) of
 		               	      NONE => error ("El tipo no se encuentra en el entorno", nl) 						
 	                            | SOME tipo => tipo  
 			    (* aux1 inserta las funciones al entorno*) 
 			    fun aux1 (([], venv) :((recfun * int) list * venv)) : venv = venv
 		    	      | aux1 ((r, n) :: rns, venv) =  let
 		    	                                            (* val _ = tigermuestratipos.printTTipos (List.map (fn t => ("\n Tipo:", t)) (TUnit :: aux0 (#params r, n) )) *)
-		    	                                    in aux1 (rns, tabRInserta (#name r, Func {level = (), label = "hola", formals = aux0 (#params r, n), result = decideResult(#result r, n), extern = false}, venv) )	end	
+		    	                                    in aux1 (rns, tabRInserta (#name r, Func {level = levNest, label = tigertrans.generateUniqueLab(), formals = aux0 (#params r, n), result = decideResult(#result r, n), extern = false}, venv) )	end	
 		    	                                                 
 			    val env1 = aux1 (xs, venv) (* Este es el entorno en donde ya agregué las funciones *)
 			   (* aux2 : (List field) (List Tipo) Venv -> Venv *) 
@@ -413,8 +393,8 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			val lp = List.map (fn ((r, n) : recfun * int) => (decideResult (#result r, n))) xs
            (* val _ = (print ("probando algo: ");tigermuestratipos.printTTipos(tigertab.tabAList (tenv: (string, Tipo) tigertab.Tabla))) *)
 			val ok = aux5 (ListPair.zip (ListPair.zip(lp,tipos), List.map (fn (_,n) => n) xs))
-			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end*)
-					
+			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end
+				
 		| trdec (venv,tenv) (TypeDec ts) = (venv,tenv,[])
 			(*let 
             val empty = Splayset.empty String.compare
@@ -428,6 +408,6 @@ fun transProg ex =
 				LetExp({decs=[FunctionDec[({name="_tigermain", params=[],
 								result=NONE, body=ex}, 0)]],
 						body=UnitExp 0}, 0)
-		val _ = transExp(tab_vars, tab_tipos) main
+		val _ = transExp(tab_vars, tab_tipos, tigertrans.outermost) main
 	in	print "bien!\n" end
 end
