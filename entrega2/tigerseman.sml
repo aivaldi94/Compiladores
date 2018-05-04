@@ -6,7 +6,7 @@ open tigersres
 open tigertrans
 
 type expty = {exp: tigertrans.exp, ty: Tipo}
-type recfun = {name: symbol, params: field list, result: symbol option, body: exp}
+type recfun = {name: symbol, params: field list, result: symbol option, body: tigerabs.exp}
 type rectype = {name: symbol, ty: ty}
 
 type venv = (string, EnvEntry) tigertab.Tabla
@@ -373,7 +373,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			    val env1 = aux1 (xs, venv) (* Este es el entorno en donde ya agregué las funciones *)
 			   (* aux2 : (List field) (List Tipo) Venv -> Venv *) 
 			   fun aux2 (([],venv) : ((field * Tipo) list * venv)) : venv = venv
-  			     | aux2 ((f, t) :: fts, venv) = aux2 (fts, tabRInserta (#name f, Var {ty= t}, venv))
+  			     | aux2 ((f, t) :: fts, venv) = aux2 (fts, tabRInserta (#name f, Var {ty= t, access=tigertrans.allocArg levNest (!(#escape f)), level= (#level levNest)}, venv))
 			   (* aux3 : (List recordFunctionDec) (List Int) Venv -> List Venv  *)
 			   fun aux3 (([], venv) : ((recfun * int) list * venv)) : venv list = []
 			     | aux3 ((r, n) :: rns, venv) =  aux2 (ListPair.zip (#params r, aux0(#params r, n)),venv) :: (aux3 (rns, venv))
