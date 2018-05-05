@@ -20,7 +20,7 @@ structure tigerframe :> tigerframe = struct
 
 open tigertree
 
-type level = int
+(*type level = int*)
 
 val fp = "FP"				(* frame pointer *)
 val sp = "SP"				(* stack pointer *)

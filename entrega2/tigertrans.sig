@@ -13,6 +13,7 @@ val formals : level -> access list
 val getActualLev : unit -> int
 val allocArg : level -> bool -> access
 val allocLocal : level -> bool -> access
+val levInt : level -> int
 
 val generateUniqueLab: unit -> tigertemp.label
 val sumUniqueLabel: unit -> unit

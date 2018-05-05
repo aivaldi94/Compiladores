@@ -286,7 +286,7 @@ and trvar(SimpleVar s, nl) =
 			val r = case tabBusca(s,venv) of
 				NONE => error("La variable no se encuentra en el entorno",nl)
 				| SOME (VIntro {access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl)), ty = TInt} 
-				| SOME (Var {ty = tip, access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl) ), ty = tip} 
+				| SOME (Var {ty = tip, access = acc, nivel = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl) ), ty = tip} 
 				| SOME (Func _)  => error("No es variable",nl)
 
 			in r end
@@ -350,40 +350,58 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
 		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  
 			    (* val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n") *)
-			    (*
-			    aux0 : Retorna la lista de Tipo correspondiente a la lista de fields, corroborando que los tipos estén en el entorno*) 			    
+			    
+			    (*aux0 : Retorna la lista de Tipo correspondiente a la lista de fields, corroborando que los tipos estén en el entorno*) 			    
 			    fun aux0 (([], nl) : (field list * int)) : (Tipo list) = []
-			      | aux0 (f :: lf, nl) = case #typ f of
-                                    NameTy s => (case tabBusca (s,tenv) of
-					                         NONE => error ("El tipo no se encuentra en el entorno", nl) 			
-					                       | SOME tipo => tipo :: (aux0 (lf, nl)))
-                                  | _ => error ("Error", nl) 			      
+			      | aux0 (f :: lf, nl) = case #typ f of 
+											NameTy s => (case tabBusca (s,tenv) of
+															NONE => error ("El tipo no se encuentra en el entorno", nl) 			
+														  | SOME tipo => tipo :: (aux0 (lf, nl)))
+										    | _ => error ("Error", nl) 			      
 			    (* decideResult : (Symbol Option) Int -> Tipo *)
 			    fun decideResult ((NONE, nl) : (symbol option * int)) : Tipo  = TUnit
 			      | decideResult ((SOME t, nl) : (symbol option * int)) : Tipo = 
 						case tabBusca (t,tenv) of
 		               	      NONE => error ("El tipo no se encuentra en el entorno", nl) 						
-	                            | SOME tipo => tipo  
-			    (* aux1 inserta las funciones al entorno*) 
-			    fun aux1 (([], venv) :((recfun * int) list * venv)) : venv = venv
-		    	      | aux1 ((r, n) :: rns, venv) =  let
-		    	                                            (* val _ = tigermuestratipos.printTTipos (List.map (fn t => ("\n Tipo:", t)) (TUnit :: aux0 (#params r, n) )) *)
-		    	                                    in aux1 (rns, tabRInserta (#name r, Func {level = levNest, label = tigertrans.generateUniqueLab(), formals = aux0 (#params r, n), result = decideResult(#result r, n), extern = false}, venv) )	end	
+	                        | SOME tipo => tipo  
+			    (* insertFun inserta las funciones al entorno*) 
+			    fun insertFun (([], l, venv) :((recfun * int) list * bool list list * venv)) : venv = venv
+		    	  | insertFun (({name = nom, params = p, result = r, ...}, n) :: rns, f::fs,venv) =  
+		    	  let
+					val res = decideResult(r, n)
+					val form = aux0 (p, n)
+					val nlevel = tigertrans.newLevel {parent = levNest, name = nom,formals = f}
+					val lab = tigertrans.generateUniqueLab()
+		    	  in insertFun (rns, fs, tabRInserta (nom, Func {level = nlevel, label = lab, formals = form, result = res, extern = false}, venv))
+		    	  end
 		    	                                                 
-			    val env1 = aux1 (xs, venv) (* Este es el entorno en donde ya agregué las funciones *)
-			   (* aux2 : (List field) (List Tipo) Venv -> Venv *) 
-			   fun aux2 (([],venv) : ((field * Tipo) list * venv)) : venv = venv
-  			     | aux2 ((f, t) :: fts, venv) = aux2 (fts, tabRInserta (#name f, Var {ty= t, access=tigertrans.allocArg levNest (!(#escape f)), level= (#level levNest)}, venv))
-			   (* aux3 : (List recordFunctionDec) (List Int) Venv -> List Venv  *)
-			   fun aux3 (([], venv) : ((recfun * int) list * venv)) : venv list = []
-			     | aux3 ((r, n) :: rns, venv) =  aux2 (ListPair.zip (#params r, aux0(#params r, n)),venv) :: (aux3 (rns, venv))
-			   val venvs : venv list = aux3(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
+			    val env1 = insertFun (xs, listEscapes, venv) (* Este es el entorno en donde ya agregué las funciones *)
+			   (* Agrega los argumentos de una función como variables al entorno *) 
+			   fun insertArgs (([],venv) : ((field * Tipo) list * venv)) : venv = venv
+  			     | insertArgs ((f, t) :: fts, venv) =
+  			     let
+					val lvl = (tigertrans.levInt levNest) : int
+				 in
+					insertArgs (fts, tabRInserta (#name f, Var {ty= t, access=tigertrans.allocArg levNest (!(#escape f)), nivel= lvl}, venv)) 
+				 end
+  			     (*(#level (levNest : tigertrans.level)) : int}*)
+			   (* Genera una lista de entornos donde se agregaron los argumentos de las funciones *)
+			   fun newEnvs (([], venv) : ((recfun * int) list * venv)) : venv list = []
+			     | newEnvs (({name = nom, params = p, ...}, n) :: rns, venv) =  
+					let
+						val tipos = aux0(p, n)
+						val nvenv = insertArgs (ListPair.zip (p, tipos),venv)
+					in 
+						 nvenv :: (newEnvs (rns, venv))
+					end
+			   
+			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
 			   (* Corroboramos cada body con su respectivo env *)	
 			   (* aux4 : (List recordFunctionDec) (List Venv) -> (List Tipo) *)
 			   fun aux4 ([] : (recfun * venv) list) : Tipo list = []
 			     | aux4 (({body = b, ... }, venv) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
-							val f = transExp (venv , tenv) (*Deberìa ser una función que toma una exp*)
+							val f = transExp (venv , tenv, levNest) (*Deberìa ser una función que toma una exp*)
 							val elem = #ty (f b)
 						    in elem :: (aux4 rvs) end
 			   val tipos = aux4 (ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs))
@@ -408,6 +426,6 @@ fun transProg ex =
 				LetExp({decs=[FunctionDec[({name="_tigermain", params=[],
 								result=NONE, body=ex}, 0)]],
 						body=UnitExp 0}, 0)
-		val _ = transExp(tab_vars, tab_tipos, tigertrans.outermost) main
+		val _ = transExp(tab_vars, tab_tipos, tigertrans.outermost : tigertrans.level) main
 	in	print "bien!\n" end
 end

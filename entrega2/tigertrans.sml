@@ -17,7 +17,7 @@ fun generateUniqueLab () =
 	in Int.toString (!uniqueLabel)
 end
 	
-type level = {parent:frame option , frame: frame, level: int}
+type level = {parent:frame option , frame: frame, levelInt: int}
 (*datatype access = InFrame of int | InReg of tigertemp.label*)
 type access = tigerframe.access
 
@@ -27,20 +27,22 @@ val fraglist = ref ([]: frag list)
 val actualLevel = ref ~1 (* _tigermain debe tener level = 0. *)
 fun getActualLev() = !actualLevel
 
-val outermost: level = {parent=NONE,
-	frame=newFrame{name="_tigermain", formals=[]}, level=getActualLev()}
+fun levInt{parent = _,frame = _,levelInt = l}  = l
 
-fun newLevel{parent={parent, frame, level}, name, formals} =
+val outermost: level = {parent=NONE,
+	frame=newFrame{name="_tigermain", formals=[]}, levelInt=getActualLev()}
+
+fun newLevel{parent={parent, frame, levelInt}, name, formals} =
 	{
 	parent=SOME frame,
 	frame=newFrame{name=name, formals=formals},
-	level=level+1}
+	levelInt=levelInt+1}
 
-fun allocArg{parent, frame, level} b = tigerframe.allocArg frame b
+fun allocArg{parent, frame, levelInt} b = tigerframe.allocArg frame b
 
-fun allocLocal{parent, frame, level} b = tigerframe.allocLocal frame b
+fun allocLocal{parent, frame, levelInt} b = tigerframe.allocLocal frame b
 
-fun formals{parent, frame, level} = tigerframe.formals frame
+fun formals{parent, frame, levelInt} = tigerframe.formals frame
 
 datatype exp =
 	Ex of tigertree.exp
