@@ -365,24 +365,28 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 		               	      NONE => error ("El tipo no se encuentra en el entorno", nl) 						
 	                        | SOME tipo => tipo  
 			    (* insertFun inserta las funciones al entorno*) 
-			    fun insertFun (([], l, venv) :((recfun * int) list * bool list list * venv)) : venv = venv
-		    	  | insertFun (({name = nom, params = p, result = r, ...}, n) :: rns, f::fs,venv) =  
+			    fun insertFuns (([], l, venv) :((recfun * int) list * bool list list * venv)) : venv = venv
+		    	  | insertFuns (({name = nom, params = p, result = r, ...}, n) :: rns, f::fs,venv) =  
 		    	  let
 					val res = decideResult(r, n)
 					val form = aux0 (p, n)
 					val nlevel = tigertrans.newLevel {parent = levNest, name = nom,formals = f}
 					val lab = tigertrans.generateUniqueLab()
-		    	  in insertFun (rns, fs, tabRInserta (nom, Func {level = nlevel, label = lab, formals = form, result = res, extern = false}, venv))
+					(* PREGUNTA: ¿por qué inserto la función con nom en lugar de hacerlo con lab que es único?*)
+		    	  in insertFuns(rns, fs, tabRInserta (nom, Func {level = nlevel, label = lab, formals = form, result = res, extern = false}, venv))
 		    	  end
 		    	                                                 
-			    val env1 = insertFun (xs, listEscapes, venv) (* Este es el entorno en donde ya agregué las funciones *)
-			   (* Agrega los argumentos de una función como variables al entorno *) 
-			   fun insertArgs (([],venv) : ((field * Tipo) list * venv)) : venv = venv
-  			     | insertArgs ((f, t) :: fts, venv) =
+			    val env1 = insertFuns (xs, listEscapes, venv) (* Este es el entorno en donde ya agregué las funciones *)
+			   (* Agrega los argumentos de la función nom como variables al entorno *) 
+			   fun insertArgs (([],_,venv) : ((field * Tipo) list * symbol *venv)) : venv = venv
+  			     | insertArgs ((f, t) :: fts, nom, venv) =
   			     let
-					val lvl = (tigertrans.levInt levNest) : int
+					val lvl = case tabBusca (nom,venv) of
+									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
+								  | SOME (Func {level = l, ...}) => l
+					val lvlint = (tigertrans.levInt lvl) : int
 				 in
-					insertArgs (fts, tabRInserta (#name f, Var {ty= t, access=tigertrans.allocArg levNest (!(#escape f)), nivel= lvl}, venv)) 
+					insertArgs (fts, nom, tabRInserta (#name f, Var {ty= t, access=tigertrans.allocArg levNest (!(#escape f)), nivel= lvlint}, venv)) 
 				 end
   			     (*(#level (levNest : tigertrans.level)) : int}*)
 			   (* Genera una lista de entornos donde se agregaron los argumentos de las funciones *)
@@ -390,7 +394,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			     | newEnvs (({name = nom, params = p, ...}, n) :: rns, venv) =  
 					let
 						val tipos = aux0(p, n)
-						val nvenv = insertArgs (ListPair.zip (p, tipos),venv)
+						val nvenv = insertArgs (ListPair.zip (p, tipos), nom, venv)
 					in 
 						 nvenv :: (newEnvs (rns, venv))
 					end
@@ -401,6 +405,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 			   fun aux4 ([] : (recfun * venv) list) : Tipo list = []
 			     | aux4 (({body = b, ... }, venv) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
+							(* Habría que ver si está bien pasar levNest ahí *)
 							val f = transExp (venv , tenv, levNest) (*Deberìa ser una función que toma una exp*)
 							val elem = #ty (f b)
 						    in elem :: (aux4 rvs) end
