@@ -312,7 +312,7 @@ datatype EnvEntry =
     extern por ahora siempre será false. Será true con funciones de librería
 *)
 		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = (venv,tenv,[])(*(tabRInserta (name, Var {ty = #ty(transExp (venv, tenv,levNest) init)}, venv),tenv,[])*)
-	            | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =	(venv,tenv,[])	
+	            | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
 				let
 					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val r = case tabBusca (t,tenv) of
