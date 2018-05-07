@@ -365,7 +365,9 @@ datatype EnvEntry =
   			     | insertArgs ((f, t) :: fts, nom, venv) =
   			     let
 					val lvl = case tabBusca (nom,venv) of
-									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
+									NONE => error("Agregando argumentos de una función que no está en el entorno",nl)
+								  | SOME (VIntro _) => error("No es funcion", nl)
+								  | SOME (Var _) =>	error("No es funcion", nl)
 								  | SOME (Func {level = l, ...}) => l
 					val lvlint = (tigertrans.levInt lvl) : int
 				 in
