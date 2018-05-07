@@ -311,7 +311,7 @@ datatype EnvEntry =
     result será el result de FunctionDec en caso de que esté presente, sino será TUnit (las funciones siempre deben indicar su tipo)
     extern por ahora siempre será false. Será true con funciones de librería
 *)
-		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = (venv,tenv,[])(*(tabRInserta (name, Var {ty = #ty(transExp (venv, tenv,levNest) init)}, venv),tenv,[])*)
+		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = (tabRInserta (name, Var {ty = #ty(transExp (venv, tenv,levNest) init),access=(tigertrans.allocLocal levNest (!escape)),nivel= tigertrans.levInt(levNest)}, venv), venv),tenv,[])
 	            | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
 				let
 					val texp = #ty(transExp (venv, tenv,levNest) init)
