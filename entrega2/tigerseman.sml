@@ -408,7 +408,7 @@ datatype EnvEntry =
 							val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
 							val elem = #ty (f b)
 						    in elem :: (aux4 rvs) end
-			   val tipos = aux4 (List.map (fn ((a,b),c) => (a,b,c)) (ListPair.zip ((ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs))),listPos)
+			   val tipos = aux4 (List.map (fn ((a,b),c) => (a,b,c)) (ListPair.zip ((ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs))),listPos))
 			   (* aux5 :  *)
 			fun aux5 ([] : ((Tipo * Tipo) * int) list) : bool * int = (true,0)
 			  | aux5 (((t1, t2), n) :: ttns) = if (tiposIguales t1 t2) then aux5 ttns else (false, n)
