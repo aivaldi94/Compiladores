@@ -320,7 +320,7 @@ datatype EnvEntry =
 						| SOME tipo => tipo
          (*val _ = (tigermuestratipos.printTipo("Tipo de init",texp,[]))
           val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) *)
-				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r, access=tigertrans.allocLocal(levNest,!escape),nivel= tigertrans.lvlInt(levNest)}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
+				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r, access=tigertrans.allocLocal(levNest,!escape),nivel= tigertrans.lvlInt(levNest)}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end
 		(* xs es una lista de tuplas*)		
 		| trdec (venv,tenv) (FunctionDec xs) =  
 			let
