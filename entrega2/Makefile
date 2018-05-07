@@ -27,7 +27,7 @@ EXEFILE=
 
 GRALOBJS= tigerabs.uo tigergrm.uo tigerlex.uo tigermain.uo \
 	tigernlin.uo tigerpp.uo tigerescap.uo tigertab.uo tigerseman.uo tigertemp.uo topsort.uo tigertree.uo \
-	tigerframe.uo tigertrans.uo tigerit.uo tigerpila.uo
+	tigerframe.uo tigertrans.uo tigerit.uo tigerpila.uo tigertopsort.uo
 
 all: tiger
 
@@ -59,7 +59,7 @@ clean:
 	$(MOSMLC) $<
 
 depend: tigerabs.sml tigergrm.sml tigerlex.sml tigermain.sml \
-	tigernlin.sml tigerpp.sml
+	tigernlin.sml tigerpp.sml tigertopsort.sml
 	$(REMOVE) Makefile.bak
 	$(MOVE) Makefile Makefile.bak
 	$(MOSMLTOOLS)/cutdeps < Makefile.bak > Makefile
