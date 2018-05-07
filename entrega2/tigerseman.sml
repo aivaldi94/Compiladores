@@ -314,10 +314,10 @@ datatype EnvEntry =
 *)
 		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = 
 				let
-					val tipo = #ty(transExp (venv, tenv,levNest) init)
+					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)					
-				in (tabRInserta (name, Var {ty = tipo,access= acc,nivel= niv}, venv),tenv,[])
+				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[])
 				end
 	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
 				let
@@ -325,9 +325,11 @@ datatype EnvEntry =
 					val r = case tabBusca (t,tenv) of
 						NONE => error ("El tipo no se encuentra en el entorno", nl) 						
 						| SOME tipo => tipo
+					val acc = tigertrans.allocLocal levNest (!escape)
+					val niv = tigertrans.levInt(levNest)
          (*val _ = (tigermuestratipos.printTipo("Tipo de init",texp,[]))
           val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) *)
-				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r, access=(tigertrans.allocLocal levNest (!escape)),nivel= tigertrans.levInt(levNest)}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end
+				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r, access= acc,nivel= niv}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end
 		(* xs es una lista de tuplas*)		
 		| trdec (venv,tenv) (FunctionDec xs) =  
 			let
