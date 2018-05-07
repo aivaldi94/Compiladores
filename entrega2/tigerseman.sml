@@ -397,18 +397,20 @@ datatype EnvEntry =
 			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
 			   (* Corroboramos cada body con su respectivo env *)	
 			   (* aux4 : (List recordFunctionDec) (List Venv) (list int)-> (List Tipo) *)
-			   fun aux4 []= []
-			     | aux4 (({body = b, name=nom, ... }, venv,pos) :: rvs) = let
-							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
-							val lvl = case tabBusca (nom,venv) of
-									NONE => error("Agregando argumentos de una función que no está en el entorno",pos)
-								  | SOME (VIntro _) => error("No deberia pasar. No es funcion", pos) 
-								  | SOME (Var _) =>	error("No deberia pasar. No es funcion", pos)
-								  | SOME (Func {level = l, ...}) => l
-							val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
-							val elem = #ty (f b)
-						    in elem :: (aux4 rvs) end
-			   val aux = ListPair.zip (List.map (fn (fs,_) => fs) xs, venvs, listPos)
+			   fun aux4 [] = []
+			     | aux4 (({body = b, name=nom, ... }, venv,pos) :: rvs) =
+			     	 let
+						(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
+						val lvl = case tabBusca (nom,venv) of
+								NONE => error("Agregando argumentos de una función que no está en el entorno",pos)
+							  | SOME (VIntro _) => error("No deberia pasar. No es funcion", pos) 
+							  | SOME (Var _) =>	error("No deberia pasar. No es funcion", pos)
+							  | SOME (Func {level = l, ...}) => l
+						val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
+						val elem = #ty (f b)
+						in elem :: (aux4 rvs) end
+			   val aux1 = List.map (fn (fs,_) => fs) xs
+			   val aux = ListPair.zip (aux1, venvs, listPos)
 			   val tipos = aux4 aux
 			   (* aux5 :  *)
 			fun aux5 ([] : ((Tipo * Tipo) * int) list) : bool * int = (true,0)
