@@ -389,10 +389,10 @@ datatype EnvEntry =
 			     | newEnvs (({name = nom, params = p, ...}, n) :: rns, venv) =  
 					let
 						val tipos = aux0(p, n)
-						val olala = ListPair.zip (p, tipos)
-						val olala2 = ListPair.zip (olala, listPos)
-						val olala3 = List.map (fn ((a,b),c) => (a,b,c)) olala2
-						val nvenv = insertArgs (olala3, nom, venv)
+						val auxiliar = ListPair.zip (p, tipos)
+						val auxiliar2 = ListPair.zip (auxiliar, listPos)
+						val auxiliar3 = List.map (fn ((a,b),c) => (a,b,c)) auxiliar2
+						val nvenv = insertArgs (auxiliar3, nom, venv)
 					in 
 						 nvenv :: (newEnvs (rns, venv))
 					end
