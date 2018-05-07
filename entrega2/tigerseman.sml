@@ -336,6 +336,7 @@ datatype EnvEntry =
 				val _ = tigertrans.preFunctionDec() (* Aumenta el nivel actual *)
 				val listlistParams = map (fn ({params=paramsFun,...},nl) => paramsFun) xs
 				val listEscapes = map (fn xs => (map (fn {escape=e,...} => !e) xs)) listlistParams : bool list list										
+				val listPos = map (fn (r,p) => p) xs : int list
 
 			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
@@ -395,19 +396,19 @@ datatype EnvEntry =
 			   
 			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
 			   (* Corroboramos cada body con su respectivo env *)	
-			   (* aux4 : (List recordFunctionDec) (List Venv) -> (List Tipo) *)
-			   fun aux4 ([] : (recfun * venv) list) : Tipo list = []
-			     | aux4 (({body = b, name=nom, ... }, venv) :: rvs) = let
+			   (* aux4 : (List recordFunctionDec) (List Venv) (list int)-> (List Tipo) *)
+			   fun aux4 ([] : (recfun * venv * pos) list) : Tipo list = []
+			     | aux4 (({body = b, name=nom, ... }, venv,pos) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
 							val lvl = case tabBusca (nom,venv) of
-									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
-								  | SOME (VIntro _) => error("No es funcion", 100) 
-								  | SOME (Var _) =>	error("No es funcion", 100)
+									NONE => error("Agregando argumentos de una función que no está en el entorno",pos)
+								  | SOME (VIntro _) => error("No deberia pasar. No es funcion", pos) 
+								  | SOME (Var _) =>	error("No deberia pasar. No es funcion", pos)
 								  | SOME (Func {level = l, ...}) => l
 							val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
 							val elem = #ty (f b)
 						    in elem :: (aux4 rvs) end
-			   val tipos = aux4 (ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs))
+			   val tipos = aux4 (ListPair.zip((ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs)),listPos)
 			   (* aux5 :  *)
 			fun aux5 ([] : ((Tipo * Tipo) * int) list) : bool * int = (true,0)
 			  | aux5 (((t1, t2), n) :: ttns) = if (tiposIguales t1 t2) then aux5 ttns else (false, n)
