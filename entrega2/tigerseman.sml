@@ -348,7 +348,7 @@ datatype EnvEntry =
 	                        | SOME tipo => tipo  
 			    (* insertFun inserta las funciones al entorno*) 
 			    fun insertFuns (([], l, venv) :((recfun * int) list * bool list list * venv)) : venv = venv
-			      | insertFuns (xs,[], venv) = venv
+			      | insertFuns (xs,[], venv) = venv (* no deberia pasar nunca *)
 		    	  | insertFuns (({name = nom, params = p, result = r, ...}, n) :: rns, f::fs,venv) =  
 		    	  let
 					val res = decideResult(r, n)
@@ -365,9 +365,9 @@ datatype EnvEntry =
   			     | insertArgs ((f, t) :: fts, nom, venv) =
   			     let
 					val lvl = case tabBusca (nom,venv) of
-									NONE => error("Agregando argumentos de una función que no está en el entorno",nl)
-								  | SOME (VIntro _) => error("No es funcion", nl)
-								  | SOME (Var _) =>	error("No es funcion", nl)
+									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
+								  | SOME (VIntro _) => error("No es funcion", 100)
+								  | SOME (Var _) =>	error("No es funcion", 100)
 								  | SOME (Func {level = l, ...}) => l
 					val lvlint = (tigertrans.levInt lvl) : int
 				 in
