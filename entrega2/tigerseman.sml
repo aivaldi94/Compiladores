@@ -366,12 +366,12 @@ datatype EnvEntry =
   			     let
 					val lvl = case tabBusca (nom,venv) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
-								  | SOME (VIntro _) => error("No es funcion", 100)
+								  | SOME (VIntro _) => error("No es funcion", 100) 
 								  | SOME (Var _) =>	error("No es funcion", 100)
 								  | SOME (Func {level = l, ...}) => l
 					val lvlint = (tigertrans.levInt lvl) : int
 				 in
-					insertArgs (fts, nom, tabRInserta (#name f, Var {ty= t, access=tigertrans.allocArg levNest (!(#escape f)), nivel= lvlint}, venv)) 
+					insertArgs (fts, nom, tabRInserta (#name f, Var {ty= t, access=tigertrans.allocArg lvl (!(#escape f)), nivel= lvlint}, venv)) 
 				 end
   			     (*(#level (levNest : tigertrans.level)) : int}*)
 			   (* Genera una lista de entornos donde se agregaron los argumentos de las funciones *)
@@ -388,10 +388,14 @@ datatype EnvEntry =
 			   (* Corroboramos cada body con su respectivo env *)	
 			   (* aux4 : (List recordFunctionDec) (List Venv) -> (List Tipo) *)
 			   fun aux4 ([] : (recfun * venv) list) : Tipo list = []
-			     | aux4 (({body = b, ... }, venv) :: rvs) = let
+			     | aux4 (({body = b, name=nom ... }, venv) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
-							(* Habría que ver si está bien pasar levNest ahí *)
-							val f = transExp (venv , tenv, levNest) (*Deberìa ser una función que toma una exp*)
+							val lvl = case tabBusca (nom,venv) of
+									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
+								  | SOME (VIntro _) => error("No es funcion", 100) 
+								  | SOME (Var _) =>	error("No es funcion", 100)
+								  | SOME (Func {level = l, ...}) => l
+							val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
 							val elem = #ty (f b)
 						    in elem :: (aux4 rvs) end
 			   val tipos = aux4 (ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs))
