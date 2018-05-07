@@ -421,7 +421,7 @@ datatype EnvEntry =
             	val empty = Splayset.empty String.compare
             	val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
             	val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre", #2 (hd ts))
-            in (venv, tenv', []) (* before (print"Entro a trdec (venv, tenve) TypeDec \n Agregado \n \n \n ";tigermuestratipos.printTTipos(tigertab.tabAList (tenv': (string, Tipo) tigertab.Tabla))) *) end*)
+            in (venv, tenv', []) (* before (print"Entro a trdec (venv, tenve) TypeDec \n Agregado \n \n \n ";tigermuestratipos.printTTipos(tigertab.tabAList (tenv': (string, Tipo) tigertab.Tabla))) *) end
     in trexp end
 
 fun transProg ex =
