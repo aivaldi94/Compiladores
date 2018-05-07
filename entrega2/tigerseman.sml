@@ -372,12 +372,12 @@ datatype EnvEntry =
 			    val env1 = insertFuns (xs, listEscapes, venv) (* Este es el entorno en donde ya agregué las funciones *)
 			   (* Agrega los argumentos de la función nom como variables al entorno *) 
 			   fun insertArgs (([],_,venv) : ((field * Tipo) list * symbol *venv)) : venv = venv
-  			     | insertArgs ((f, t) :: fts, nom, venv) =
+  			     | insertArgs ((f, t,pos) :: fts, nom, venv) =
   			     let
 					val lvl = case tabBusca (nom,venv) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
-								  | SOME (VIntro _) => error("No es funcion", 100) 
-								  | SOME (Var _) =>	error("No es funcion", 100)
+								  | SOME (VIntro _) => error("No es funcion", pos) 
+								  | SOME (Var _) =>	error("No es funcion", pos)
 								  | SOME (Func {level = l, ...}) => l
 					val lvlint = (tigertrans.levInt lvl) : int
 				 in
@@ -389,30 +389,13 @@ datatype EnvEntry =
 			     | newEnvs (({name = nom, params = p, ...}, n) :: rns, venv) =  
 					let
 						val tipos = aux0(p, n)
-						val nvenv = insertArgs (ListPair.zip (p, tipos), nom, venv)
+						val nvenv = insertArgs (ListPair.zip (p, tipos,listPos), nom, venv)
 					in 
 						 nvenv :: (newEnvs (rns, venv))
 					end
 			   
 			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
-			   (* Corroboramos cada body con su respectivo env *)	
-			   (* aux4 : (List recordFunctionDec) (List Venv) -> (List Tipo) *)
-			   (*
-			   fun aux4 ([] : (recfun * venv) list) : Tipo list = []
-			     | aux4 (({body = b, name=nom, ... }, venv) :: rvs) = let
-							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
-							val lvl = case tabBusca (nom,venv) of
-									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
-								  | SOME (VIntro _) => error("No es funcion", 100) 
-								  | SOME (Var _) =>	error("No es funcion", 100)
-								  | SOME (Func {level = l, ...}) => l
-							val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
-							val elem = #ty (f b)
-						    in elem :: (aux4 rvs) end			   
-			   val tipos = aux4 (ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs))
-			*)
-
-
+			   (* Corroboramos cada body con su respectivo env *)				   
 			fun aux4 ([] : (recfun * venv * int) list) : Tipo list = []
 			     | aux4 (({body = b, name=nom, ... }, venv, pos) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
