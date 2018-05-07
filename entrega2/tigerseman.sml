@@ -388,7 +388,7 @@ datatype EnvEntry =
 			   (* Corroboramos cada body con su respectivo env *)	
 			   (* aux4 : (List recordFunctionDec) (List Venv) -> (List Tipo) *)
 			   fun aux4 ([] : (recfun * venv) list) : Tipo list = []
-			     | aux4 (({body = b, name=nom ... }, venv) :: rvs) = let
+			     | aux4 (({body = b, name=nom, ... }, venv) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
 							val lvl = case tabBusca (nom,venv) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
