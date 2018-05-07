@@ -313,14 +313,14 @@ datatype EnvEntry =
 *)
 		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = (venv,tenv,[])(*(tabRInserta (name, Var {ty = #ty(transExp (venv, tenv,levNest) init)}, venv),tenv,[])*)
 	            | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =	(venv,tenv,[])	
-				(*let
+				let
 					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val r = case tabBusca (t,tenv) of
 						NONE => error ("El tipo no se encuentra en el entorno", nl) 						
 						| SOME tipo => tipo
          (*val _ = (tigermuestratipos.printTipo("Tipo de init",texp,[]))
           val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) *)
-				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
+				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r, access=tigertrans.allocLocal(levNest,!escape),nivel= tigertrans.lvlInt(levNest)}, venv),tenv,[]) else error ("La inicializacion no tiene el tipo de la variable",nl) end*)
 		(* xs es una lista de tuplas*)		
 		| trdec (venv,tenv) (FunctionDec xs) =  
 			let
@@ -408,7 +408,7 @@ datatype EnvEntry =
 			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end
 				
 		| trdec (venv,tenv) (TypeDec ts) = (venv,tenv,[])
-			(*let 
+			(* let 
             val empty = Splayset.empty String.compare
             val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
             val tenv' = if (Splayset.numItems ts' = length ts) then tigertopsort.fijaTipos (List.map (fn (r, n) => r) ts) tenv else error("Tipos con el mismo nombre", #2 (hd ts))
