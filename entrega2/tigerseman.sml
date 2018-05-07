@@ -397,7 +397,7 @@ datatype EnvEntry =
 			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
 			   (* Corroboramos cada body con su respectivo env *)	
 			   (* aux4 : (List recordFunctionDec) (List Venv) (list int)-> (List Tipo) *)
-			   fun aux4 ([] : (recfun * venv * pos) list) : Tipo list = []
+			   fun aux4 []= []
 			     | aux4 (({body = b, name=nom, ... }, venv,pos) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
 							val lvl = case tabBusca (nom,venv) of
