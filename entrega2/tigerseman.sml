@@ -371,7 +371,7 @@ datatype EnvEntry =
 		    	                                                 
 			    val env1 = insertFuns (xs, listEscapes, venv) (* Este es el entorno en donde ya agregué las funciones *)
 			   (* Agrega los argumentos de la función nom como variables al entorno *) 
-			   fun insertArgs (([],_,venv) : ((field * Tipo) list * symbol *venv)) : venv = venv
+			   fun insertArgs (([],_,venv) : ((field * Tipo * int) list * symbol *venv)) : venv = venv
   			     | insertArgs ((f, t,pos) :: fts, nom, venv) =
   			     let
 					val lvl = case tabBusca (nom,venv) of
