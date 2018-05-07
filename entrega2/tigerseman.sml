@@ -336,7 +336,6 @@ datatype EnvEntry =
 				val _ = tigertrans.preFunctionDec() (* Aumenta el nivel actual *)
 				val listlistParams = map (fn ({params=paramsFun,...},nl) => paramsFun) xs
 				val listEscapes = map (fn xs => (map (fn {escape=e,...} => !e) xs)) listlistParams : bool list list										
-				val listPos = map (fn (r,p) => p) xs : int list
 
 			    val empty = Splayset.empty String.compare
 	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
@@ -396,9 +395,9 @@ datatype EnvEntry =
 			   
 			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
 			   (* Corroboramos cada body con su respectivo env *)	
-			   (* aux4 : (List recordFunctionDec) (List Venv)  -> (List Tipo) *)
+			   (* aux4 : (List recordFunctionDec) (List Venv) -> (List Tipo) *)
 			   fun aux4 ([] : (recfun * venv) list) : Tipo list = []
-			     | aux4 (({body = b, name=nom, ... }, venv, pos) :: rvs) = let
+			     | aux4 (({body = b, name=nom, ... }, venv) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
 							val lvl = case tabBusca (nom,venv) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
