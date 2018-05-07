@@ -348,6 +348,7 @@ datatype EnvEntry =
 	                        | SOME tipo => tipo  
 			    (* insertFun inserta las funciones al entorno*) 
 			    fun insertFuns (([], l, venv) :((recfun * int) list * bool list list * venv)) : venv = venv
+			      | insertFuns (xs,[], venv) = venv
 		    	  | insertFuns (({name = nom, params = p, result = r, ...}, n) :: rns, f::fs,venv) =  
 		    	  let
 					val res = decideResult(r, n)
