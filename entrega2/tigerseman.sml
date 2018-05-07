@@ -397,7 +397,7 @@ datatype EnvEntry =
 			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
 			   (* Corroboramos cada body con su respectivo env *)	
 			   (* aux4 : (List recordFunctionDec) (List Venv) (list int)-> (List Tipo) *)
-			   fun aux4 [] = []
+			   fun aux4 [] : (recfun * venv * pos) list = []
 			     | aux4 (({body = b, name=nom, ... }, venv,pos) :: rvs) =
 			     	 let
 						(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
@@ -411,7 +411,7 @@ datatype EnvEntry =
 						in elem :: (aux4 rvs) end			   
 			   val aux = ListPair.zip (List.map (fn (fs,_) => fs) xs, venvs)
 			   val aux2 = ListPair.zip (aux, listPos)
-			   val fin = List.map (fn (({name=n, params=p, result=r, body=bod},b),c) => ({name=n, params=p, result=r, body=bod},b,c)) aux2
+			   val fin = List.map (fn ((a,b),c) => (a,b,c)) aux2
 			   val tipos = aux4 aux2
 			   (* aux5 :  *)
 			fun aux5 ([] : ((Tipo * Tipo) * int) list) : bool * int = (true,0)
