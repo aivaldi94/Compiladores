@@ -398,7 +398,7 @@ datatype EnvEntry =
 			   (* Corroboramos cada body con su respectivo env *)	
 			   (* aux4 : (List recordFunctionDec) (List Venv) (list int)-> (List Tipo) *)
 			   fun aux4 ([] venv pos) = []
-			     | aux4 (({body = b, name=nom, ... } :: rvs) (venv :: venvs) (p :: poss) =
+			     | aux4 ({body = b, name=nom, ... } :: rvs) (venv :: venvs) (p :: poss) =
 			     	 let
 						(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
 						val lvl = case tabBusca (nom,venv) of
