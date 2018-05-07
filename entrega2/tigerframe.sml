@@ -15,7 +15,6 @@
 		|   localn   |	fp-4*n
 *)
 
-(*oladfgdfgdfg*)
 structure tigerframe :> tigerframe = struct
 
 open tigertree
@@ -73,6 +72,7 @@ fun formals({formals=f, ...}: frame) =
 	in aux(argsInicial, f) end
 
 fun maxRegFrame(f: frame) = !(#actualReg f)
+
 fun allocArg (f: frame) b = 
 	case b of
 	true =>

@@ -17,6 +17,7 @@ val tab_tipos : (string, Tipo) Tabla = tabInserList(
 	[("int", TInt), ("string", TString)])
 
 val levelPila: tigertrans.level tigerpila.Pila = tigerpila.nuevaPila1(tigertrans.outermost) 
+
 fun pushLevel l = tigerpila.pushPila levelPila l
 fun popLevel() = tigerpila.popPila levelPila 
 fun topLevel() = tigerpila.topPila levelPila
@@ -86,8 +87,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 							NONE => error("Funcion no existente",nl)
 							| SOME (VIntro _) => error("No es funcion",nl)
 							| SOME (Var _) => error("No es funcion",nl)
-							| SOME (Func {level=lev, label=lab,formals=l,result=tip,extern=ext})  => (l,tip,lab,lev,ext)
-							
+							| SOME (Func {level=lev,label=lab,formals=l,result=tip,extern=ext}) => (l,tip,lab,lev,ext)							
 				val _ = if (length ts <> length args) then error("Argumentos extras o faltantes",nl) else ()
 				val m = ListPair.zip (map (fn x => #ty (trexp x)) args : Tipo list, ts) : (Tipo * Tipo) list
 				fun equalList ([] : (Tipo * Tipo) list) : bool = true
@@ -177,21 +177,21 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 							NONE => error("Variable no existente",nl)
 							| SOME (VIntro _) => error("No es variable.Solo lectura",nl)
 							| SOME (Var {ty = tip,...}) => tip 
-							| SOME (Func _)  => raise Fail "No es variable."
+							| SOME (Func _)  => error("No es variable",nl)
 				val {exp=eexp,ty=texp} = trexp exp
 				val {exp=evar,ty=_} = trvar (SimpleVar s, nl)
-			in if (tiposIguales texp r) then {exp=assignExp{var =evar ,exp = eexp},ty= TUnit} else error("Tipos erroneos",nl) end	(*COMPLETADO*)		
+			in if (tiposIguales texp r) then {exp=assignExp{var =evar ,exp = eexp},ty= TUnit} else error("Tipos erroneos",nl) end	
 		| trexp(AssignExp({var=FieldVar (v,s), exp}, nl)) = 
 			let 
 				val {exp=evar,ty=r} = trvar (FieldVar (v,s),nl)
 				val {exp=eexp,ty=texp} = trexp exp
 			(* Esta comparación estaba hecha con un =, en lugar de con tiposIguales *)	
-			in if tiposIguales texp r then {exp=assignExp{var =evar ,exp = eexp},ty = TUnit} else error("Tipos erroneos",nl) end (*COMPLETADO*)
+			in if tiposIguales texp r then {exp=assignExp{var =evar ,exp = eexp},ty = TUnit} else error("Tipos erroneos",nl) end
 		| trexp(AssignExp({var=SubscriptVar(v,s), exp}, nl)) =	
 			let 
 				val {exp=evar,ty=r} = trvar (SubscriptVar (v,s),nl)
 				val {exp=eexp,ty=texp} = trexp exp
-			in if tiposIguales texp r then {exp=assignExp{var =evar ,exp = eexp},ty = TUnit} else error("Tipos erroneos",nl) end (*COMPLETADO*)
+			in if tiposIguales texp r then {exp=assignExp{var =evar ,exp = eexp},ty = TUnit} else error("Tipos erroneos",nl) end
 			
 		| trexp(IfExp({test, then', else'=SOME else'}, nl)) =
 			let val {exp=testexp, ty=tytest} = trexp test
@@ -199,7 +199,8 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			    val {exp=elseexp, ty=tyelse} = trexp else'
 			in
 				if tipoReal (tytest,tenv)=TInt andalso tiposIguales tythen tyelse then
-				{exp=if tipoReal (tythen,tenv)=TUnit then ifThenElseExpUnit {test=testexp,then'=thenexp,else'=elseexp} else ifThenElseExp {test=testexp,then'=thenexp,else'=elseexp}, ty=tythen}
+				{exp=if tipoReal (tythen,tenv)=TUnit then ifThenElseExpUnit {test=testexp,then'=thenexp,else'=elseexp}
+				else ifThenElseExp {test=testexp,then'=thenexp,else'=elseexp}, ty=tythen}
 				else error("Error de tipos en if" ,nl)
 			end
 		| trexp(IfExp({test, then', else'=NONE}, nl)) =
@@ -269,7 +270,7 @@ and trvar(SimpleVar s, nl) =
 				| SOME (Func _)  => error("No es variable",nl)
 
 			in r end
-		| trvar(FieldVar(v, s), nl) = (*{exp= unitExp(), ty=TUnit}*)
+		| trvar(FieldVar(v, s), nl) = 
 			let 
 				val {exp=expfield, ty=tip} = trvar (v,nl)
 				val r = case tip of 
@@ -311,8 +312,14 @@ datatype EnvEntry =
     result será el result de FunctionDec en caso de que esté presente, sino será TUnit (las funciones siempre deben indicar su tipo)
     extern por ahora siempre será false. Será true con funciones de librería
 *)
-		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = (tabRInserta (name, Var {ty = #ty(transExp (venv, tenv,levNest) init),access=(tigertrans.allocLocal levNest (!escape)),nivel= tigertrans.levInt(levNest)}, venv),tenv,[])
-	            | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
+		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = 
+				let
+					val tipo = #ty(transExp (venv, tenv,levNest) init)
+					val acc = tigertrans.allocLocal levNest (!escape)
+					val niv = tigertrans.levInt(levNest)					
+				in (tabRInserta (name, Var {ty = tipo,access= acc,nivel= niv}, venv),tenv,[])
+				end
+	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
 				let
 					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val r = case tabBusca (t,tenv) of
