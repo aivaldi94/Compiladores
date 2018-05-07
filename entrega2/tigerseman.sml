@@ -44,28 +44,12 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 	("exit", Func{level=topLevel(), label="exit",
 		formals=[TInt], result=TUnit, extern=true})
 	])
-(*)
-fun tipoReal (TTipo (s, ref (SOME (t)))) = tipoReal t
-  | tipoReal t = t
-REVISAR
-*)
 
 fun tipoReal ((TTipo (s, ref (SOME (t)))),(env : tenv)) =
 	(case tabBusca(s , env) of 
          NONE => raise Fail "tipoReal Ttipo"
        | SOME ti => ti)
     | tipoReal (t,(env : tenv)) = t
-
-
-
-(*
-  De entrega1:
-    fun tipoReal (TTipo s, (env : tenv)) : Tipo = 
-    (case tabBusca(s , env) of 
-         NONE => raise Fail "tipoReal Ttipo"
-       | SOME t => t)
-  | tipoReal (t, _) = t
-*)
 
 fun tiposIguales (TRecord _) TNil = true
   | tiposIguales TNil (TRecord _) = true 
@@ -247,13 +231,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			in
 				if tipoReal ((#ty tlo),tenv) = TInt andalso tipoReal((#ty thi),tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, ty=TUnit}
 				else if tipoReal((#ty tlo),tenv) <> TInt orelse tipoReal((#ty thi),tenv) <> TInt then error("Error de tipo en la condición", nl)
-				else error("El cuerpo de un for no puede devolver un valor", nl)   
-				(*
-				{exp= unitExp(), ty=TUnit}				
-				if tipoReal(#ty tlo, tenv) = TInt andalso tipoReal(#ty thi, tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp(), ty=TUnit}
-				else if tipoReal(#ty tlo, tenv) <> TInt orelse tipoReal(#ty thi, tenv) <> TInt then error("Error de tipo en la condición", nl)
-				else error("El cuerpo de un for no puede devolver un valor", nl)   
-				*)
+				else error("El cuerpo de un for no puede devolver un valor", nl)   				
 			end		
 		| trexp(LetExp({decs, body}, _)) =
 			let
@@ -314,17 +292,20 @@ and trvar(SimpleVar s, nl) =
 			in r end
 
 (*
-and dec = FunctionDec of ({name: symbol, params: field list,
+	ENTREGA 2:
+
+dec = FunctionDec of ({name: symbol, params: field list,
 		result: symbol option, body: exp} * pos) list
 	| VarDec of {name: symbol, escape: bool ref,
 		     typ: symbol option, init: exp} * pos
 	| TypeDec of ({name: symbol, ty: ty} * pos) list
-		datatype EnvEntry =
-	VIntro	(* int readonly *)
-	| Var of {ty: Tipo}
-	| Func of {level: unit, label: tigertemp.label,
+
+datatype EnvEntry =
+	VIntro of {access: tigertrans.access, level: int}	(* int readonly *)
+	| Var of {ty: Tipo, access: tigertrans.access, nivel: int}
+	| Func of {level: tigertrans.level, label: tigertemp.label,
 		formals: Tipo list, result: Tipo, extern: bool}
-		
+
 	Cosas a tener en cuenta de EnvEntry Func: 
 	label es un string que debe ser único, para identificar funciones anidadas con el mismo nombre.
     result será el result de FunctionDec en caso de que esté presente, sino será TUnit (las funciones siempre deben indicar su tipo)
@@ -373,7 +354,7 @@ and dec = FunctionDec of ({name: symbol, params: field list,
 					val form = aux0 (p, n)
 					val nlevel = tigertrans.newLevel {parent = levNest, name = nom,formals = f}
 					val lab = tigertrans.generateUniqueLab()
-					(* PREGUNTA: ¿por qué inserto la función con nom en lugar de hacerlo con lab que es único?*)
+					(* PREGUNTA: ¿por qué inserto la función con nom en lugar de hacerlo con lab que es único? *)
 		    	  in insertFuns(rns, fs, tabRInserta (nom, Func {level = nlevel, label = lab, formals = form, result = res, extern = false}, venv))
 		    	  end
 		    	                                                 
