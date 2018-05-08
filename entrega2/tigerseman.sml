@@ -316,7 +316,9 @@ datatype EnvEntry =
 				let
 					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val acc = tigertrans.allocLocal levNest (!escape)
-					val niv = tigertrans.levInt(levNest)					
+					val niv = tigertrans.levInt(levNest)			
+							
+					(* val addDec = AssignExp {var= ?, exp=init} *)
 					
 				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[])
 				end
