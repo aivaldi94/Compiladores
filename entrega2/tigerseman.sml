@@ -236,12 +236,12 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			end		
 		| trexp(LetExp({decs, body}, _)) =
 			let
-				fun aux (d, (v, t, exps1)) =
+				fun aux ((d, (v, t, exps1)) : (dec * ( venv * tenv * exp list))) : (venv * tenv * exp list) =
 				let
 					val (v', t', exps2) = trdec (v, t) d
 				in
 					(v', t', exps1@exps2)
-				end
+				end 
 				val (venv', tenv', expdecs) = List.foldl aux (venv, tenv, []) decs
 				val {exp=expbody,ty=tybody}=transExp (venv', tenv',levNest) body
 			in 
@@ -317,6 +317,7 @@ datatype EnvEntry =
 					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)					
+					
 				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[])
 				end
 	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
