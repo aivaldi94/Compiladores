@@ -91,7 +91,7 @@ fun fijaNONE [] env = env
 	NONE => raise Fail "error interno 666+1"
 	| SOME ras => (ref(ar) := ras; fijaNONE t env))
 | fijaNONE((name, TRecord(lf, u))::t) env =
-	let	fun busNONE(s, ar as (ref(TTipo t)), _) =
+	let	fun busNONE(s, ar as (TTipo t), _) =
 			(ar := tabSaca(t, env) handle _ => raise noExiste)
 		| busNONE _ = ()
 		val _ = List.app busNONE lf
