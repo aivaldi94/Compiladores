@@ -39,7 +39,7 @@ fun buscaArrRecords lt =
 		| buscaRecs({name, ty=RecordTy lf}::t) res =
 			let	fun genrecs [] _ = []
 				| genrecs({name, escape, typ=NameTy s}::tail) n =
-					(name, ref(TTipo (s,refOptTipo), n)::genrecs tail (n+1)
+					(name, ref(TTipo (s,refOptTipo)), n)::genrecs tail (n+1)
 				| genrecs _ _ = raise Fail "error interno 666+3"
 			in	buscaRecs t ((name, TRecord(genrecs lf 0, ref()))::res) end
 		| buscaRecs({name, ty=ArrayTy ty}::t) res = buscaRecs t ((name, TArray(ref(TTipo ty), ref()))::res)
