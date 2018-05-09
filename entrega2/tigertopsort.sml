@@ -37,7 +37,7 @@ fun topsort P =
 fun buscaArrRecords lt =
 	let	fun buscaRecs [] res = res
 		| buscaRecs({name, ty=RecordTy lf}::t) res =
-			let	fun genrecs [] _ = []
+			let	fun genrecs [] _ = [] : (string * Tipo * int) list
 				| genrecs({name, escape, typ=NameTy s}::tail) n =
 					(name, ref(TTipo (s,ref NONE) ), n)::genrecs tail (n+1)
 				| genrecs _ _ = raise Fail "error interno 666+3"
