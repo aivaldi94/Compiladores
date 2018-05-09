@@ -1,9 +1,9 @@
 # Unix makefile for tigermain example
-#HOME=/usr/local/bin
-HOME=/usr/bin
+HOME=/usr/local/bin
+#HOME=/usr/bin
 MOSMLHOME=${HOME}
-#MOSMLTOOLS=camlrunm /usr/local/share/mosml/tools
-MOSMLTOOLS=camlrunm /usr/share/mosml/tools
+MOSMLTOOLS=camlrunm /usr/local/share/mosml/tools
+#MOSMLTOOLS=camlrunm /usr/share/mosml/tools
 MOSMLLEX=mosmllex
 MOSMLYACC=mosmlyac -v
 
@@ -26,7 +26,7 @@ EXEFILE=
 .SUFFIXES : .sig .sml .ui .uo
 
 GRALOBJS= tigerabs.uo tigergrm.uo tigerlex.uo tigermain.uo \
-	tigernlin.uo tigerpp.uo tigerescap.uo tigertab.uo tigertopsort.uo tigerseman.uo tigertemp.uo tigertree.uo \
+	tigernlin.uo tigerpp.uo tigerescap.uo tigertab.uo tigerseman.uo tigertemp.uo topsort.uo tigertree.uo \
 	tigerframe.uo tigertrans.uo tigerit.uo tigerpila.uo
 
 all: tiger
