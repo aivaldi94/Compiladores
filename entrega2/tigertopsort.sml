@@ -42,7 +42,7 @@ fun buscaArrRecords lt =
 					(name, TTipo (s,ref NONE), n)::genrecs tail (n+1)
 				| genrecs _ _ = raise Fail "error interno 666+3"
 			in	buscaRecs t ((name, TRecord(genrecs lf 0, ref()))::res) end
-		| buscaRecs({name, ty=ArrayTy ty}::t) res = buscaRecs t ((name, TArray(ref(TTipo ty), ref()))::res)
+		| buscaRecs({name, ty=ArrayTy ty}::t) res = buscaRecs t ((name, TArray(TTipo ty, ref()))::res)
 		| buscaRecs(_::t) res = buscaRecs t res
 	in	buscaRecs lt [] end
 fun genPares lt =
