@@ -21,7 +21,7 @@ fun printTipo(n, t, lenv) =
 				| aux ((sr, TArray(_, u), ir)::t) = (print (buscaRecordArray u lenv); print(" "^Int.toString ir^" "); aux t)
 				| aux ((sr, tr , ir)::t) = (prnt tr; print(" "^Int.toString ir^" "); aux t)
 			in print "TRecord["; aux l; print "]\n" end
-		| prnt(TTipo s) =
+		| prnt(TTipo (s,ref NONE)) =
 			print("TTipo "^s)
     in	print(n^" = "); prnt t end
 fun printTTipos tips = List.app (fn(s,t) => printTipo(s, t, tips)) tips
