@@ -92,7 +92,7 @@ fun fijaNONE [] env = env
 	| SOME ras => (ref(ar) := ras; fijaNONE t env))
 | fijaNONE((name, TRecord(lf, u))::t) env =
 	let	fun busNONE(s, ar as (TTipo t), _) =
-			(ar := tabSaca(t, env) handle _ => raise noExiste)
+			(ref(ar) := tabSaca(t, env) handle _ => raise noExiste)
 		| busNONE _ = ()
 		val _ = List.app busNONE lf
 	in	fijaNONE t env end
