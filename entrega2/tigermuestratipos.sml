@@ -15,7 +15,7 @@ fun printTipo(n, t, lenv) =
     	| prnt(TArray(t, _)) = (print "TArray of "; prnt t)
     	| prnt(TRecord(l, u)) =
 			let fun aux [] = ()
-				| aux ((sr, ref(TTipo tr), ir)::t) =
+				| aux ((sr, ref(TTipo (tr,ref NONE)), ir)::t) =
 								print("TRecord(TTipo "^tr^" "^Int.toString(ir)^")\n")
 				| aux ((sr, ref(TRecord(_, u)), ir)::t) = (print (buscaRecordArray u lenv); print(" "^Int.toString ir^" "); aux t)
 				| aux ((sr, ref(TArray(_, u)), ir)::t) = (print (buscaRecordArray u lenv); print(" "^Int.toString ir^" "); aux t)
