@@ -33,13 +33,13 @@ fun topsort P =
 							NONE => y::l1 | _ => l1
 			in	l2 end) [] lt
 	in	tsort P (elementos P) [] end
-(* hola *)
+
 fun buscaArrRecords lt =
 	let	fun buscaRecs [] res = res
 		| buscaRecs({name, ty=RecordTy lf}::t) res =
 			let	fun genrecs [] _ = []
 				| genrecs({name, escape, typ=NameTy s}::tail) n =
-					(name, ref(TTipo (s,_) ), n)::genrecs tail (n+1)
+					(name, ref(TTipo (s,ref NONE) ), n)::genrecs tail (n+1)
 				| genrecs _ _ = raise Fail "error interno 666+3"
 			in	buscaRecs t ((name, TRecord(genrecs lf 0, ref()))::res) end
 		| buscaRecs({name, ty=ArrayTy ty}::t) res = buscaRecs t ((name, TArray(ref(TTipo ty), ref()))::res)
