@@ -23,6 +23,7 @@ fun printTipo(n, t, lenv) =
 			in print "TRecord["; aux l; print "]\n" end
 		| prnt(TTipo (s,ref NONE)) =
 			print("TTipo "^s)
+		| prnt _ = ()
     in	print(n^" = "); prnt t end
 fun printTTipos tips = List.app (fn(s,t) => printTipo(s, t, tips)) tips
 end
