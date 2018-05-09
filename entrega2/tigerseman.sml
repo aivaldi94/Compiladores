@@ -426,7 +426,7 @@ datatype EnvEntry =
 			val ok = aux5 (ListPair.zip (ListPair.zip(lp,tipos), List.map (fn (_,n) => n) xs))
 			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end
 				
-		| trdec (venv,tenv) (TypeDec ts) = (venv, tenv, [])
+		| trdec (venv,tenv) (TypeDec ts) = (* (venv, tenv, []) *)
 			let 
             	val empty = Splayset.empty String.compare
             	val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
