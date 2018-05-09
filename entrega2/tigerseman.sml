@@ -1,4 +1,4 @@
-vstructure tigerseman :> tigerseman =
+structure tigerseman :> tigerseman =
 struct
 
 open tigerabs
