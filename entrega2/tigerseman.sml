@@ -317,7 +317,13 @@ datatype EnvEntry =
 					val texp = #ty(transExp (venv, tenv,levNest) init)
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)			
-							
+					(*case tipoReal texp of
+						TInt SV
+						TString SV AR
+						TArray extraer size del init
+						TRecord contiene lista de ahi sacamos con List.length el size
+						TFunc error no deberia pasar
+					*)
 					(* val addDec = AssignExp {var= ?, exp=init} *)
 					
 				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[])
