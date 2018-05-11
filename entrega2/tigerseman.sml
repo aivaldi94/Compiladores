@@ -427,6 +427,7 @@ datatype EnvEntry =
 			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end
 				
 		| trdec (venv,tenv) (TypeDec ts) = 
+		(* Controlar fijatipos -> hay arreglos que no sabemos si estan bien en tigertopsort *)
 			let 
             	val empty = Splayset.empty String.compare
             	val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
