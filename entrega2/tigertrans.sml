@@ -228,7 +228,7 @@ let
 	val s = topSalida()
 in
 	Nx (JUMP (NAME s, [s]))
-end (*COMPLETADO*)
+end 
 
 fun seqExp ([]:exp list) = Nx (EXP(CONST 0))
 	| seqExp (exps:exp list) =
@@ -296,7 +296,6 @@ in
 		LABEL f])
 		
 end
- (*COMPLETADO*)
 
 fun ifThenElseExp {test,then',else'} =
 let
@@ -328,7 +327,6 @@ in
 		expelse])
 		
 end
-(*COMPLETADO*)
 
 fun assignExp{var, exp} =
 let
