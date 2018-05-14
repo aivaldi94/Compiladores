@@ -84,9 +84,9 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 		| trexp(NilExp _)= {exp=nilExp(), ty=TNil}
 		| trexp(IntExp(i, _)) = {exp=intExp i, ty=TInt}
 		| trexp(StringExp(s, _)) = {exp=stringExp(s), ty=TString}
-		| trexp(CallExp({n, args}, nl)) = 	
+		| trexp(CallExp({func, args}, nl)) = 	
 			let 
-				val (ts,t,lab,lev,ext) = case tabBusca(n, venv) of
+				val (ts,t,lab,lev,ext) = case tabBusca(func, venv) of
 							NONE => error("Funcion no existente",nl)
 							| SOME (VIntro _) => error("No es funcion",nl)
 							| SOME (Var _) => error("No es funcion",nl)
@@ -96,8 +96,8 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 				val argsExp = map (fn x => #exp (trexp x)) args : (tigertrans.exp list)			
 			in
 				case t of
-					TUnit => if eqList m then {exp=callExp(n,ext,true,lev,argsExp), ty= t} else error("Tipos erroneos",nl)
-				    | _ => if eqList m then {exp=callExp(n,ext,false,lev,argsExp), ty= t} else error("Tipos erroneos",nl) 
+					TUnit => if eqList m then {exp=callExp(func,ext,true,lev,argsExp), ty= t} else error("Tipos erroneos",nl)
+				    | _ => if eqList m then {exp=callExp(func,ext,false,lev,argsExp), ty= t} else error("Tipos erroneos",nl) 
 			end
 		| trexp(OpExp({left, oper=EqOp, right}, nl)) =
 			let 
