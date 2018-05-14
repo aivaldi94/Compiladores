@@ -322,15 +322,15 @@ datatype EnvEntry =
 						TString SV AR
 						TArray extraer size del init
 						TRecord contiene lista de ahi sacamos con List.length el size
-						TFunc error no deberia pasar
-					*)
-					(* val addDec = AssignExp {var= ?, exp=init} *)
-					(* Y si con exp list se refiere a tigertrans.exp? O sea a Ex ?
-					   Supuestamente en esta etapa tendriamos que hacer todo con ese
-					   tipo de datos, porque es para pasar a codigo intermedio el otro ya fue.
-					*)
-					val v = tigertrans.assignExp{var=tigertrans.varDec (acc),exp=eexp}					   					
-				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[v])
+						TFunc error no deberia pasar *)
+					(* Y si con exp list se refiere a tigertrans.exp? O sea a Ex/Nx etc..?
+					   Supuestamente en esta etapa no tendriamos que escribir nada de tigerabs.exp
+					   tenemos que pasar al codigo intermedio mediante tigertrans, que usa el otro exp
+					   Entonces esto que queriamos agregar val addDec = AssignExp {var= ?, exp=init}
+					   no va. Para generar algo con esa forma usamos tigertrans.assignexp *)
+					val v = tigertrans.assignExp{var=tigertrans.varDec (acc),exp=eexp}	
+					(* Habria que hacer esto para cada opcion escrita arriba? *)				   					
+				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[])
 				end
 	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
 				let
