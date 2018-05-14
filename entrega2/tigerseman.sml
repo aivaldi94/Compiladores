@@ -74,6 +74,9 @@ fun tiposIguales (TRecord _) TNil = true
 		end
   | tiposIguales a b = (a=b)
 
+fun eqList ([] : (Tipo * Tipo) list) : bool = true
+	| eqList ((t1, t2) :: tss) = if (tiposIguales t1 t2) then eqList tss else false
+
 fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tigerabs.exp -> expty) =
 	let fun error(s, p) = raise Fail ("Error -- línea "^Int.toString(p)^": "^s^"\n")
 		fun trexp(VarExp v) = trvar(v)
@@ -81,22 +84,20 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 		| trexp(NilExp _)= {exp=nilExp(), ty=TNil}
 		| trexp(IntExp(i, _)) = {exp=intExp i, ty=TInt}
 		| trexp(StringExp(s, _)) = {exp=stringExp(s), ty=TString}
-		| trexp(CallExp({func, args}, nl)) = 	
+		| trexp(CallExp({n, args}, nl)) = 	
 			let 
-				val (ts,t,lab,lev,ext) = case tabBusca(func, venv) of
+				val (ts,t,lab,lev,ext) = case tabBusca(n, venv) of
 							NONE => error("Funcion no existente",nl)
 							| SOME (VIntro _) => error("No es funcion",nl)
 							| SOME (Var _) => error("No es funcion",nl)
 							| SOME (Func {level=lev,label=lab,formals=l,result=tip,extern=ext}) => (l,tip,lab,lev,ext)							
 				val _ = if (length ts <> length args) then error("Argumentos extras o faltantes",nl) else ()
-				val m = ListPair.zip (map (fn x => #ty (trexp x)) args : Tipo list, ts) : (Tipo * Tipo) list
-				fun equalList ([] : (Tipo * Tipo) list) : bool = true
-				 | equalList ((t1, t2) :: tss) = if (tiposIguales t1 t2) then equalList tss else false	
+				val m = ListPair.zip (map (fn x => #ty (trexp x)) args, ts)
 				val argsExp = map (fn x => #exp (trexp x)) args : (tigertrans.exp list)			
 			in
 				case t of
-					TUnit => if equalList m then {exp=callExp(func,ext,true,lev,argsExp) : tigertrans.exp, ty= t} else error("Tipos erroneos",nl)
-				    | _ => if equalList m then {exp=callExp(func,ext,false,lev,argsExp) : tigertrans.exp, ty= t} else error("Tipos erroneos",nl) 
+					TUnit => if eqList m then {exp=callExp(n,ext,true,lev,argsExp), ty= t} else error("Tipos erroneos",nl)
+				    | _ => if eqList m then {exp=callExp(n,ext,false,lev,argsExp), ty= t} else error("Tipos erroneos",nl) 
 			end
 		| trexp(OpExp({left, oper=EqOp, right}, nl)) =
 			let 
