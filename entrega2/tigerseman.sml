@@ -330,7 +330,10 @@ datatype EnvEntry =
 					   Entonces esto que queriamos agregar val addDec = AssignExp {var= ?, exp=init}
 					   no va. Para generar algo con esa forma usamos tigertrans.assignexp *)
 					val v = tigertrans.assignExp{var=tigertrans.varDec (acc),exp=eexp}	
-					(* Habria que hacer esto para cada opcion escrita arriba? *)				   					
+					(* Habria que hacer esto para cada opcion escrita en el case? No se, porque la unica vez que 
+					se llama a trdec en este archivo es en LetExp. trdec es llamada por aux que a la vez es utilizada por un foldl
+					es decir que puede ser que se arme una super lista ahi a partir de todas minilistas (cada llamada a trdec 
+						contendra un elemento (?))*)				   					
 				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[])
 				end
 	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
