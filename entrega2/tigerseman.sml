@@ -314,7 +314,7 @@ datatype EnvEntry =
 *)
 		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = 
 				let
-					val texp = #ty(transExp (venv, tenv,levNest) init)
+					val {ty=texp,exp=eexp} = transExp (venv, tenv,levNest) init
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)			
 					(*case tipoReal texp of
@@ -328,9 +328,9 @@ datatype EnvEntry =
 					(* Y si con exp list se refiere a tigertrans.exp? O sea a Ex ?
 					   Supuestamente en esta etapa tendriamos que hacer todo con ese
 					   tipo de datos, porque es para pasar a codigo intermedio el otro ya fue.
-					   *)
-					
-				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[])
+					*)
+					val = tigertrans.assignExp{tigertrans.varDec (acc),eexp}					   					
+				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[val])
 				end
 	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
 				let
