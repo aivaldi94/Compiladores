@@ -200,7 +200,7 @@ let
 	val s = unEx size
 	val i = unEx init
 in
-	Ex (externalCall("initArray", [s, i]))
+	Ex (externalCall("allocArray", [s, i]))
 end
 
 fun callExp(name,ext,isproc,lev, ls : exp list) = 

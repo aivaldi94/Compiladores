@@ -16,8 +16,6 @@ val allocLocal : level -> bool -> access
 val levInt : level -> int
 
 val generateUniqueLab: unit -> tigertemp.label
-val sumUniqueLabel: unit -> unit
-val uniqueLabel: int ref
 
 type exp 
 val procEntryExit : {level: level, body: exp} -> unit
