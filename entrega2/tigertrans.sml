@@ -417,34 +417,32 @@ end
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
 fun binOpStrExp {left,oper = PlusOp,right} = raise Fail "No podes sumar strings"
-fun binOpStrExp {left,oper = MinusOp,right} = raise Fail "No podes restar strings"
-fun binOpStrExp {left,oper = TimesOp,right} = raise Fail "No podes multiplicar strings"
-fun binOpStrExp {left,oper = DivideOp,right} = raise Fail "No podes dividir strings"
-fun binOpStrExp {left,oper = EqOp,right} =
-	let
-		val l = unEx left
-		val r = unEx right		
-		val n = case externalCall("_stringCompare", [l , r]) of
-				CONST n => n
-				| _ => raise Fail "no deberia pasar"		
-	in 
-		if (n = 0) then Ex (CONST 1) else Ex (CONST 0)
-	end
-
-fun binOpStrExp {left,oper = NeqOp,right} =
-	let
-		val l = unEx left
-		val r = unEx right		
-		val n = case externalCall("_stringCompare", [l , r]) of
-				CONST n => n
-				| _ => raise Fail "no deberia pasar"		
-	in 
-		if (n = 0) then Ex (CONST 0) else Ex (CONST 1)
-	end
-
-fun binOpStrExp {left,oper = LtOp,right} = Ex (CONST 1)
-fun binOpStrExp {left,oper = LeOp,right} = Ex (CONST 1)
-fun binOpStrExp {left,oper = GtOp,right} = Ex (CONST 1)
-fun binOpStrExp {left,oper = GeOp,right} = Ex (CONST 1)
-fun binOpStrExp {left,oper,right} = raise Fail "No deberia pasar"
+	| binOpStrExp {left,oper = MinusOp,right} = raise Fail "No podes restar strings"
+	| binOpStrExp {left,oper = TimesOp,right} = raise Fail "No podes multiplicar strings"
+	| binOpStrExp {left,oper = DivideOp,right} = raise Fail "No podes dividir strings"
+	| binOpStrExp {left,oper = EqOp,right} =
+		let
+			val l = unEx left
+			val r = unEx right		
+			val n = case externalCall("_stringCompare", [l , r]) of
+					CONST n => n
+					| _ => raise Fail "no deberia pasar"		
+		in 
+			if (n = 0) then Ex (CONST 1) else Ex (CONST 0)
+		end
+	| binOpStrExp {left,oper = NeqOp,right} =
+		let
+			val l = unEx left
+			val r = unEx right		
+			val n = case externalCall("_stringCompare", [l , r]) of
+					CONST n => n
+					| _ => raise Fail "no deberia pasar"		
+		in 
+			if (n = 0) then Ex (CONST 0) else Ex (CONST 1)
+		end
+	| binOpStrExp {left,oper = LtOp,right} = Ex (CONST 1)
+	| binOpStrExp {left,oper = LeOp,right} = Ex (CONST 1)
+	| binOpStrExp {left,oper = GtOp,right} = Ex (CONST 1)
+	| binOpStrExp {left,oper = GeOp,right} = Ex (CONST 1)
+	| binOpStrExp {left,oper,right} = raise Fail "No deberia pasar"
 end
