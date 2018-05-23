@@ -440,6 +440,7 @@ fun binOpStrExp {left,oper = PlusOp,right} = raise Fail "No podes sumar strings"
 		in 
 			if (n = 0) then Ex (CONST 0) else Ex (CONST 1)
 		end
+	(* si esta bien la idea hay que completar los casos que siguen... *)
 	| binOpStrExp {left,oper = LtOp,right} = Ex (CONST 1)
 	| binOpStrExp {left,oper = LeOp,right} = Ex (CONST 1)
 	| binOpStrExp {left,oper = GtOp,right} = Ex (CONST 1)
