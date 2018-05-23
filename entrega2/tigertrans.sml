@@ -416,15 +416,12 @@ end
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
-fun binOpStrExp {left,oper,right} =
-	Ex(CONST 0)
-(*
-
+fun binOpStrExp {left,oper = EqOp,right} =
+	(* Ex(CONST 0) *)
 	let
 		val l = unEx left
 		val r = unEx right
 	in 
 		Ex (externalCall("_stringCompare", l , r))
 	end
-*)
 end
