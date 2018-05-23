@@ -416,12 +416,26 @@ end
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
-fun binOpStrExp {left,oper = oper,right} =
-(* PlusOp | MinusOp | TimesOp | DivideOp| EqOp | NeqOp | LtOp | LeOp | GtOp | GeOp *)
+fun binOpStrExp {left,oper = PlusOp,right} = raise Fail "No podes sumar strings"
+fun binOpStrExp {left,oper = MinusOp,right} = raise Fail "No podes restar strings"
+fun binOpStrExp {left,oper = TimesOp,right} = raise Fail "No podes multiplicar strings"
+fun binOpStrExp {left,oper = DivideOp,right} = raise Fail "No podes dividir strings"
+fun binOpStrExp {left,oper = EqOp,right} =
 	let
 		val l = unEx left
-		val r = unEx right
+		val r = unEx right		
+		val (CONST n) = externalCall("_stringCompare", [l , r])		
 	in 
-		Ex (externalCall("_stringCompare", [l , r]))
+		if (n = 0) then Ex (CONST 1) else Ex (CONST 0)
 	end
+(*
+fun binOpStrExp {left,oper = NeqOp,right} =
+	let
+		val l = unEx left
+		val r = unEx right		
+		val cmp = externalCall("_stringCompare", [l , r])		
+	in 
+		if (cmp = CONST 0) then Ex (CONST 0) else Ex (CONST 1)
+	end
+*)
 end
