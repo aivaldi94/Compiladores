@@ -444,5 +444,4 @@ fun binOpStrExp {left,oper = PlusOp,right} = raise Fail "No podes sumar strings"
 	| binOpStrExp {left,oper = LeOp,right} = Ex (CONST 1)
 	| binOpStrExp {left,oper = GtOp,right} = Ex (CONST 1)
 	| binOpStrExp {left,oper = GeOp,right} = Ex (CONST 1)
-	| binOpStrExp {left,oper,right} = raise Fail "No deberia pasar"
 end
