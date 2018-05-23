@@ -417,7 +417,7 @@ end
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
 fun binOpStrExp {left,oper = oper,right} =
-	(* Ex(CONST 0) *)
+(* PlusOp | MinusOp | TimesOp | DivideOp| EqOp | NeqOp | LtOp | LeOp | GtOp | GeOp *)
 	let
 		val l = unEx left
 		val r = unEx right
