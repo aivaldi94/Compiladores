@@ -415,12 +415,11 @@ in
 end	
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
-(*
+
 fun binOpStrExp {left,oper = PlusOp,right} = raise Fail "No podes sumar strings"
 fun binOpStrExp {left,oper = MinusOp,right} = raise Fail "No podes restar strings"
 fun binOpStrExp {left,oper = TimesOp,right} = raise Fail "No podes multiplicar strings"
 fun binOpStrExp {left,oper = DivideOp,right} = raise Fail "No podes dividir strings"
-*)
 fun binOpStrExp {left,oper = EqOp,right} =
 	let
 		val l = unEx left
