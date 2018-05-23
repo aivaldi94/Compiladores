@@ -447,5 +447,5 @@ fun binOpStrExp {left,oper = LtOp,right} = Ex (CONST 1)
 fun binOpStrExp {left,oper = LeOp,right} = Ex (CONST 1)
 fun binOpStrExp {left,oper = GtOp,right} = Ex (CONST 1)
 fun binOpStrExp {left,oper = GeOp,right} = Ex (CONST 1)
-fun binOpStrExp {left,oper = o,right} = raise Fail "No deberia pasar"
+fun binOpStrExp {left,oper,right} = raise Fail "No deberia pasar"
 end
