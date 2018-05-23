@@ -426,7 +426,7 @@ fun binOpStrExp {left,oper = EqOp,right} =
 		val r = unEx right		
 		val n = case externalCall("_stringCompare", [l , r]) of
 				CONST n => n
-				| _ => rais Fail "no deberia pasar"		
+				| _ => raise Fail "no deberia pasar"		
 	in 
 		if (n = 0) then Ex (CONST 1) else Ex (CONST 0)
 	end
