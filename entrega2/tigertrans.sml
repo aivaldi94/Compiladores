@@ -151,7 +151,6 @@ fun nilExp() = Ex (CONST 0)
 
 fun intExp i = Ex (CONST i)
 
-(*datatype access = InFrame of int | InReg of tigertemp.label*)
 (* A la función tigergrame.exp le paso la cantidad de niveles que debe saltar para llegar al frame donde la variable está definida*)
 (* Habría que verificar que esto ande correctamente *)	
 fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (tigerframe.exp acc (getActualLev() - nivel))
@@ -172,7 +171,6 @@ in
 			BINOP(MUL, TEMP ri, CONST tigerframe.wSz)))))
 end
 
-(* arr tiene que tener tipo TArray (lo obtenés luego de aplicar trvar), ind es una expresión que debe tener tipo TInt *)
 fun subscriptVar(arr, ind) =
 let
 	val a = unEx arr
@@ -440,9 +438,44 @@ fun binOpStrExp {left,oper = PlusOp,right} = raise Fail "No podes sumar strings"
 		in 
 			if (n = 0) then Ex (CONST 0) else Ex (CONST 1)
 		end
-	(* si esta bien la idea hay que completar los casos que siguen... *)
-	| binOpStrExp {left,oper = LtOp,right} = Ex (CONST 1)
-	| binOpStrExp {left,oper = LeOp,right} = Ex (CONST 1)
-	| binOpStrExp {left,oper = GtOp,right} = Ex (CONST 1)
-	| binOpStrExp {left,oper = GeOp,right} = Ex (CONST 1)
+	| binOpStrExp {left,oper = LtOp,right} = 
+		let
+			val l = unEx left
+			val r = unEx right		
+			val n = case externalCall("_stringCompare", [l , r]) of
+					CONST n => n
+					| _ => raise Fail "no deberia pasar"		
+		in 
+			if (n < 0) then Ex (CONST 1) else Ex (CONST 0)
+		end
+	| binOpStrExp {left,oper = LeOp,right} =
+		let
+			val l = unEx left
+			val r = unEx right		
+			val n = case externalCall("_stringCompare", [l , r]) of
+					CONST n => n
+					| _ => raise Fail "no deberia pasar"		
+		in 
+			if (n <= 0) then Ex (CONST 1) else Ex (CONST 0)
+		end
+	| binOpStrExp {left,oper = GtOp,right} = 
+		let
+			val l = unEx left
+			val r = unEx right		
+			val n = case externalCall("_stringCompare", [l , r]) of
+					CONST n => n
+					| _ => raise Fail "no deberia pasar"		
+		in 
+			if (n > 0) then Ex (CONST 1) else Ex (CONST 0)
+		end
+	| binOpStrExp {left,oper = GeOp,right} =
+		let
+			val l = unEx left
+			val r = unEx right		
+			val n = case externalCall("_stringCompare", [l , r]) of
+					CONST n => n
+					| _ => raise Fail "no deberia pasar"		
+		in 
+			if (n >= 0) then Ex (CONST 1) else Ex (CONST 0)
+		end
 end

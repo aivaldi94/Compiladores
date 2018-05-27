@@ -228,7 +228,9 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 				val tlo = trexp lo
 				val thi = trexp hi				
 				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
+				val _ = preWhileForExp ()
 				val tbody =  transExp (venv', tenv,levNest) body 
+				val _ = postWhileForExp()				
 				val evar = trvar ((SimpleVar var),nl)
 			in
 				if tipoReal ((#ty tlo),tenv) = TInt andalso tipoReal((#ty thi),tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, ty=TUnit}
@@ -288,7 +290,6 @@ and trvar(SimpleVar s, nl) =
 					| _ => error("El indice no es un int",nl)
 				val {exp=exparr, ty=tip} = trvar (v,nl)
 				val r = case tip of 
-					(* Saqué la referencia. Ahora TArray tiene un TTipo y no una referencia a *)
 					(TArray (tr,_)) => {exp=(tigertrans.subscriptVar (exparr, expint)),ty=(tr)} 
 					| _ => error("Accediendo a un arreglo inexistente",nl)
 			in r end
