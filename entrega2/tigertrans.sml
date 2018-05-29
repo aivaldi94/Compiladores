@@ -415,7 +415,7 @@ end
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
-fun binOpStrExp {left,oper = op,right} =
+fun binOpStrExp {left,op,right} =
 		case op of 
 		EqOp => let
 					val l = unEx left
