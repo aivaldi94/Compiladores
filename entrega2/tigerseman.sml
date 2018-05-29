@@ -403,7 +403,8 @@ datatype EnvEntry =
 					end
 			   
 			   val venvs : venv list = newEnvs(xs, env1) (* venvs es la lista de entornos con las variables agregadas para cada función *)
-			   (* Corroboramos cada body con su respectivo env *)				   
+			   (* Corroboramos cada body con su respectivo env 
+			   Agregar las expresiones de los cuerpos a la lista global*)				   
 			fun aux4 ([] : (recfun * venv * int) list) : Tipo list = []
 			     | aux4 (({body = b, name=nom, ... }, venv, pos) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
