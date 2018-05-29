@@ -420,7 +420,7 @@ fun binOpStrExp {left,oper = EqOp,right} =
 		in 
 			(*De donde saco quien es t y f? Tienen que ser Temp.label's por el tipo de CJUMP*)
 			(*Sigo el ejemplo de la funcion de arriba*)
-			Cx (CJUMP (EQ, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))				
+			Nx (CJUMP (EQ, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))				
 		end
 	| binOpStrExp {left,oper = NeqOp,right} =
 		let
