@@ -198,7 +198,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			    val {exp=thenexp, ty=tythen} = trexp then'
 			    val {exp=elseexp, ty=tyelse} = trexp else'
 			in
-				if tipoReal (tytest,tenv)=TInt andalso tiposIguales tythen tyelse then
+				if tipoReal tytest=TInt andalso tiposIguales tythen tyelse then
 				{exp=if tipoReal (tythen,tenv)=TUnit then ifThenElseExpUnit {test=testexp,then'=thenexp,else'=elseexp}
 				else ifThenElseExp {test=testexp,then'=thenexp,else'=elseexp}, ty=tythen}
 				else error("Error de tipos en if" ,nl)
