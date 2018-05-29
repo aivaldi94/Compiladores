@@ -415,49 +415,47 @@ end
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
-fun binOpStrExp {left,op,right} =
-		case op of 
-		EqOp => let
+fun binOpStrExp {left,oper = EqOp,right} =
+		let
 					val l = unEx left
 					val r = unEx right		
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-
-		| NeqOp =>
-				let
+	| binOpStrExp {left,oper = NeqOp,right} =
+		let
 					val l = unEx left
 					val r = unEx right		
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-		| LtOp => 
-				let
+	| binOpStrExp {left,oper = LtOp,right} = 
+		let
 					val l = unEx left
 					val r = unEx right		
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-		|LeOp =>
-				let
+	| binOpStrExp {left,oper = LeOp,right} =
+		let
 					val l = unEx left
 					val r = unEx right		
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-		| GtOp => 
-				let
+	| binOpStrExp {left,oper = GtOp,right} = 
+		let
 					val l = unEx left
 					val r = unEx right		
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-		| GeOp =>
-				let
+	| binOpStrExp {left,oper = GeOp,right} =
+		let
 					val l = unEx left
 					val r = unEx right		
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-		| _ => raise Fail "No deberia pasar"
+	| binOpStrExp {left,op,right} = raise Fail "no deberia pasar"
 end
