@@ -418,8 +418,9 @@ fun binOpStrExp {left,oper = EqOp,right} =
 			val r = unEx right		
 			val (t,f) = (newlabel(),newlabel())
 		in 
-			(*De donde saco quien es t y f? Tienen que ser Temp.label's por el tipo de CJUMP*)
-			(*Sigo el ejemplo de la funcion de arriba...*)
+			(*De donde saco quien es t y f? Tienen que ser Temp.label's por el tipo de CJUMP
+			Sigo el ejemplo de la funcion de arriba...*)
+			
 			(*externalCall devuelve algo tipo Tree.exp, tengo que guardarlo en el return value. Segun grepie
 			en tigerinterp usa el return value como un tigertemp.label, por eso hago TEMP rv.
 			Solo queda "guardar" en rv el resultado, eso me suena que sea hace con un MOVE pero asi no coinciden los tipos
@@ -428,38 +429,38 @@ fun binOpStrExp {left,oper = EqOp,right} =
 		end
 	| binOpStrExp {left,oper = NeqOp,right} =
 		let
-					val l = unEx left
-					val r = unEx right		
-				in 
-					Ex (externalCall("_stringCompare", [l , r]))
-				end
+			val l = unEx left
+			val r = unEx right		
+			val (t,f) = (newlabel(),newlabel())
+		in 
+			Nx (CJUMP (NE, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))								end
 	| binOpStrExp {left,oper = LtOp,right} = 
 		let
-					val l = unEx left
-					val r = unEx right		
-				in 
-					Ex (externalCall("_stringCompare", [l , r]))
-				end
+			val l = unEx left
+			val r = unEx right		
+			val (t,f) = (newlabel(),newlabel())
+		in 
+			Nx (CJUMP (LT, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))								end
 	| binOpStrExp {left,oper = LeOp,right} =
 		let
-					val l = unEx left
-					val r = unEx right		
-				in 
-					Ex (externalCall("_stringCompare", [l , r]))
-				end
+			val l = unEx left
+			val r = unEx right		
+			val (t,f) = (newlabel(),newlabel())
+		in 
+			Nx (CJUMP (LE, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))								end
 	| binOpStrExp {left,oper = GtOp,right} = 
 		let
-					val l = unEx left
-					val r = unEx right		
-				in 
-					Ex (externalCall("_stringCompare", [l , r]))
-				end
+			val l = unEx left
+			val r = unEx right		
+			val (t,f) = (newlabel(),newlabel())
+		in 
+			Nx (CJUMP (GT, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))								end
 	| binOpStrExp {left,oper = GeOp,right} =
 		let
-					val l = unEx left
-					val r = unEx right		
-				in 
-					Ex (externalCall("_stringCompare", [l , r]))
-				end
+			val l = unEx left
+			val r = unEx right		
+			val (t,f) = (newlabel(),newlabel())
+		in 
+			Nx (CJUMP (GE, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))								end
 	| binOpStrExp {left,oper,right} = raise Fail "no deberia llegar aqui"
 end
