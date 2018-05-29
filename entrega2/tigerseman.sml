@@ -199,7 +199,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			    val {exp=elseexp, ty=tyelse} = trexp else'
 			in
 				if tipoReal tytest=TInt andalso tiposIguales tythen tyelse then
-				{exp=if tipoReal (tythen,tenv)=TUnit then ifThenElseExpUnit {test=testexp,then'=thenexp,else'=elseexp}
+				{exp=if tipoReal tythen=TUnit then ifThenElseExpUnit {test=testexp,then'=thenexp,else'=elseexp}
 				else ifThenElseExp {test=testexp,then'=thenexp,else'=elseexp}, ty=tythen}
 				else error("Error de tipos en if" ,nl)
 			end
@@ -207,7 +207,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			let val {exp=exptest,ty=tytest} = trexp test
 			    val {exp=expthen,ty=tythen} = trexp then'
 			in
-				if tipoReal (tytest,tenv)=TInt andalso tythen=TUnit then
+				if tipoReal tytest=TInt andalso tythen=TUnit then
 				{exp=ifThenExp{test=exptest, then'=expthen}, ty=TUnit}
 				else error("Error de tipos en if", nl)
 			end
@@ -218,8 +218,8 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 				val tbody = trexp body
 				val _ = postWhileForExp()
 			in
-				if tipoReal ((#ty ttest),tenv) = TInt andalso #ty tbody = TUnit then {exp=whileExp {test=(#exp ttest), body=(#exp tbody), lev=topLevel()}, ty=TUnit}
-				else if tipoReal ((#ty ttest),tenv) <> TInt then error("Error de tipo en la condición", nl)
+				if tipoReal (#ty ttest) = TInt andalso #ty tbody = TUnit then {exp=whileExp {test=(#exp ttest), body=(#exp tbody), lev=topLevel()}, ty=TUnit}
+				else if tipoReal (#ty ttest) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un while no puede devolver un valor", nl)
 			end
 		| trexp(ForExp({var, escape, lo, hi, body}, nl)) =  
@@ -232,8 +232,8 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 				val _ = postWhileForExp()				
 				val evar = trvar ((SimpleVar var),nl)
 			in
-				if tipoReal ((#ty tlo),tenv) = TInt andalso tipoReal((#ty thi),tenv) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, ty=TUnit}
-				else if tipoReal((#ty tlo),tenv) <> TInt orelse tipoReal((#ty thi),tenv) <> TInt then error("Error de tipo en la condición", nl)
+				if tipoReal (#ty tlo) = TInt andalso tipoReal (#ty thi) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, ty=TUnit}
+				else if tipoReal(#ty tlo) <> TInt orelse tipoReal (#ty thi) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un for no puede devolver un valor", nl)   				
 			end		
 		| trexp(LetExp({decs, body}, _)) =
