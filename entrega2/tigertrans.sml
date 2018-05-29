@@ -415,68 +415,49 @@ end
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
-fun binOpStrExp {left,oper = PlusOp,right} = raise Fail "No podes sumar strings"
-	| binOpStrExp {left,oper = MinusOp,right} = raise Fail "No podes restar strings"
-	| binOpStrExp {left,oper = TimesOp,right} = raise Fail "No podes multiplicar strings"
-	| binOpStrExp {left,oper = DivideOp,right} = raise Fail "No podes dividir strings"
-	| binOpStrExp {left,oper = EqOp,right} =
-		let
-			val l = unEx left
-			val r = unEx right		
-			val n = case externalCall("_stringCompare", [l , r]) of
-					CONST n => n
-					| _ => raise Fail "no deberia pasar"		
-		in 
-			if (n = 0) then Ex (CONST 1) else Ex (CONST 0)
-		end
-	| binOpStrExp {left,oper = NeqOp,right} =
-		let
-			val l = unEx left
-			val r = unEx right		
-			val n = case externalCall("_stringCompare", [l , r]) of
-					CONST n => n
-					| _ => raise Fail "no deberia pasar"		
-		in 
-			if (n = 0) then Ex (CONST 0) else Ex (CONST 1)
-		end
-	| binOpStrExp {left,oper = LtOp,right} = 
-		let
-			val l = unEx left
-			val r = unEx right		
-			val n = case externalCall("_stringCompare", [l , r]) of
-					CONST n => n
-					| _ => raise Fail "no deberia pasar"		
-		in 
-			if (n < 0) then Ex (CONST 1) else Ex (CONST 0)
-		end
-	| binOpStrExp {left,oper = LeOp,right} =
-		let
-			val l = unEx left
-			val r = unEx right		
-			val n = case externalCall("_stringCompare", [l , r]) of
-					CONST n => n
-					| _ => raise Fail "no deberia pasar"		
-		in 
-			if (n <= 0) then Ex (CONST 1) else Ex (CONST 0)
-		end
-	| binOpStrExp {left,oper = GtOp,right} = 
-		let
-			val l = unEx left
-			val r = unEx right		
-			val n = case externalCall("_stringCompare", [l , r]) of
-					CONST n => n
-					| _ => raise Fail "no deberia pasar"		
-		in 
-			if (n > 0) then Ex (CONST 1) else Ex (CONST 0)
-		end
-	| binOpStrExp {left,oper = GeOp,right} =
-		let
-			val l = unEx left
-			val r = unEx right		
-			val n = case externalCall("_stringCompare", [l , r]) of
-					CONST n => n
-					| _ => raise Fail "no deberia pasar"		
-		in 
-			if (n >= 0) then Ex (CONST 1) else Ex (CONST 0)
-		end
+fun binOpStrExp {left,oper = op,right} =
+		case op of 
+		EqOp => let
+					val l = unEx left
+					val r = unEx right		
+				in 
+					Ex (externalCall("_stringCompare", [l , r]))
+				end
+
+		| NeqOp =>
+				let
+					val l = unEx left
+					val r = unEx right		
+				in 
+					Ex (externalCall("_stringCompare", [l , r]))
+				end
+		| LtOp => 
+				let
+					val l = unEx left
+					val r = unEx right		
+				in 
+					Ex (externalCall("_stringCompare", [l , r]))
+				end
+		|LeOp =>
+				let
+					val l = unEx left
+					val r = unEx right		
+				in 
+					Ex (externalCall("_stringCompare", [l , r]))
+				end
+		| GtOp => 
+				let
+					val l = unEx left
+					val r = unEx right		
+				in 
+					Ex (externalCall("_stringCompare", [l , r]))
+				end
+		| GeOp =>
+				let
+					val l = unEx left
+					val r = unEx right		
+				in 
+					Ex (externalCall("_stringCompare", [l , r]))
+				end
+		| _ => raise Fail "No deberia pasar"
 end
