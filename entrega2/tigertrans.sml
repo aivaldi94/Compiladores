@@ -416,8 +416,11 @@ fun binOpStrExp {left,oper = EqOp,right} =
 		let
 					val l = unEx left
 					val r = unEx right		
+					val (t,f) = (newlabel(),newlabel())
 				in 
-					Ex (externalCall("_stringCompare", [l , r]))
+				(*De donde saco quien es t y f? Tienen que ser Temp.label's por el tipo de CJUMP*)
+				(*Sigo el ejemplo de la funcion de arriba*)
+				Ex (CJUMP (EQ, ESEQ ((EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))				
 				end
 	| binOpStrExp {left,oper = NeqOp,right} =
 		let
