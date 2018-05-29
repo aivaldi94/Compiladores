@@ -421,8 +421,10 @@ fun binOpStrExp {left,oper = EqOp,right} =
 			(*De donde saco quien es t y f? Tienen que ser Temp.label's por el tipo de CJUMP*)
 			(*Sigo el ejemplo de la funcion de arriba...*)
 			(*externalCall devuelve algo tipo Tree.exp, tengo que guardarlo en el return value. Segun grepie
-			en tigerinterp usa el return value como un tigertemp.label, por eso hago TEMP rv. *)
-			Nx (CJUMP (EQ, MOVE (TEMP rv,EXP (externalCall("_stringCompare", [l , r]))) , CONST 0 ,t,f))				
+			en tigerinterp usa el return value como un tigertemp.label, por eso hago TEMP rv.
+			Solo queda "guardar" en rv el resultado, eso me suena que sea hace con un MOVE pero asi no coinciden los tipos
+			por descarte me queda ESEQ *)
+			Nx (CJUMP (EQ, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))				
 		end
 	| binOpStrExp {left,oper = NeqOp,right} =
 		let
