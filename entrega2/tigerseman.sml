@@ -123,22 +123,34 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			in
 				if tiposIguales tyl tyr then
 					case oper of
-						PlusOp => if tipoReal tyl = TInt then {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt} else error("Error de tipos", nl)
-						| MinusOp => if tipoReal tyl = TInt then {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt} else error("Error de tipos", nl)
-						| TimesOp => if tipoReal tyl=TInt then {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt} else error("Error de tipos", nl)
-						| DivideOp => if tipoReal tyl=TInt then {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt} else error("Error de tipos", nl)
-						| LtOp => if tipoReal tyl=TInt orelse tipoReal tyl=TString then
-							{exp=if tipoReal tyl=TInt then binOpIntRelExp {left=expl,oper=oper,right=expr} else binOpStrExp {left=expl,oper=oper,right=expr},ty=TInt} 
-							else error("Error de tipos", nl)
-						| LeOp => if tipoReal tyl=TInt orelse tipoReal tyl=TString then 
-							{exp=if tipoReal tyl=TInt then binOpIntRelExp {left=expl,oper=oper,right=expr} else binOpStrExp {left=expl,oper=oper,right=expr},ty=TInt} 
-							else error("Error de tipos", nl)
-						| GtOp => if tipoReal tyl=TInt orelse tipoReal tyl=TString then
-							{exp=if tipoReal tyl=TInt then binOpIntRelExp {left=expl,oper=oper,right=expr} else binOpStrExp {left=expl,oper=oper,right=expr},ty=TInt} 
-							else error("Error de tipos", nl)
-						| GeOp => if tipoReal tyl=TInt orelse tipoReal tyl=TString then
-							{exp=if tipoReal tyl=TInt then binOpIntRelExp {left=expl,oper=oper,right=expr} else binOpStrExp {left=expl,oper=oper,right=expr},ty=TInt} 
-							else error("Error de tipos", nl)
+						PlusOp => case tipoReal tyl of
+									TInt  => {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt}
+									| _ => error ("Error de tipos", nl)
+						| MinusOp => case tipoReal tyl of
+									 	TInt => {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt}
+									 	| _ => error("Error de tipos", nl)
+						| TimesOp => case tipoReal tyl of
+									 	TInt => {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt}
+									 	| _ => error("Error de tipos", nl)
+						| DivideOp => case tipoReal tyl of
+									 	TInt => {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt}
+									 	| _ => error("Error de tipos", nl)									 
+						| LtOp => case tipoReal tyl of
+									TInt => {exp= binOpIntRelExp {left=expl,oper=oper,right=expr},ty=TInt} 
+									| TString => {exp= binOpStrExp {left=expl,oper=oper,right=expr}, ty=TInt}
+									| _ => error("Error de tipos", nl)
+						| LeOp => case tipoReal tyl of
+									TInt => {exp= binOpIntRelExp {left=expl,oper=oper,right=expr},ty=TInt} 
+									| TString => {exp= binOpStrExp {left=expl,oper=oper,right=expr}, ty=TInt}
+									| _ => error("Error de tipos", nl)
+						| GtOp => case tipoReal tyl of
+									TInt => {exp= binOpIntRelExp {left=expl,oper=oper,right=expr},ty=TInt} 
+									| TString => {exp= binOpStrExp {left=expl,oper=oper,right=expr}, ty=TInt}
+									| _ => error("Error de tipos", nl)
+						| GeOp => case tipoReal tyl of
+									TInt => {exp= binOpIntRelExp {left=expl,oper=oper,right=expr},ty=TInt} 
+									| TString => {exp= binOpStrExp {left=expl,oper=oper,right=expr}, ty=TInt}
+									| _ => error("Error de tipos", nl)
 						| _ => raise Fail "No debería pasar! (3)"
 				else error("Error de tipos", nl)
 			end
