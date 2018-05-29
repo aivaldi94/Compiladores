@@ -123,9 +123,9 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			in
 				if tiposIguales tyl tyr then
 					case oper of
-						PlusOp => case tipoReal tyl of
+						PlusOp => (case (tipoReal tyl) of
 									TInt  => {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt}
-									| _ => error ("Error de tipos", nl)
+									| _ => error ("Error de tipos", nl))
 						| MinusOp => case tipoReal tyl of
 									 	TInt => {exp=binOpIntExp {left=expl, oper=oper, right=expr},ty=TInt}
 									 	| _ => error("Error de tipos", nl)
