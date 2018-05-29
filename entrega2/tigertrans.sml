@@ -457,5 +457,5 @@ fun binOpStrExp {left,oper = EqOp,right} =
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-	| binOpStrExp {left,op,right} = raise Fail "no deberia pasar"
+	| binOpStrExp {left,oper,right} = raise Fail "no deberia pasar"
 end
