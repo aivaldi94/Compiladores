@@ -254,7 +254,7 @@ in
 		JUMP(NAME l1, [l1]),
 		LABEL l3])
 end
-(* REVISAR *)
+
 fun forExp {lo, hi, var, body} =
 let
 	val var = unEx var
@@ -357,8 +357,6 @@ in
 	if (r = CONST 0) then raise Fail "División por cero" else Ex (BINOP(DIV,l,r))
 end
 	| binOpIntExp {left, oper, right} = raise Fail "Error" 
-		(*COMPLETADO - VER LO DE LA DIVISIÓN POR CERO - VER LA EXAUSTIVIDAD*)
-
 
 fun binOpIntRelExp {left,oper = LtOp,right} =
 let
@@ -413,7 +411,6 @@ in
 		    TEMP tmp))
 end	
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
-	(* COMPLETADO - VER LA EXAUSTIVIDAD *)
 
 fun binOpStrExp {left,oper = EqOp,right} =
 		let
@@ -457,5 +454,5 @@ fun binOpStrExp {left,oper = EqOp,right} =
 				in 
 					Ex (externalCall("_stringCompare", [l , r]))
 				end
-	| binOpStrExp {left,oper,right} = raise Fail "no deberia pasar"
+	| binOpStrExp {left,oper,right} = raise Fail "no deberia llegar aqui"
 end
