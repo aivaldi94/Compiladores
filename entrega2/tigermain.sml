@@ -32,10 +32,10 @@ fun main(args) =
 		
 		val frags = tigertrans.getResult()		
 		fun makeProc [] = [] 
-			| makeProc (tigerframe.PROC {body, frame} :: l) = ([(body,frame)] @ makeProc l
+			| makeProc (tigerframe.PROC {body, frame} :: l) = (body,frame) :: makeProc l
 			| makeProc l = l
 		fun makeStr [] = []
-			| makeStr (tigerframe.STRING (lab,str) :: l) = [(lab,str)] @ makeStr l
+			| makeStr (tigerframe.STRING (lab,str) :: l) = (lab,str) :: makeStr l
 			| makeStr l = l
 		
 		val b = makeProc frags		
