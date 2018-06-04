@@ -31,15 +31,10 @@ fun main(args) =
 		val _ = if arbol then tigerpp.exprAst expr else ()
 		
 		val frags = tigertrans.getResult()		
-		fun makeProc [] = [] 
-			| makeProc (tigerframe.PROC {body, frame} :: l) = (body,frame) :: makeProc l
-			| makeProc l = l
-		fun makeStr [] = []
-			| makeStr (tigerframe.STRING (lab,str) :: l) = (lab,str) :: makeStr l
-			| makeStr l = l
-		
-		val b = makeProc frags		
-		val c = makeStr frags
+		fun makeList [] = ([],[]) 
+			| makeList (tigerframe.PROC {body, frame} :: l) = ((body,frame) :: makeList l, makeList l)
+			| makeList (tigerframe.STRING (lab,str) :: l) = (makeList l, (lab,str) :: makeList l)
+		val (b,c) = makeList frags	
 		val _ = if inter then tigerinterp.inter true b c else () 
 
 	in
