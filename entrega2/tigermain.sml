@@ -29,7 +29,18 @@ fun main(args) =
 		val expr = prog Tok lexbuf handle _ => errParsing lexbuf
 		val _ = findEscape(expr)
 		val _ = if arbol then tigerpp.exprAst expr else ()
-		val _ = if inter then print ("Esto es intermedio") else ()
+		
+		val frags = tigertrans.getResult()		
+		fun makeProc [] = [] 
+			| makeProc (tigerframe.PROC {body, frame} :: l) = ([(body,frame)] @ makeProc l
+			| makeProc l = l
+		fun makeStr [] = []
+			| makeStr (tigerframe.STRING (lab,str) :: l) = [(lab,str)] @ makeStr l
+			| makeStr l = l
+		
+		val b = makeProc frags		
+		val c = makeStr frags
+		val _ = if inter then tigerinterp.inter true b c else () 
 
 	in
 		transProg(expr);
