@@ -29,6 +29,8 @@ fun main(args) =
 		val expr = prog Tok lexbuf handle _ => errParsing lexbuf
 		val _ = findEscape(expr)
 		val _ = if arbol then tigerpp.exprAst expr else ()
+		val _ = if inter then print ("Esto es intermedio") else ()
+
 	in
 		transProg(expr);
 		print "yes!!\n"
