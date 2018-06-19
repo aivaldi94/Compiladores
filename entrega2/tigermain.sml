@@ -33,8 +33,8 @@ fun main(args) =
 		val frags = tigertrans.getResult()		
 		
 		fun makeList [] (a,b) = (a,b)
-			| makeList (tigerframe.PROC {body, frame} :: l) = makeList l ((body,frame) :: a, b)
-			| makeList (tigerframe.STRING (lab,s) :: l) = makeList l (a, (lab,s) :: b)
+			| makeList (tigerframe.PROC {body, frame} :: l) (a,b) = makeList l ((body,frame) :: a, b)
+			| makeList (tigerframe.STRING (lab,s) :: l) (a,b) = makeList l (a, (lab,s) :: b)
 
 		fun makeListProc [] = [] 
 			| makeListProc (tigerframe.PROC {body, frame} :: l) = ((body,frame) :: makeListProc l)
