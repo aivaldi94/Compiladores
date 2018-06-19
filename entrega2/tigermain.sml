@@ -32,19 +32,15 @@ fun main(args) =
 		
 		val frags = tigertrans.getResult()		
 		
+		(*El tipo de ahora es este*)
+		(* makeList:: [frags] -> ([(stm, frame)], [label, string]) -> ([(stm, frame)], [label, string])*)
+		(*Pero deberia ser este*)
+		(* makeList:: [frags] -> ([([stm], frame)], [label, string]) -> ([(stm, frame)], [label, string])*)
+		(* Como obtengo la lista de tigertree.stm devuelta por el canonizador ?!?!? *)
 		fun makeList [] (a,b) = (a,b)
 			| makeList (tigerframe.PROC {body, frame} :: l) (a,b) = makeList l ((body,frame) :: a, b)
 			| makeList (tigerframe.STRING (lab,s) :: l) (a,b) = makeList l (a, (lab,s) :: b)
-
-		fun makeListProc [] = [] 
-			| makeListProc (tigerframe.PROC {body, frame} :: l) = ((body,frame) :: makeListProc l)
-			| makeListProc (tigerframe.STRING (lab,s) :: l) = makeListProc l
-
-		fun makeListStr [] = [] 
-			| makeListStr (tigerframe.STRING (lab,s) :: l) = ((lab,s) :: makeListStr l)
-			| makeListStr (tigerframe.PROC {body, frame} :: l) = makeListStr l
-		
-		(*)
+		(*
 		val (b,c) = makeList frags	
 		val _ = if inter then tigerinterp.inter true b c else () 
 		*)
