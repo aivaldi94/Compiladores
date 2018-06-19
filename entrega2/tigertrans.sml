@@ -413,8 +413,8 @@ end
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 
 
-fun binOpStrExp {left, op, right} =
-	case o of
+fun binOpStrExp {left, oper, right} =
+	case oper of
 		EqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
 		NeqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
 		LtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
