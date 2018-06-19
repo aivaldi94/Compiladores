@@ -412,23 +412,25 @@ in
 end	
 	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
 
+
+fun binOpStrExp {left, op, right} =
+	case o of
+		EqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+		NeqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+		LtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+		LeOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+		GtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+		GeOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+		_ => raise Fail "no deberia llegar"
+	end
+
+(*
 fun binOpStrExp {left,oper = EqOp,right} =
 		let
 			val l = unEx left
 			val r = unEx right		
-			val (t,f) = (newlabel(),newlabel())
 		in 
-			(*De donde saco quien es t y f? Tienen que ser Temp.label's por el tipo de CJUMP
-			Sigo el ejemplo de la funcion de arriba...*)
-			
-			(*externalCall devuelve algo tipo Tree.exp, tengo que guardarlo en el return value. Segun grepie
-			en tigerinterp usa el return value como un tigertemp.label, por eso hago TEMP rv.
-			Solo queda "guardar" en rv el resultado, eso me suena que sea hace con un MOVE pero asi no coinciden los tipos
-			por descarte me queda ESEQ, estara bien?? *)
-			(*
 			Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
-			*)
-			Nx (CJUMP (EQ, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))				
 		end
 	| binOpStrExp {left,oper = NeqOp,right} =
 		let
@@ -466,4 +468,6 @@ fun binOpStrExp {left,oper = EqOp,right} =
 		in 
 			Nx (CJUMP (GE, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))								end
 	| binOpStrExp {left,oper,right} = raise Fail "no deberia llegar aqui"
+
 end
+*)
