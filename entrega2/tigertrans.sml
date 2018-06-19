@@ -419,7 +419,7 @@ fun binOpStrExp {left, oper, right} =
 		val r = unEx right
 	in
 		case oper of
-			EqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+			EqOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
 			| NeqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
 			| LtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
 			| LeOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
