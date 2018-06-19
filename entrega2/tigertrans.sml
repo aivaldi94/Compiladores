@@ -420,12 +420,12 @@ fun binOpStrExp {left, oper, right} =
 	in
 		case oper of
 			EqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
-			NeqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
-			LtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
-			LeOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
-			GtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
-			GeOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
-			_ => raise Fail "no deberia llegar"
+			| NeqOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+			| LtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+			| LeOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+			| GtOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+			| GeOp => Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+			| _ => raise Fail "no deberia llegar"
 	end
 
 (*
