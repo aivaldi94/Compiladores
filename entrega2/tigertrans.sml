@@ -425,6 +425,9 @@ fun binOpStrExp {left,oper = EqOp,right} =
 			en tigerinterp usa el return value como un tigertemp.label, por eso hago TEMP rv.
 			Solo queda "guardar" en rv el resultado, eso me suena que sea hace con un MOVE pero asi no coinciden los tipos
 			por descarte me queda ESEQ, estara bien?? *)
+			(*
+			Ex (ESEQ (MOVE (EXP (externalCall("_stringCompare", [l , r])),TEMP rv),TEMP rv))
+			*)
 			Nx (CJUMP (EQ, ESEQ (EXP (externalCall("_stringCompare", [l , r])),TEMP rv) , CONST 0 ,t,f))				
 		end
 	| binOpStrExp {left,oper = NeqOp,right} =
