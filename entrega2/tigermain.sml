@@ -29,11 +29,12 @@ fun main(args) =
 		val expr = prog Tok lexbuf handle _ => errParsing lexbuf
 		val _ = findEscape(expr)
 		val _ = if arbol then tigerpp.exprAst expr else ()
-		(*
+		
 		val frags = tigertrans.getResult()		
 		fun makeList [] = ([],[]) 
 			| makeList (tigerframe.PROC {body, frame} :: l) = ((body,frame) :: makeList l, makeList l)
 			| makeList (tigerframe.STRING (lab,str) :: l) = (makeList l, (lab,str) :: makeList l)
+		(*)
 		val (b,c) = makeList frags	
 		val _ = if inter then tigerinterp.inter true b c else () 
 		*)
