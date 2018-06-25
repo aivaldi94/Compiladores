@@ -36,7 +36,7 @@ fun main(args) =
 		(* makeList:: [frags] -> ([(stm, frame)], [label, string]) -> ([(stm, frame)], [label, string])*)
 		(*Pero deberia ser este*)
 		(* makeList:: [frags] -> ([([stm], frame)], [label, string]) -> ([(stm, frame)], [label, string])*)
-		(* Como obtengo la lista de tigertree.stm devuelta por el canonizador ?!?!? *)
+		(* Como obtengo "la lista de tigertree.stm devuelta por el canonizador ?!?!? "*)
 		fun makeList [] (a,b) = (a,b)
 			| makeList (tigerframe.PROC {body, frame} :: l) (a,b) = makeList l ((body,frame) :: a, b)
 			| makeList (tigerframe.STRING (lab,s) :: l) (a,b) = makeList l (a, (lab,s) :: b)
