@@ -211,9 +211,11 @@ struct
 
 		fun getstrFun(args) = 
 		let
-			val str = TextIO.inputLine TextIO.stdIn
+			val str = ((TextIO.inputLine : TextIO.instream -> string option) (TextIO.stdIn : TextIO.instream)) : string option
 		in
-			storeString str
+			case str of 
+			  NONE => raise Fail("El string fue nulo")
+			| SOME s => storeString (s : string)
 		end
 
 		val tabLib: (tigertemp.label, int list -> int) Tabla =
@@ -347,7 +349,8 @@ struct
 				val fpPrev = loadTemp tigerframe.fp
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
 				(* Poner argumentos donde la función los espera *)
-				val formals = map (fn x => tigerframe.exp x (TEMP tigerframe.fp)) (tigerframe.formals frame)
+				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
+				val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame)
 				val formalsValues = ListPair.zip(formals, args)
 				val _ = map (fn (x,y) => 
 					case x of

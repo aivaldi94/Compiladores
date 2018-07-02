@@ -349,14 +349,15 @@ datatype EnvEntry =
 		
 		| trdec (venv,tenv) (FunctionDec xs) =  
 			let
+				val nombreFuncion = (#name (#1 (hd xs))) : string
 				val _ = tigertrans.preFunctionDec() (* Aumenta el nivel actual *)
 				val listlistParams = map (fn ({params=paramsFun,...},nl) => paramsFun) xs
-				val listEscapes = map (fn xs => (map (fn {escape=e,...} => !e) xs)) listlistParams : bool list list										
-				val listPos = map (fn (a,b) => b) xs
+				val listEscapes = map (fn xs => (map (fn {escape=e,...} => !e) xs)) listlistParams : bool list list	
+				val listPos = map (fn (a,b) => b) xs				
 
 			    val empty = Splayset.empty String.compare
-	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)
-		        val _ = if (Splayset.numItems ts' <> length xs) then error("Tipos con el mismo nombre 299",length xs) else()  
+	            val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) xs)	            
+		        val _ = if (Splayset.numItems ts' <> length xs) then error("Funciones con el mismo nombre",length xs) else()  
 			    (* val _ = print ("Entro a trdec (venv, tenve) FunctionDec \n") *)
 			    
 			    (*aux0 : Retorna la lista de Tipo correspondiente a la lista de fields, corroborando que los tipos estén en el entorno*) 			    
@@ -425,12 +426,14 @@ datatype EnvEntry =
 								  | SOME (Var _) =>	error("No es funcion", pos)
 								  | SOME (Func {level = l, ...}) => l
 							val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
-							val elem = #ty (f b)
+							(* Agregar las expresiones de los cuerpos a la lista*)
+							val {ty = elem,exp =expr} = (f b)
+							val _ = tigertrans.functionDec(expr,lvl, (tiposIguales elem TUnit))
 						    in elem :: (aux4 rvs) end	
 			   val auxiliar = 	ListPair.zip(List.map (fn (fs,_) => fs) xs, venvs)	   
 			   val auxiliar2 = ListPair.zip (auxiliar,listPos)
 			   val auxiliar3 = List.map (fn ((a,b),c) => (a,b,c)) auxiliar2
-			   val tipos = aux4 auxiliar3
+			   val tipos : Tipo list = aux4 auxiliar3
 
 			   (* aux5 :  *)
 			fun aux5 ([] : ((Tipo * Tipo) * int) list) : bool * int = (true,0)
@@ -438,7 +441,8 @@ datatype EnvEntry =
 			val lp = List.map (fn ((r, n) : recfun * int) => (decideResult (#result r, n))) xs
            (* val _ = (print ("probando algo: ");tigermuestratipos.printTTipos(tigertab.tabAList (tenv: (string, Tipo) tigertab.Tabla))) *)
 			val ok = aux5 (ListPair.zip (ListPair.zip(lp,tipos), List.map (fn (_,n) => n) xs))
-			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función", (#2 ok)) end
+			val _ = tigertrans.postFunctionDec() (* Disminuye el nivel actual *)
+			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función 446", (#2 ok)) end
 				
 		| trdec (venv,tenv) (TypeDec ts) = 
 		(* Controlar fijatipos -> hay arreglos que no sabemos si estan bien en tigertopsort *)
@@ -452,7 +456,7 @@ datatype EnvEntry =
 fun transProg ex =
 	let	val main =
 				LetExp({decs=[FunctionDec[({name="_tigermain", params=[],
-								result=NONE, body=ex}, 0)]],
+								result=SOME "int", body=ex}, 0)]],
 						body=UnitExp 0}, 0)
 		val _ = transExp(tab_vars, tab_tipos, tigertrans.outermost : tigertrans.level) main
 	in	print "bien!\n" end

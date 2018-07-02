@@ -86,12 +86,12 @@ fun procesa [] pares env _ = env: (string, Tipo) Tabla
 					| _ => env
 	in procesa t ps' env' recs end
 fun fijaNONE [] env = env
-| fijaNONE((name, TArray(ar as (TTipo (s,ref NONE)), u))::t) env =
+| fijaNONE((name, TArray(ar as (TTipo (s,r)), u))::t) env =
 	(case tabBusca(s, env) of
 	NONE => raise Fail "error interno 666+1"
 	| SOME ras => (ref(ar) := ras; fijaNONE t env))
 | fijaNONE((name, TRecord(lf, u))::t) env =
-	let	fun busNONE(s, ar as (TTipo (t,ref NONE)), _) =
+	let	fun busNONE(s, ar as (TTipo (t,r)), _) =
 			(ref(ar) := tabSaca(t, env) handle _ => raise noExiste)
 		| busNONE _ = ()
 		val _ = List.app busNONE lf
