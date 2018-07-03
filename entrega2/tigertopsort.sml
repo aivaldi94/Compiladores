@@ -85,14 +85,14 @@ fun procesa [] pares env _ = env: (string, Tipo) Tabla
 					 		env ps
 					| _ => env
 	in procesa t ps' env' recs end
-fun fijaNONE [] env = env
-| fijaNONE((name, TArray(ar as (TTipo (s,r)), u))::t) env =
+fun fijaNONE [] (env : (string, Tipo) Tabla) = env
+| fijaNONE((name, TArray(ar as ((TTipo (s : string,r)), u)))::t) env =
 	(case tabBusca(s, env) of
 	NONE => raise Fail "error interno 666+1"
-	| SOME ras => (ref(ar) := ras; fijaNONE t env))
-| fijaNONE((name, TRecord(lf, u))::t) env =
+	| (SOME ras) : Tipo option  => (r := SOME ras; fijaNONE t env))
+| fijaNONE((name, TRecord(lf, u))::t) (env : (string, Tipo) Tabla) =
 	let	fun busNONE(s, ar as (TTipo (t,r)), _) =
-			(ref(ar) := tabSaca(t, env) handle _ => raise noExiste)
+			(r := SOME (tabSaca(t : string, env : (string, Tipo) Tabla)) handle _ => raise noExiste)
 		| busNONE _ = ()
 		val _ = List.app busNONE lf
 	in	fijaNONE t env end
@@ -105,9 +105,9 @@ fun fijaTipos batch env =
 	let	val pares = genPares batch
 		val recs = buscaArrRecords batch
 		val orden = topsort pares
-		val env' = procesa orden batch env recs
-		val env'' = agregarecs env' recs
-		val env''' = fijaNONE (tabAList env'') env''
+		val env' : (string, Tipo) Tabla = procesa orden batch env recs
+		val env'' : (string, Tipo) Tabla = (agregarecs env' recs) : (string, Tipo) Tabla
+		val env''' = fijaNONE (tabAList env'') (env'' : (string, Tipo) Tabla)
 val _ = tigermuestratipos.printTTipos(tabAList env'')
 	in	env''' end
 end
