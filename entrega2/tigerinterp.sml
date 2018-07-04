@@ -14,8 +14,7 @@ struct
 	open tigertab
 	open Dynarray
 	open tigertree
-	open tigerit
-	
+
 	fun inter showdebug (funfracs: (stm list*tigerframe.frame) list) (stringfracs: (tigertemp.label*string) list) =
 	let
 		(* Memoria y registros *)
