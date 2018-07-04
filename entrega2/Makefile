@@ -27,7 +27,7 @@ EXEFILE=
 
 GRALOBJS= tigerabs.uo tigergrm.uo tigerlex.uo tigermain.uo \
 	tigernlin.uo tigerpp.uo tigerescap.uo tigertab.uo tigerseman.uo tigertemp.uo topsort.uo tigertree.uo \
-	tigertopsort.uo tigerframe.uo tigertrans.uo tigerit.uo tigerpila.uo tigermuestratipos.uo tigerinterp.uo
+	tigertopsort.uo tigerframe.uo tigertrans.uo tigerit.uo tigerpila.uo tigermuestratipos.uo
 
 all: tiger
 
@@ -87,7 +87,7 @@ tigersres.uo: tigertab.ui tigertips.uo tigertemp.ui tigertopsort.ui \
 	tigerabs.uo tigertrans.ui 
 tigertab.uo: tigertab.ui 
 tigermain.uo: tigerseman.ui tigerescap.ui tigergrm.ui tigerlex.uo \
-    tigerpp.uo tigerinterp.uo
+    tigerpp.uo 
 tigertemp.uo: tigertemp.ui 
 tigerlex.uo: tigergrm.ui tigernlin.uo 
 tigertopsort.uo: tigertopsort.ui tigertab.ui tigertips.uo tigerabs.uo \
