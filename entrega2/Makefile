@@ -94,6 +94,4 @@ tigertopsort.uo: tigertopsort.ui tigertab.ui tigertips.uo tigerabs.uo \
     tigermuestratipos.ui
 tigertopsort.ui: tigertab.ui tigertips.uo tigerabs.uo 
 tigermuestratipos.uo: tigermuestratipos.ui tigertips.uo 
-tigerinterp.uo: tigerinterp.ui tigertree.uo tigertab.ui tigerframe.ui \
-    tigerit.uo tigertemp.ui
-	
+
