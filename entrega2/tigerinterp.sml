@@ -11,7 +11,7 @@
 *)
 structure tigerinterp =
 struct
-	open tigertab
+	(*open tigertab*)
 	open Dynarray
 	open tigertree
 
