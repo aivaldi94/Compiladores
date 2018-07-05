@@ -335,7 +335,6 @@ datatype EnvEntry =
 				
 	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =	       		
 				let
-				val _ = print("entrando a var dec")
 					val {ty=texp,exp=eexp} = transExp (venv, tenv,levNest) init
 					val r = case tabBusca (t,tenv) of
 						NONE => error ("El tipo no se encuentra en el entorno", nl) 						
@@ -343,8 +342,8 @@ datatype EnvEntry =
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)
 					val v = tigertrans.assignExp{var=tigertrans.varDec (acc),exp=eexp}	
-         val _ = (tigermuestratipos.printTipo("Tipo de init",texp,[]))
-          val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) 
+         (*val _ = (tigermuestratipos.printTipo("Tipo de init",texp,[]))
+          val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) *)
 				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r, access= acc,nivel= niv}, venv),tenv,[v]) else error ("La inicializacion no tiene el tipo de la variable",nl) end	
 		
 		| trdec (venv,tenv) (FunctionDec xs) =  
