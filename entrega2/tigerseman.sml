@@ -87,8 +87,8 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 			let 
 				val (ts,t,lab,lev,ext) = case tabBusca(func, venv) of
 							NONE => error("Funcion no existente",nl)
-							| SOME (VIntro _) => error("No es funcion",nl)
-							| SOME (Var _) => error("No es funcion",nl)
+							| SOME (VIntro _) => error("No es funcion 1",nl)
+							| SOME (Var _) => error("No es funcion 2",nl)
 							| SOME (Func {level=lev,label=lab,formals=l,result=tip,extern=ext}) => (l,tip,lab,lev,ext)							
 				val _ = if (length ts <> length args) then error("Argumentos extras o faltantes",nl) else ()
 				val m = ListPair.zip (map (fn x => #ty (trexp x)) args, ts)
@@ -291,7 +291,7 @@ and trvar(SimpleVar s, nl) =
 			let 
 				val {exp=expfield, ty=tip} = trvar (v,nl)
 				val _ = tigermuestratipos.printTipo("v ", tip, [])
-				val r = case tip of 
+				val r = case (tipoReal tip) of 
 					(* Supongo que el int del TRecord es el número de campo *)
 					(TRecord (l,_)) => List.filter (fn (a,_,_) => a = s) l
 					| _ => error("Accediendo a un record inexistente",nl)
@@ -304,7 +304,7 @@ and trvar(SimpleVar s, nl) =
 					TInt => ()
 					| _ => error("El indice no es un int",nl)
 				val {exp=exparr, ty=tip} = trvar (v,nl)
-				val r = case tip of 
+				val r = case (tipoReal tip) of 
 					(TArray (tr,_)) => {exp=(tigertrans.subscriptVar (exparr, expint)),ty=(tr)} 
 					| _ => error("Accediendo a un arreglo inexistente",nl)
 			in r end
@@ -398,8 +398,8 @@ datatype EnvEntry =
   			     let
 					val lvl = case tabBusca (nom,venv) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",100)
-								  | SOME (VIntro _) => error("No es funcion", pos) 
-								  | SOME (Var _) =>	error("No es funcion", pos)
+								  | SOME (VIntro _) => error("No es funcion 3", pos) 
+								  | SOME (Var _) =>	error("No es funcion 4", pos)
 								  | SOME (Func {level = l, ...}) => l
 					val lvlint = (tigertrans.levInt lvl) : int
 				 in
@@ -427,8 +427,8 @@ datatype EnvEntry =
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
 							val lvl = case tabBusca (nom,venv) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",pos)
-								  | SOME (VIntro _) => error("No es funcion", pos) 
-								  | SOME (Var _) =>	error("No es funcion", pos)
+								  | SOME (VIntro _) => error("No es funcion 5", pos) 
+								  | SOME (Var _) =>	error("No es funcion 6", pos)
 								  | SOME (Func {level = l, ...}) => l
 							val f = transExp (venv , tenv, lvl) (*Deberìa ser una función que toma una exp*)
 							(* Agregar las expresiones de los cuerpos a la lista*)
