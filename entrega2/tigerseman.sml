@@ -282,7 +282,6 @@ and trvar(SimpleVar s, nl) =
 				| SOME (VIntro {access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl)), ty = TInt} 
 				| SOME (Var {ty = tip, access = acc, nivel = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl) ), ty = tip} 
 				| SOME (Func _)  => error("No es variable",nl)
-
 			in r end
 		| trvar(FieldVar(v, s), nl) = 
 			let 
@@ -343,8 +342,8 @@ datatype EnvEntry =
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)
 					val v = tigertrans.assignExp{var=tigertrans.varDec (acc),exp=eexp}	
-         (*val _ = (tigermuestratipos.printTipo("Tipo de init",texp,[]))
-          val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) *)
+         val _ = (tigermuestratipos.printTipo("Tipo de init",texp,[]))
+          val _ = (tigermuestratipos.printTipo("Tipo de r:",r,[])) 
 				in if (tiposIguales texp r) then (tabRInserta (name, Var {ty=r, access= acc,nivel= niv}, venv),tenv,[v]) else error ("La inicializacion no tiene el tipo de la variable",nl) end	
 		
 		| trdec (venv,tenv) (FunctionDec xs) =  
