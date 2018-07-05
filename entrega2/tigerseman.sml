@@ -333,8 +333,9 @@ datatype EnvEntry =
 				in (tabRInserta (name, Var {ty= texp,access= acc,nivel= niv}, venv),tenv,[v])
 				end
 				
-	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =
+	       | trdec (venv, tenv) (VarDec ({name,escape,typ=SOME t,init},nl)) =	       		
 				let
+				val _ = print("entrando a var dec")
 					val {ty=texp,exp=eexp} = transExp (venv, tenv,levNest) init
 					val r = case tabBusca (t,tenv) of
 						NONE => error ("El tipo no se encuentra en el entorno", nl) 						
