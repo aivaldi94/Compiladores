@@ -26,7 +26,7 @@ struct
 				case tabBusca(a, !tab) of
 					SOME v => !v
 					| NONE => (tab := tabInserta(a, ref 0, !tab); 0)
-			fun store tab a x =
+			fun store tab a x = (* almacenar *)
 				case tabBusca(a, !tab) of
 					SOME v => v := x
 					| NONE => tab := tabInserta(a, ref x, !tab)

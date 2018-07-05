@@ -15,14 +15,14 @@ fun printTipo(n, t, lenv) =
     	| prnt(TArray(t, _)) = (print "TArray of "; prnt t)
     	| prnt(TRecord(l, u)) =
 			let fun aux [] = ()
-				| aux ((sr, TTipo (tr,ref NONE), ir)::t) =
-								print("TRecord(TTipo "^tr^" "^Int.toString(ir)^")\n")
+				| aux ((sr, TTipo (tr,r), ir)::t) =
+								(print("TTipo "^tr^" "^Int.toString(ir)^")\n"); aux t)
 				| aux ((sr, TRecord(_, u), ir)::t) = (print (buscaRecordArray u lenv); print(" "^Int.toString ir^" "); aux t)
 				| aux ((sr, TArray(_, u), ir)::t) = (print (buscaRecordArray u lenv); print(" "^Int.toString ir^" "); aux t)
 				| aux ((sr, tr , ir)::t) = (prnt tr; print(" "^Int.toString ir^" "); aux t)
 			in print "TRecord["; aux l; print "]\n" end
-		| prnt(TTipo (s,ref NONE)) =
-			print("TTipo "^s)
+		| prnt(TTipo (s,r)) =
+			print("TTipo "^s^"\n")
 		| prnt _ = ()
     in	print(n^" = "); prnt t end
 fun printTTipos tips = List.app (fn(s,t) => printTipo(s, t, tips)) tips

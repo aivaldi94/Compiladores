@@ -228,25 +228,28 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 				val ttest = trexp test
 				val _ = preWhileForExp ()
 				val tbody = trexp body
-				val _ = postWhileForExp()
-			in
-				if tipoReal (#ty ttest) = TInt andalso #ty tbody = TUnit then {exp=whileExp {test=(#exp ttest), body=(#exp tbody), lev=topLevel()}, ty=TUnit}
+				val (exp, ty) = if tipoReal (#ty ttest) = TInt andalso #ty tbody = TUnit then (whileExp {test=(#exp ttest), body=(#exp tbody), lev=topLevel()}, TUnit)
 				else if tipoReal (#ty ttest) <> TInt then error("Error de tipo en la condición", nl)
 				else error("El cuerpo de un while no puede devolver un valor", nl)
+				val _ = postWhileForExp()
+			in
+				{exp = exp, ty = ty}
 			end
 		| trexp(ForExp({var, escape, lo, hi, body}, nl)) =  
 			let
 				val tlo = trexp lo
-				val thi = trexp hi				
-				val venv' = tabRInserta (var, VIntro {access= allocLocal outermost (! escape), level= 0}, venv) 
-				val _ = preWhileForExp ()
+				val thi = trexp hi			
+				val venv' = tabRInserta (var, VIntro {access= allocLocal levNest (!escape), level= levInt levNest}, venv) 
+				val _ = preWhileForExp()
 				val tbody =  transExp (venv', tenv,levNest) body 
-				val _ = postWhileForExp()				
-				val evar = trvar ((SimpleVar var),nl)
-			in
-				if tipoReal (#ty tlo) = TInt andalso tipoReal (#ty thi) = TInt andalso (#ty tbody) = TUnit then {exp= forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, ty=TUnit}
+				val evar = transExp (venv', tenv,levNest) (VarExp ((SimpleVar var), nl))
+				val (exp,ty) = if tipoReal (#ty tlo) = TInt andalso tipoReal (#ty thi) = TInt andalso (#ty tbody) = TUnit then (forExp {lo= #exp tlo,hi= #exp thi,var= #exp evar,body= #exp tbody}, TUnit)
 				else if tipoReal(#ty tlo) <> TInt orelse tipoReal (#ty thi) <> TInt then error("Error de tipo en la condición", nl)
-				else error("El cuerpo de un for no puede devolver un valor", nl)   				
+				else error("El cuerpo de un for no puede devolver un valor", nl)  
+				(*Habría que ver si el postWhileForExp está bien ubicado*)
+				val _ = postWhileForExp()
+			in
+				{exp = exp, ty = ty} 				
 			end		
 		| trexp(LetExp({decs, body}, _)) =
 			let
@@ -278,7 +281,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 and trvar(SimpleVar s, nl) = 
 			let 
 			val r = case tabBusca(s,venv) of
-				NONE => error("La variable no se encuentra en el entorno",nl)
+				NONE => error("La variable no se encuentra en el entorno: "^s,nl)
 				| SOME (VIntro {access = acc, level = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl)), ty = TInt} 
 				| SOME (Var {ty = tip, access = acc, nivel = lvl}) => {exp = (tigertrans.simpleVar (acc, lvl) ), ty = tip} 
 				| SOME (Func _)  => error("No es variable",nl)
@@ -287,6 +290,7 @@ and trvar(SimpleVar s, nl) =
 		| trvar(FieldVar(v, s), nl) = 
 			let 
 				val {exp=expfield, ty=tip} = trvar (v,nl)
+				val _ = tigermuestratipos.printTipo("v ", tip, [])
 				val r = case tip of 
 					(* Supongo que el int del TRecord es el número de campo *)
 					(TRecord (l,_)) => List.filter (fn (a,_,_) => a = s) l
@@ -327,6 +331,7 @@ datatype EnvEntry =
 *)
 		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = 
 				let
+					(* ¿Por qué llamamos a transExp en lugar de a trexp?*)
 					val {ty=texp,exp=eexp} = transExp (venv, tenv,levNest) init
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)								
@@ -445,7 +450,6 @@ datatype EnvEntry =
 			in if (#1 ok) then (env1, tenv, []) else error("Error en el cuerpo de la función 446", (#2 ok)) end
 				
 		| trdec (venv,tenv) (TypeDec ts) = 
-		(* Controlar fijatipos -> hay arreglos que no sabemos si estan bien en tigertopsort *)
 			let 
             	val empty = Splayset.empty String.compare
             	val ts' = Splayset.addList (empty, List.map (fn ({name = n,...},_) => n) ts)
