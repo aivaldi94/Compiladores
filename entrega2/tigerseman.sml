@@ -326,6 +326,7 @@ datatype EnvEntry =
 *)
 		and trdec (venv, tenv) (VarDec ({name,escape,typ=NONE,init},nl)) = 
 				let
+					val _ = print ("HOLA!!!")
 					val {ty=texp,exp=eexp} = transExp (venv, tenv,levNest) init
 					val acc = tigertrans.allocLocal levNest (!escape)
 					val niv = tigertrans.levInt(levNest)								
