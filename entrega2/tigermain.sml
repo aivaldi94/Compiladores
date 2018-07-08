@@ -69,7 +69,7 @@ fun main(args) =
 		
 		(*val (b,c) = makeList frags ([],[])*)
 		val (b,c) = makelist frags
-		val _ = if inter then (tigerinterp.inter true b c) else ()
+		val _ = if inter then (tigerinterp.inter false b c) else ()
 		in 
 		print "yes!!\n"
 	end	handle Fail s => print("Fail: "^s^"\n")
