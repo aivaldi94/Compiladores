@@ -345,6 +345,8 @@ struct
 
 				(* Guardar temporarios *)
 				val temps = getTemps()
+				print ("temporarios\n")
+				print (#1(hd(temps)))
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
