@@ -344,7 +344,7 @@ struct
 				end
 
 				(* Guardar temporarios *)
-				val temps = getTemps()
+				val temps : (temp * int) list = getTemps()
 				(*print ("temporarios\n")*)
 				(*print (#1(hd(temps)))*)
 				(* Mover fp lo suficiente *)
