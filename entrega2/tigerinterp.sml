@@ -53,9 +53,8 @@ struct
 			let
 				val ls = tabAList(!tabTemps)
 				fun p (a,b) = (print(a); print(" -> "); print(Int.toString(!b)); print("\n"))
-			in
-				val _ = if (length ls) = 0 then print("vacia") else ()
-				(print("TEMPS:\n"); List.app p ls)
+			in				
+				(val _ = if (length ls) = 0 then print("vacia") else ();print("TEMPS:\n"); List.app p ls)
 			end
 		end
 
