@@ -345,7 +345,7 @@ struct
 
 				(* Guardar temporarios *)
 				val temps : (tigertemp.temp * int) list = getTemps()
-				(*print ("temporarios\n")*)
+				val _ = print ("temporarios\n")
 				(*print (#1(hd(temps)))*)
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
