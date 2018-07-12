@@ -52,8 +52,10 @@ struct
 			fun printTemps () =
 			let
 				val ls = tabAList(!tabTemps)
+				(*
 				val _ = if (length ls) = 0 then print("#(listaTemps) = 0\n") else print("#(listaTemps) != 0\n")
 				val _ = if (length ls) = 1 then print("#(listaTemps) = 1\n") else print("#(listaTemps) != 1\n")
+				*)
 				fun p (a,b) = (print(a); print(" -> "); print(Int.toString(!b)); print("\n"))
 			in				
 				(print("TEMPS:\n"); List.app p ls)	
@@ -80,6 +82,8 @@ struct
 				SOME a => a
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
 			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)
+			val listLab = tabAList (!tabLabels)
+			val _ = if (length listLab) = 0 then print ("#(listaLabs) = 0") else print ("#(listaLabs) != 0")
 		end
 
 		(* Guardado de strings *)
