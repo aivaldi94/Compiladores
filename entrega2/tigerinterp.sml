@@ -52,8 +52,8 @@ struct
 			fun printTemps () =
 			let
 				val ls = tabAList(!tabTemps)
-				val _ = if (length ls) = 0 then print("listaTemps vacia\n") else print("listaTemps con algo\n")
-				val _ = print (#1(hd(ls)))
+				val _ = if (length ls) = 0 then print("#(listaTemps) = 0\n") else print("#(listaTemps) != 0\n")
+				val _ = if (length ls) = 1 then print("#(listaTemps) = 1\n") else print("#(listaTemps) != 1\n")
 				fun p (a,b) = (print(a); print(" -> "); print(Int.toString(!b)); print("\n"))
 			in				
 				(print("TEMPS:\n"); List.app p ls)	
