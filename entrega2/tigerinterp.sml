@@ -98,7 +98,7 @@ struct
 					val idx = !next;
 					val _ = next := !next + 1;
 				in
-					(update(stringArray, idx, str); storeMem addr idx; addr; if (Array.length stringArray) = 0 then print("#(stringArray) = 0\n") else print("#(stringArray) != 0\n"))
+					(update(stringArray, idx, str); storeMem addr idx; addr)
 				end
 		end
 		val _ = List.map (fn (lab, str) => storeLabel lab (storeString str)) stringfracs
