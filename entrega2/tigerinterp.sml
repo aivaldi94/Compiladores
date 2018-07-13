@@ -83,7 +83,7 @@ struct
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
 			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)
 			val listLab = tabAList (!tabLabels)
-			val _ = if (length listLab) = 0 then print ("#(listaLabs) = 0") else print ("#(listaLabs) != 0")
+			val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n")
 		end
 
 		(* Guardado de strings *)
