@@ -358,6 +358,14 @@ in
 end
 	| binOpIntExp {left, oper, right} = raise Fail "Error en binOpIntExp" 
 
+fun fromOperToRelOp (op = EqOp : tigerabs.oper) = EQ : tigertree.relop
+	|  fromOperToRelOp (op = NeqOp) = NEQ
+	|  fromOperToRelOp (op = LtOp) = LT 
+	|  fromOperToRelOp (op = LeOp) = LE
+	|  fromOperToRelOp (op = GtOp) = GT
+	|  fromOperToRelOp (op = GeOp) = GE
+	|  fromOperToRelOp _ = raise fail "Operacion no permitida" 
+
 fun binOpIntRelExp {left,oper = LtOp,right} =
 let
 	val l = unEx left
