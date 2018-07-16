@@ -52,9 +52,13 @@ struct
 			fun printTemps () =
 			let
 				val ls = tabAList(!tabTemps)
+				(*
+				val _ = if (length ls) = 0 then print("#(listaTemps) = 0\n") else print("#(listaTemps) != 0\n")
+				val _ = if (length ls) = 1 then print("#(listaTemps) = 1\n") else print("#(listaTemps) != 1\n")
+				*)
 				fun p (a,b) = (print(a); print(" -> "); print(Int.toString(!b)); print("\n"))
-			in
-				(print("TEMPS:\n"); List.app p ls)
+			in				
+				(print("TEMPS:\n"); List.app p ls)	
 			end
 		end
 
@@ -78,6 +82,8 @@ struct
 				SOME a => a
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
 			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)
+			val listLab = tabAList (!tabLabels)
+			val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n")
 		end
 
 		(* Guardado de strings *)
@@ -344,7 +350,11 @@ struct
 				end
 
 				(* Guardar temporarios *)
-				val temps = getTemps()
+				val temps : (tigertemp.temp * int) list = getTemps()
+				(*
+				val _ = print ("temporarios\n")
+				val _ = print (#1(hd(temps)))
+				*)
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
