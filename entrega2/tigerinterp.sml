@@ -367,9 +367,10 @@ struct
 						| MEM m => storeMem (evalExp m) y) formalsValues
 				(* Ejecutar la lista de instrucciones *)
 				val _ = execute body
+				val rv = loadTemp tigerframe.rv
+				
 				val _ = print ("temporarios\n")
 				val _ = print (#1(hd(temps)))
-				val rv = loadTemp tigerframe.rv
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
