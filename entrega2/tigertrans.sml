@@ -358,7 +358,7 @@ in
 end
 	| binOpIntExp {left, oper, right} = raise Fail "Error en binOpIntExp" 
 
-fun fromOperToRelOp (op = EqOp : tigerabs.oper) = EQ : tigertree.relop
+fun fromOperToRelOp (op = EqOp ) = EQ
 	|  fromOperToRelOp (op = NeqOp) = NEQ
 	|  fromOperToRelOp (op = LtOp) = LT 
 	|  fromOperToRelOp (op = LeOp) = LE
