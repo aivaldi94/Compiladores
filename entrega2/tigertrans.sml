@@ -356,7 +356,7 @@ let
 in
 	if (r = CONST 0) then raise Fail "División por cero" else Ex (BINOP(DIV,l,r))
 end
-	| binOpIntExp {left, oper, right} = raise Fail "Error" 
+	| binOpIntExp {left, oper, right} = raise Fail "Error en binOpIntExp" 
 
 fun binOpIntRelExp {left,oper = LtOp,right} =
 let
@@ -410,7 +410,7 @@ in
 		    LABEL t],
 		    TEMP tmp))
 end	
-	| binOpIntRelExp {left,oper ,right} = raise Fail "Error"
+	| binOpIntRelExp {left,oper ,right} = raise Fail "Error en binOpIntRelExp"
 
 
 fun binOpStrExp {left, oper, right} =
