@@ -375,6 +375,7 @@ struct
 				fun printLista [] = ()
 					| printLista (x::xs) = let 
 											val _ = print x
+											val _ = print ("\n")
 										  in printLista xs end
 				val _ = print ("temporarios\n")
 				val _ = printLista (map (fn (a,b) => a) (getTemps()))
