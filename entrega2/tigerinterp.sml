@@ -372,8 +372,10 @@ struct
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
+				fun printLista [] = ()
+					| printLista (x:xs) = print x ; printLista xs
 				val _ = print ("temporarios\n")
-				val _ = if (length (getTemps())) = 1 then print ("es 1\n") else print("no es 1\n")
+				val _ = printLista (map (fn (a,b) => a) (getTemps()))
 			in
 				rv
 			end
