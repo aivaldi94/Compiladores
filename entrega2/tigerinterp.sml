@@ -373,7 +373,7 @@ struct
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
 				val _ = print ("temporarios\n")
-				val _ = print (#1(hd(getTemps()))
+				val _ = print (#1(hd(getTemps())))
 			in
 				rv
 			end
