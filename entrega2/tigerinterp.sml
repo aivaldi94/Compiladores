@@ -368,12 +368,12 @@ struct
 				(* Ejecutar la lista de instrucciones *)
 				val _ = execute body
 				val rv = loadTemp tigerframe.rv
-				
-				val _ = print ("temporarios\n")
-				val _ = print (#1(hd(temps)))
+
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
+				val _ = print ("temporarios\n")
+				val _ = print (#1(hd(temps)))
 			in
 				rv
 			end
