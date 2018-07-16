@@ -373,7 +373,7 @@ struct
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
 				fun printLista [] = ()
-					| printLista (x:xs) = let 
+					| printLista (x::xs) = let 
 											val _ = print x
 										  in printLista xs end
 				val _ = print ("temporarios\n")
