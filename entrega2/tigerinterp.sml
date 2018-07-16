@@ -373,7 +373,7 @@ struct
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
 				val _ = print ("temporarios\n")
-				val _ = print (#1(snd(getTemps())))
+				val _ = if (length getTemps()) = 1 then print ("es 1\n") else print("no es 1\n")
 			in
 				rv
 			end
