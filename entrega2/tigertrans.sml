@@ -366,60 +366,20 @@ fun fromOperToRelOp (EqOp : tigerabs.oper) = EQ : tigertree.relop
 	|  fromOperToRelOp GeOp = GE
 	|  fromOperToRelOp _ = raise Fail "Operacion no permitida" 
 
-fun binOpIntRelExp {left,oper = LtOp,right} =
+fun binOpIntRelExp {left,oper,right} =
 let
+	val etiq = fromOperToRelOp oper
 	val l = unEx left
 	val r = unEx right
 	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
 in
 	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
-			CJUMP(LT,l,r,t,f),
+			CJUMP(etiq,l,r,t,f),
 		    LABEL f,
 		    MOVE(TEMP tmp, CONST 0),
 		    LABEL t],
 		    TEMP tmp))
 end	
-	| binOpIntRelExp {left,oper = LeOp,right} =
-let
-	val l = unEx left
-	val r = unEx right
-	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
-in
-	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
-			CJUMP(LE,l,r,t,f),
-		    LABEL f,
-		    MOVE(TEMP tmp, CONST 0),
-		    LABEL t],
-		    TEMP tmp))
-end	
-	| binOpIntRelExp {left,oper = GtOp,right} =
-let
-	val l = unEx left
-	val r = unEx right
-	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
-in
-	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
-			CJUMP(GT,l,r,t,f),
-		    LABEL f,
-		    MOVE(TEMP tmp, CONST 0),
-		    LABEL t],
-		    TEMP tmp))
-end	
-	| binOpIntRelExp {left,oper = GeOp,right} =
-let
-	val l = unEx left
-	val r = unEx right
-	val (t,f,tmp) = (newlabel(), newlabel(), newtemp())
-in
-	Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
-			CJUMP(GE,l,r,t,f),
-		    LABEL f,
-		    MOVE(TEMP tmp, CONST 0),
-		    LABEL t],
-		    TEMP tmp))
-end	
-	| binOpIntRelExp {left,oper ,right} = raise Fail "Error en binOpIntRelExp"
-
 
 fun binOpStrExp {left, oper, right} =
 	let 
