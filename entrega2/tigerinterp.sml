@@ -352,9 +352,6 @@ struct
 				(* Guardar temporarios *)
 				val temps : (tigertemp.temp * int) list = getTemps()
 				
-				val _ = print ("temporarios\n")
-				val _ = print (#1(hd(temps)))
-				
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
@@ -370,6 +367,8 @@ struct
 						| MEM m => storeMem (evalExp m) y) formalsValues
 				(* Ejecutar la lista de instrucciones *)
 				val _ = execute body
+				val _ = print ("temporarios\n")
+				val _ = print (#1(hd(temps)))
 				val rv = loadTemp tigerframe.rv
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
