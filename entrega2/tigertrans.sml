@@ -364,7 +364,7 @@ fun fromOperToRelOp (EqOp : tigerabs.oper) = EQ : tigertree.relop
 	|  fromOperToRelOp LeOp = LE
 	|  fromOperToRelOp GtOp = GT
 	|  fromOperToRelOp GeOp = GE
-	|  fromOperToRelOp _ = raise fail "Operacion no permitida" 
+	|  fromOperToRelOp _ = raise Fail "Operacion no permitida" 
 
 fun binOpIntRelExp {left,oper = LtOp,right} =
 let
