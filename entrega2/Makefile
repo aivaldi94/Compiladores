@@ -85,7 +85,7 @@ tigerpila.uo: tigerpila.ui
 tigersres.uo: tigertab.ui tigertips.uo tigertemp.ui tigertopsort.ui \
 	tigerabs.uo tigertrans.ui 
 tigertab.uo: tigertab.ui 
-tigercanon.uo: tigercanon.ui
+tigercanon.uo: tigercanon.ui tigertree.ui
 tigermain.uo: tigerseman.ui tigerescap.ui tigergrm.ui tigerlex.uo \
     tigerpp.uo tigerinterp.uo tigerit.uo tigertrans.ui tigercanon.ui
 tigertemp.uo: tigertemp.ui 
