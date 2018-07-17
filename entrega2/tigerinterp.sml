@@ -319,7 +319,7 @@ struct
 		and evalFun(f, args) =
 			let
 				(* Encontrar la función*)
-				val ffrac = List.filter (fn (body, frame) => tigerframe.name(frame)=f) funfracs
+				val ffrac = List.filter (fn (body, frame) => (print tigerframe.name(frame) ; tigerframe.name(frame)=f) funfracs
 				val _ = if (List.length(ffrac)<>1) then raise Fail ("No se encuentra la función, o repetida: "^f^"\n") else ()
 				val [(body, frame)] = ffrac
 				(* Mostrar qué se está haciendo, si showdebug *)
