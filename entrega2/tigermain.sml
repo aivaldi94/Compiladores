@@ -56,7 +56,7 @@ fun main(args) =
 			| makelist (tigerframe.PROC {body, frame} :: l) = 
 			let 
 				val (la,lb) = makelist l 
-				val _ = ppp (fn (x,y) => print y) ((tigercanon.basicBlocks o tigercanon.linearize) body)
+				val _ = map (fn (x,y) => print y) ((tigercanon.basicBlocks o tigercanon.linearize) body)
 			in ((canonizar (body),frame) :: la, lb)
 			end
 			| makelist (tigerframe.STRING (lab,s) :: l) = 
