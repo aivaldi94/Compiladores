@@ -59,10 +59,9 @@ fun main(args) =
 			end
 
 		val (b,c) = makelist frags
-		(*
-		val _ = if (length b) = 0 then print ("#[PROC]=0\n") else print ("#[PROC]!=0\n")
-		val _ = if (length c) = 0 then print ("#[STRING]=0\n") else print ("#[STRING]!=0\n")
-		*)
+		val _ = print ("#[PROC]=")
+		val _ = print (Int.toString (length b))
+		val _ = print ("\n")
 		val _ = if inter then (tigerinterp.inter true b c) else ()
 		in 
 		print "yes!!\n"
