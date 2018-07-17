@@ -83,7 +83,7 @@ struct
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
 			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)
 			val listLab = tabAList (!tabLabels)
-			val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n")
+			(* val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n") *)
 		end
 
 		(* Guardado de strings *)
@@ -283,7 +283,7 @@ struct
 			end
 		| evalExp(ESEQ(s, e)) = raise Fail("No canonizado\n")
 		(* ejecuta un comando, devuelve NONE si no salta, SOME l si salta al label l *)
-		and evalStm(MOVE(TEMP t, e)) = (print("enMOVE");storeTemp t (evalExp(e)); NONE)
+		and evalStm(MOVE(TEMP t, e)) = (storeTemp t (evalExp(e)); NONE)
 		| evalStm(MOVE(MEM(e1), e2)) = (storeMem (evalExp(e1)) (evalExp(e2)); NONE)
 		| evalStm(MOVE(_, _)) = raise Fail("MOVE a otra cosa\n")
 		| evalStm(EXP e) = (evalExp(e); NONE)
