@@ -46,10 +46,12 @@ fun main(args) =
 			end
 		*)
 		val canonizar = tigercanon.traceSchedule o tigercanon.basicBlocks o tigercanon.linearize
+		(*
 		fun ppp [] = print ("")
 			| ppp (x::xs) = let 
 								val _ = print x
 							in ppp xs
+		*)
 		fun makelist [] = ([],[])
 			| makelist (tigerframe.PROC {body, frame} :: l) = 
 			let 
