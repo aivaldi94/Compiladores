@@ -62,7 +62,7 @@ fun main(args) =
 		val _ = print ("#[PROC]=")
 		val _ = print (Int.toString (length b))
 		val _ = print ("\n")
-		val _ = if inter then (tigerinterp.inter true b c) else ()
+		val _ = if inter then (tigerinterp.inter false b c) else ()
 		in 
 		print "yes!!\n"
 	end	handle Fail s => print("Fail: "^s^"\n")
