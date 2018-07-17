@@ -50,7 +50,7 @@ fun main(args) =
 			| makelist (tigerframe.PROC {body, frame} :: l) = 
 			let 
 				val (la,lb) = makelist l 
-			in ((canonizar body,frame) :: la, lb)
+			in ((tigercanon.linearize (body),frame) :: la, lb)
 			end
 			| makelist (tigerframe.STRING (lab,s) :: l) = 
 			let
