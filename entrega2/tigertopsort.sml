@@ -120,12 +120,25 @@ fun fijaNONE [] (env : (string, Tipo) Tabla) = env
 		val _ = List.app busNONE lf
 	in	fijaNONE t env end
 | fijaNONE(_::t) env = fijaNONE t env
-
+(*
+fun fijaNONE [] (env : (string, Tipo) Tabla) = env
+| fijaNONE((name, TArray(ar as ((TTipo (s : string,r)), u)))::t) env =
+	(case tabBusca(s, env) of
+	NONE => raise Fail "error interno 666+1"
+	| (SOME ras) : Tipo option  =>  fijaNONE t (tabRInserta (name, TArray (ras,u), env)))
+| fijaNONE((name, TRecord(lf, u))::t) (env : (string, Tipo) Tabla) =
+	let	fun busNONE(s, ar as (TTipo (t,r)), _) =
+			(r := SOME (tabSaca(t : string, env : (string, Tipo) Tabla)) handle _ => raise noExiste)
+		| busNONE _ = ()
+		val _ = List.app busNONE lf
+	in	fijaNONE t env end
+| fijaNONE(_::t) env = fijaNONE t env
+*)
 fun sacaTTipo (TTipo (s : string,ref(NONE))) env =  raise Fail "error interno 666+1"
-| sacaTTipo (TTipo (s : string,ref(SOME ras))) env = sacaTTipo ras env
+| sacaTTipo (TTipo (s : string,ref(SOME ras))) env = ras
 | sacaTTipo (TArray(ar as ((TTipo (s : string,ref(NONE))), u))) env = raise Fail "error interno 666+1"
 | sacaTTipo (TArray(ar as ((TTipo (s : string,ref(SOME ras))), u))) env = TArray ((sacaTTipo ras env),u)
-| sacaTTipo (rcd as(TRecord(lf : (string * Tipo * int) list, u))) env = TRecord(List.map (fn (s,t,n) =>  if (tiposIguales rcd t) then (s,t,n) else (s,sacaTTipo t env,n)) lf,u)
+| sacaTTipo (rcd as(TRecord(lf : (string * Tipo * int) list, u))) env = (*TRecord(List.map (fn (s,t,n) =>  if (tiposIguales rcd t) then (s,t,n) else (s,sacaTTipo t env,n)) lf,u)*)  TRecord(List.map (fn (s,t,n) =>  (s,sacaTTipo t env,n)) lf,u)
 | sacaTTipo t env = t			
 	
 fun sacaTTipos [] env = env : (string, Tipo) Tabla
@@ -218,8 +231,8 @@ fun fijaTipos batch env =
 		val recs = buscaArrRecords batch
 		val orden = topsort pares
 		val env' : (string, Tipo) Tabla = procesa orden batch env recs
-		(*val _ = print("Primer entorno:\n")
-		val _ = tigermuestratipos.printTTipos(tabAList env')*)
+		val _ = print("Primer entorno:\n")
+		val _ = tigermuestratipos.printTTipos(tabAList env')
 		val env'' : (string, Tipo) Tabla = (agregarecs env' recs) : (string, Tipo) Tabla
 		(*val _ = print("Segundo entorno:\n")
 		val _ = tigermuestratipos.printTTipos(tabAList env'')*)
