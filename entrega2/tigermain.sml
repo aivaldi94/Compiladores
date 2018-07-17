@@ -32,26 +32,7 @@ fun main(args) =
 		
 		val _ = transProg(expr)
 		val frags = tigertrans.getResult() : tigerframe.frag list
-		
-		(*El tipo de ahora es este*)
-		(* makeList:: [frags]  -> ([(stm, frame)], [label, string])*)
-		(*Pero deberia ser este*)
-		(* makeList:: [frags] -> ([(stm, frame)], [label, string])*)
-		(* Como obtengo "la lista de tigertree.stm devuelta por el canonizador ?!?!? "*)
-		(*fun makeList [] : (tigerframe.frag list) = ([],[]) :  (((tigertree.stm list*tigerframe.frame) list) * ((tigertemp.label*string) list))
-			| makeList (tigerframe.PROC {body, frame} :: l) =
-			let 
-				val (la,lb) = makelist l 
-			in ((([body],frame) :: la) :((tigertree.stm list*tigerframe.frame) list) ,lb:((tigertemp.label*string) list))
-			end
-					(* makeList l (([body],frame) :: a, b)*)
-			| makeList (tigerframe.STRING (lab,s) :: l) = 
-			let
-				val (la,lb) = makelist l
-			in (la, (lab,s) :: lb)
-			end
-			(*makeList l (a, (lab,s) :: b)*)*)
-			
+		(*
 		fun makelist [] = ([],[])
 			| makelist (tigerframe.PROC {body, frame} :: l) = 
 			let 
@@ -63,14 +44,24 @@ fun main(args) =
 				val (la,lb) = makelist l
 			in (la, (lab,s) :: lb)
 			end
-		(*fun makeList [] (a,b) = (a,b)
-			| makeList (tigerframe.PROC {body, frame} :: l) (a,b) = makeList l (([body],frame) :: a, b)
-			| makeList (tigerframe.STRING (lab,s) :: l) (a,b) = makeList l (a, (lab,s) :: b)*)
-		
-		(*val (b,c) = makeList frags ([],[])*)
+		*)
+		val canonizar = tigercanon.traceSchedule o tigercanon.basicBlocks o tigercanon.linearize
+		fun makelist [] = ([],[])
+			| makelist (tigerframe.PROC {body, frame} :: l) = 
+			let 
+				val (la,lb) = makelist l 				
+			in ((canonizar (body),frame) :: la, lb)
+			end
+			| makelist (tigerframe.STRING (lab,s) :: l) = 
+			let
+				val (la,lb) = makelist l
+			in (la, (lab,s) :: lb)
+			end
+
 		val (b,c) = makelist frags
-		val _ = if (length b) = 0 then print ("#[PROC]=0\n") else print ("#[PROC]!=0\n")
-		val _ = if (length c) = 0 then print ("#[STRING]=0\n") else print ("#[STRING]!=0\n")
+		val _ = print ("#[PROC]=")
+		val _ = print (Int.toString (length b))
+		val _ = print ("\n")
 		val _ = if inter then (tigerinterp.inter true b c) else ()
 		in 
 		print "yes!!\n"

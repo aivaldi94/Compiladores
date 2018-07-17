@@ -83,7 +83,7 @@ struct
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
 			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)
 			val listLab = tabAList (!tabLabels)
-			val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n")
+			(* val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n") *)
 		end
 
 		(* Guardado de strings *)
@@ -319,7 +319,7 @@ struct
 		and evalFun(f, args) =
 			let
 				(* Encontrar la función*)
-				val ffrac = List.filter (fn (body, frame) => tigerframe.name(frame)=f) funfracs
+				val ffrac = List.filter (fn (body, frame) => (tigerframe.name(frame)=f)) funfracs
 				val _ = if (List.length(ffrac)<>1) then raise Fail ("No se encuentra la función, o repetida: "^f^"\n") else ()
 				val [(body, frame)] = ffrac
 				(* Mostrar qué se está haciendo, si showdebug *)
@@ -351,15 +351,14 @@ struct
 
 				(* Guardar temporarios *)
 				val temps : (tigertemp.temp * int) list = getTemps()
-				(*
-				val _ = print ("temporarios\n")
-				val _ = print (#1(hd(temps)))
-				*)
+				
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
+				(* val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame) *)
+
 				val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame)
 				val formalsValues = ListPair.zip(formals, args)
 				val _ = map (fn (x,y) => 
@@ -369,9 +368,17 @@ struct
 				(* Ejecutar la lista de instrucciones *)
 				val _ = execute body
 				val rv = loadTemp tigerframe.rv
+
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
+				fun printLista [] = ()
+					| printLista (x::xs) = let 
+											val _ = print x
+											val _ = print ("\n")
+										  in printLista xs end
+				val _ = print ("temporarios\n")
+				val _ = printLista (map (fn (a,b) => a) (getTemps()))
 			in
 				rv
 			end
