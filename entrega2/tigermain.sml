@@ -45,11 +45,12 @@ fun main(args) =
 			in (la, (lab,s) :: lb)
 			end
 		*)
+		val canonizar = tigercanon.traceSchedule o tigercanon.basicBlocks o tigercanon.linearize
 		fun makelist [] = ([],[])
 			| makelist (tigerframe.PROC {body, frame} :: l) = 
 			let 
 				val (la,lb) = makelist l 
-			in ((tigercanon.linearize(body),frame) :: la, lb)
+			in ((canonizar body,frame) :: la, lb)
 			end
 			| makelist (tigerframe.STRING (lab,s) :: l) = 
 			let
