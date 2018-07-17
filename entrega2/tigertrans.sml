@@ -285,8 +285,7 @@ in
 	Nx (seq[cf(t,f),
 		LABEL t,
 		expthen,
-		LABEL f])
-		
+		LABEL f])		
 end
 
 fun ifThenElseExp {test,then',else'} =
