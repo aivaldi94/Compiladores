@@ -117,6 +117,7 @@ struct
 		fun checkIndexArray(arr::idx::rest) =
 		let
 			val siz = loadMem (arr-1)
+			val _ = print ("SIZE"^Int.toString(siz)^"\n")
 			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuara de rango\n") else ()
 		in
 			0
