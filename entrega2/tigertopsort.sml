@@ -231,15 +231,13 @@ fun fijaTipos batch env =
 		val recs = buscaArrRecords batch
 		val orden = topsort pares
 		val env' : (string, Tipo) Tabla = procesa orden batch env recs
-		val _ = print("Primer entorno:\n")
-		val _ = tigermuestratipos.printTTipos(tabAList env')
 		val env'' : (string, Tipo) Tabla = (agregarecs env' recs) : (string, Tipo) Tabla
 		(*val _ = print("Segundo entorno:\n")
 		val _ = tigermuestratipos.printTTipos(tabAList env'')*)
 		val env''' = fijaNONE (tabAList env'') (env'' : (string, Tipo) Tabla)
 		val env'''' = sacaTTipos (tabAList env''') env'''
-		val _ = print("Entorno final:\n")
+		(*val _ = print("Entorno final:\n")
 		val _ = tigermuestratipos.printTTipos(tabAList env'''')
-		val _ = print("Fin entorno\n")
+		val _ = print("Fin entorno\n")*)
 	in	env'''' end
 end

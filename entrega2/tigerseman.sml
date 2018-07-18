@@ -290,7 +290,6 @@ and trvar(SimpleVar s, nl) =
 		| trvar(FieldVar(v, s), nl) = 
 			let 
 				val {exp=expfield, ty=tip} = trvar (v,nl)
-				val _ = tigermuestratipos.printTipo("v ", tip, tabAList tenv)
 				val r = case (tipoReal tip) of 
 					(* Supongo que el int del TRecord es el número de campo *)
 					(TRecord (l,_)) => List.filter (fn (a,_,_) => a = s) l
