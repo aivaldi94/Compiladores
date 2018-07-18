@@ -107,7 +107,7 @@ struct
 		fun initArray(siz::init::rest) =
 		let
 			val mem = getNewMem(siz)
-			val l = (mem, siz)::(List.tabulate(siz, (fn x => (mem+1+tigerframe.wSz*x, init))))
+			val l = (mem, siz)::(List.tabulate(siz, (fn x => (mem+tigerframe.wSz*(x+1), init))))
 			val _ = List.map (fn (a,v) => storeMem a v) l
 		in
 			mem+1
@@ -126,11 +126,12 @@ struct
 		fun allocRecord(ctos::vals) =
 		let
 			val mem = getNewMem(ctos)
-			val addrs = List.tabulate(ctos, (fn x => mem + x*tigerframe.wSz))
+			val _ = storeMem ctos mem
+			val addrs = List.tabulate(ctos, (fn x => mem + (x+1)*tigerframe.wSz))
 			val l = ListPair.zip(addrs, vals)
 			val _ = List.map (fn (a,v) => storeMem a v) l
 		in
-			mem
+			mem+1
 		end
 		| allocRecord _ = raise Fail("No debería pasar (allocRecord)")
 		
