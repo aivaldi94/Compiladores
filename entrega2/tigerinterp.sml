@@ -126,7 +126,7 @@ struct
 		
 		fun allocRecord(ctos::vals) =
 		let
-			val mem = getNewMem(ctos)
+			val mem = getNewMem(ctos+1)
 			val _ = storeMem ctos mem
 			val addrs = List.tabulate(ctos, (fn x => mem + (x+1)*tigerframe.wSz))
 			val l = ListPair.zip(addrs, vals)
