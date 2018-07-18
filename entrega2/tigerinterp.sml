@@ -235,7 +235,7 @@ struct
 				("print", printFun),
 				("flush", flushFun),
 				("ord", ordFun),
-				("chr", chrFun),
+				("getChar", chrFun),
 				("size", sizeFun),
 				("substring", substringFun),
 				("concat", concatFun),
