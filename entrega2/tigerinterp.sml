@@ -110,13 +110,13 @@ struct
 			val l = (mem, siz)::(List.tabulate(siz, (fn x => (mem+tigerframe.wSz*(x+1), init))))
 			val _ = List.map (fn (a,v) => storeMem a v) l
 		in
-			mem+1
+			mem+tigerframe.wSz
 		end
 		| initArray _ = raise Fail("No debería pasar (initArray)")
 
 		fun checkIndexArray(arr::idx::rest) =
 		let
-			val siz = loadMem (arr-1)
+			val siz = loadMem (arr-tigerframe.wSz)
 			val _ = print ("SIZE"^Int.toString(siz)^"\n")
 			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuara de rango\n") else ()
 		in
@@ -132,7 +132,7 @@ struct
 			val l = ListPair.zip(addrs, vals)
 			val _ = List.map (fn (a,v) => storeMem a v) l
 		in
-			mem+1
+			mem+tigerframe.wSz
 		end
 		| allocRecord _ = raise Fail("No debería pasar (allocRecord)")
 		
