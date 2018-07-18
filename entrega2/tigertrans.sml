@@ -191,7 +191,7 @@ let
 	val s = CONST (length l)
 	val is = map (fn (e,n) => unEx e) l
 in
-	Ex (externalCall("allocRecord", s :: is))
+	Ex (externalCall("_allocRecord", s :: is))
 end
 
 fun arrayExp{size, init} =
@@ -199,7 +199,7 @@ let
 	val s = unEx size
 	val i = unEx init
 in
-	Ex (externalCall("initArray", [s, i]))
+	Ex (externalCall("_initArray", [s, i]))
 end
 
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
