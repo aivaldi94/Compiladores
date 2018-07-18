@@ -167,7 +167,7 @@ let
 in
 	Ex( ESEQ(seq[MOVE(TEMP ra, a),
 		MOVE(TEMP ri, i),
-		EXP(externalCall("_checkindex", [TEMP ra, TEMP ri]))],
+		EXP(externalCall("_checkIndexArray", [TEMP ra, TEMP ri]))],
 		MEM(BINOP(PLUS, TEMP ra,
 			BINOP(MUL, TEMP ri, CONST tigerframe.wSz)))))
 end
@@ -181,7 +181,7 @@ let
 in
 	Ex( ESEQ(seq[MOVE(TEMP ra, a),
 		MOVE(TEMP ri, i),
-		EXP(externalCall("_checkindex", [TEMP ra, TEMP ri]))],
+		EXP(externalCall("_checkIndexArray", [TEMP ra, TEMP ri]))],
 		MEM(BINOP(PLUS, TEMP ra,
 			BINOP(MUL, TEMP ri, CONST tigerframe.wSz)))))
 end
@@ -191,7 +191,7 @@ let
 	val s = CONST (length l)
 	val is = map (fn (e,n) => unEx e) l
 in
-	Ex (externalCall("allocRecord", s :: is))
+	Ex (externalCall("_allocRecord", s :: is))
 end
 
 fun arrayExp{size, init} =
@@ -386,12 +386,12 @@ fun binOpStrExp {left, oper, right} =
 		val r = unEx right
 	in
 		case oper of
-			EqOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| NeqOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| LtOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| LeOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| GtOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| GeOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
+			EqOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| NeqOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| LtOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| LeOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| GtOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| GeOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
 			| _ => raise Fail "no deberia llegar"
 	end
 end
