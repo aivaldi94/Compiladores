@@ -20,6 +20,14 @@ struct
 		(* Memoria y registros *)
 		local
 			val tabTemps: (tigertemp.temp, int ref) Tabla ref = ref (tabNueva())
+			fun printTemps1 () =
+			let
+				val ls = tabAList(!tabTemps)
+				fun p (a,b) = (print(a); print(" ---> "); print(Int.toString(!b)); print("\n"))
+			in				
+				(print("¡TEMPS!:\n"); List.app p ls)	
+			end
+
 			val tabMem: (int, int ref) Tabla ref = ref (tabNueva())
 
 			fun load tab a =
@@ -52,10 +60,6 @@ struct
 			fun printTemps () =
 			let
 				val ls = tabAList(!tabTemps)
-				(*
-				val _ = if (length ls) = 0 then print("#(listaTemps) = 0\n") else print("#(listaTemps) != 0\n")
-				val _ = if (length ls) = 1 then print("#(listaTemps) = 1\n") else print("#(listaTemps) != 1\n")
-				*)
 				fun p (a,b) = (print(a); print(" -> "); print(Int.toString(!b)); print("\n"))
 			in				
 				(print("TEMPS:\n"); List.app p ls)	
