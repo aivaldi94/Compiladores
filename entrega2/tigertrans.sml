@@ -25,10 +25,11 @@ fun levInt{parent = _,frame = _,levelInt = l}  = l
 val outermost: level = {parent=NONE,
 	frame=newFrame{name="_tigermain", formals=[]}, levelInt=getActualLev()}
 
+(* Según página 142 se debe agregar un true correspondiente al static link*)
 fun newLevel{parent={parent, frame, levelInt}, name, formals} =
 	{
 	parent=SOME frame,
-	frame=newFrame{name=name, formals=formals},
+	frame=newFrame{name=name, formals=true::formals},
 	levelInt=levelInt+1}
 
 fun allocArg{parent, frame, levelInt} b = tigerframe.allocArg frame b
@@ -167,7 +168,7 @@ let
 in
 	Ex( ESEQ(seq[MOVE(TEMP ra, a),
 		MOVE(TEMP ri, i),
-		EXP(externalCall("_checkindex", [TEMP ra, TEMP ri]))],
+		EXP(externalCall("_checkIndexArray", [TEMP ra, TEMP ri]))],
 		MEM(BINOP(PLUS, TEMP ra,
 			BINOP(MUL, TEMP ri, CONST tigerframe.wSz)))))
 end
@@ -181,7 +182,7 @@ let
 in
 	Ex( ESEQ(seq[MOVE(TEMP ra, a),
 		MOVE(TEMP ri, i),
-		EXP(externalCall("_checkindex", [TEMP ra, TEMP ri]))],
+		EXP(externalCall("_checkIndexArray", [TEMP ra, TEMP ri]))],
 		MEM(BINOP(PLUS, TEMP ra,
 			BINOP(MUL, TEMP ri, CONST tigerframe.wSz)))))
 end
@@ -386,12 +387,12 @@ fun binOpStrExp {left, oper, right} =
 		val r = unEx right
 	in
 		case oper of
-			EqOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| NeqOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| LtOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| LeOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| GtOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
-			| GeOp => Ex (ESEQ (MOVE (externalCall("_stringCompare", [l , r]),TEMP rv),TEMP rv))
+			EqOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| NeqOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| LtOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| LeOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| GtOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			| GeOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
 			| _ => raise Fail "no deberia llegar"
 	end
 end

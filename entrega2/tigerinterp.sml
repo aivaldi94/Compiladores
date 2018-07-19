@@ -106,18 +106,19 @@ struct
 		(* Funciones de biblioteca *)
 		fun initArray(siz::init::rest) =
 		let
-			val mem = getNewMem(siz)
-			val l = (mem+1, siz)::(List.tabulate(siz, (fn x => (mem+tigerframe.wSz*x, init))))
+			val mem = getNewMem(siz+1)
+			val l = (mem, siz)::(List.tabulate(siz, (fn x => (mem+tigerframe.wSz*(x+1), init))))
 			val _ = List.map (fn (a,v) => storeMem a v) l
 		in
-			mem
+			mem+tigerframe.wSz
 		end
 		| initArray _ = raise Fail("No debería pasar (initArray)")
 
 		fun checkIndexArray(arr::idx::rest) =
 		let
-			val siz = loadMem (arr+1)
-			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuara de rango\n") else ()
+			val siz = loadMem (arr-tigerframe.wSz)
+			val _ = print ("SIZE"^Int.toString(siz)^"\n")
+			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuera de rango\n") else ()
 		in
 			0
 		end
@@ -125,12 +126,12 @@ struct
 		
 		fun allocRecord(ctos::vals) =
 		let
-			val mem = getNewMem(ctos)
-			val addrs = List.tabulate(ctos, (fn x => mem + x*tigerframe.wSz))
-			val l = ListPair.zip(addrs, vals)
+			val mem = getNewMem(ctos+1)
+			val addrs = List.tabulate(ctos, (fn x => mem + (x+1)*tigerframe.wSz))
+			val l = (mem,ctos)::ListPair.zip(addrs, vals)
 			val _ = List.map (fn (a,v) => storeMem a v) l
 		in
-			mem
+			mem+tigerframe.wSz
 		end
 		| allocRecord _ = raise Fail("No debería pasar (allocRecord)")
 		
