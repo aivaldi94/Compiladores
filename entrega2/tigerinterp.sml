@@ -348,6 +348,11 @@ struct
 
 				(* Guardar temporarios *)
 				val temps : (tigertemp.temp * int) list = getTemps()
+				fun printLista [] = ()
+					| printLista (x::xs) = let 
+											val _ = print x
+											val _ = print ("\n")
+										  in printLista xs end
 				val _ = print("ACA")
 				val _ = printLista (map (fn (a,b) => a) (getTemps()))
 				(* Mover fp lo suficiente *)
@@ -371,11 +376,7 @@ struct
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
-				fun printLista [] = ()
-					| printLista (x::xs) = let 
-											val _ = print x
-											val _ = print ("\n")
-										  in printLista xs end
+				
 				val _ = print ("temporarios\n")
 				val _ = printLista (map (fn (a,b) => a) (getTemps()))
 			in
