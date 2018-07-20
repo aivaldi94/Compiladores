@@ -56,7 +56,6 @@ struct
 			in				
 				(print("TEMPS:\n"); List.app p ls)	
 			end
-			printTemps()
 		end
 
 		(* alocación de memoria *)
