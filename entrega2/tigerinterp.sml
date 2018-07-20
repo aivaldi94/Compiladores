@@ -343,7 +343,7 @@ struct
 								| NONE => exe xs
 						end
 				in
-					exe l
+					printTemps;exe l
 				end
 
 				(* Guardar temporarios *)
