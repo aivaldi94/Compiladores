@@ -348,12 +348,11 @@ struct
 
 				(* Guardar temporarios *)
 				val temps : (tigertemp.temp * int) list = getTemps()
-				val _ = print ("ACA"^Int.toString(length temps))
+				val _ = print("ACA")
+				val _ = printLista (map (fn (a,b) => a) (getTemps()))
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
-				val _ = print ("ACA1"^Int.toString(length temps)^"\n")
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
-				val _ = print ("ACA2"^Int.toString(length temps)^"\n")
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
 				(* val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame) *)
@@ -364,16 +363,14 @@ struct
 					case x of
 						TEMP t => storeTemp t y
 						| MEM m => storeMem (evalExp m) y) formalsValues
-				val _ = print ("ACA4"^Int.toString(length temps)^"\n")
+				
 				(* Ejecutar la lista de instrucciones *)
 				val _ = execute body
 				val rv = loadTemp tigerframe.rv
 
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
-				val _ = print ("ACA5"^Int.toString(length temps)^"\n")
 				val _ = storeTemp tigerframe.rv rv
-				val _ = print ("ACA6"^Int.toString(length temps)^"\n")
 				fun printLista [] = ()
 					| printLista (x::xs) = let 
 											val _ = print x
