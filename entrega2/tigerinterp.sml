@@ -364,16 +364,16 @@ struct
 					case x of
 						TEMP t => storeTemp t y
 						| MEM m => storeMem (evalExp m) y) formalsValues
-				val _ = print ("ACA4"^Int.toString(length temps)^"\n"
+				val _ = print ("ACA4"^Int.toString(length temps)^"\n")
 				(* Ejecutar la lista de instrucciones *)
 				val _ = execute body
 				val rv = loadTemp tigerframe.rv
 
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
-				val _ = print ("ACA5"^Int.toString(length temps)^"\n"
+				val _ = print ("ACA5"^Int.toString(length temps)^"\n")
 				val _ = storeTemp tigerframe.rv rv
-				val _ = print ("ACA6"^Int.toString(length temps)^"\n"
+				val _ = print ("ACA6"^Int.toString(length temps)^"\n")
 				fun printLista [] = ()
 					| printLista (x::xs) = let 
 											val _ = print x
