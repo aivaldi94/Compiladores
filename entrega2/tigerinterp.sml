@@ -348,10 +348,10 @@ struct
 
 				(* Guardar temporarios *)
 				val temps : (tigertemp.temp * int) list = getTemps()
-				
+				val _ = print ("ACA"^Int.toString(length temps))
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
-				val _ = storeTemp tigerframe.fp (1024*1024)
+				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
 				(* val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame) *)
