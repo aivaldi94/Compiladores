@@ -20,8 +20,6 @@ struct
 		(* Memoria y registros *)
 		local
 			val tabTemps: (tigertemp.temp, int ref) Tabla ref = ref (tabNueva())
-			val ls = tabAList(!tabTemps)
-			print ("LONGITUD DE TABTEMP"^Int.toString(length(ls)))
 			val tabMem: (int, int ref) Tabla ref = ref (tabNueva())
 
 			fun load tab a =
@@ -58,6 +56,7 @@ struct
 			in				
 				(print("TEMPS:\n"); List.app p ls)	
 			end
+			printTemps()
 		end
 
 		(* alocación de memoria *)
