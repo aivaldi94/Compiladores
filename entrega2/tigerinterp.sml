@@ -27,7 +27,7 @@ struct
 			in				
 				(print("¡TEMPS!:\n"); List.app p ls)	
 			end
-
+			printTemps1()
 			val tabMem: (int, int ref) Tabla ref = ref (tabNueva())
 
 			fun load tab a =
