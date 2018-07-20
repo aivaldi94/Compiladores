@@ -351,7 +351,9 @@ struct
 				val _ = print ("ACA"^Int.toString(length temps))
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
+				val _ = print ("ACA1"^Int.toString(length temps)^"\n")
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
+				val _ = print ("ACA2"^Int.toString(length temps)^"\n")
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
 				(* val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame) *)
