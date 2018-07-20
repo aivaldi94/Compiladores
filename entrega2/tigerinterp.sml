@@ -353,12 +353,12 @@ struct
 											val _ = print x
 											val _ = print ("\n")
 										  in printLista xs end
-				val _ = print("ACA")
+				val _ = print("ACA NO HAY NADA: \n")
 				val _ = printLista (map (fn (a,b) => a) (getTemps()))
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
-				val _ = print("ACA1")
+				val _ = print("ACA SE CARGA: \n")
 				val _ = printLista (map (fn (a,b) => a) (getTemps()))
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
