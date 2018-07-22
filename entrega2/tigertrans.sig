@@ -45,6 +45,7 @@ val preFunctionDec : unit -> unit
 val functionDec : exp * level * bool -> exp
 val postFunctionDec : unit -> unit
 val binOpIntExp : {left:exp, oper:tigerabs.oper, right:exp} -> exp
+val fromOperToRelOp: tigerabs.oper -> tigertree.relop
 val binOpIntRelExp: {left:exp, oper:tigerabs.oper, right:exp} -> exp
 val binOpStrExp : {left:exp, oper:tigerabs.oper, right:exp} -> exp
 val arrayExp : {size: exp, init: exp} -> exp

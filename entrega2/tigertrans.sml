@@ -11,7 +11,6 @@ exception divCero
 fun generateUniqueLab () = tigertemp.newlabel()
 	
 type level = {parent:frame option , frame: frame, levelInt: int}
-(*datatype access = InFrame of int | InReg of tigertemp.label*)
 type access = tigerframe.access
 
 type frag = tigerframe.frag
@@ -98,7 +97,6 @@ fun Ir(e) =
 	
 fun nombreFrame frame = print(".globl " ^ tigerframe.name frame ^ "\n")
 
-(* While y for necesitan la u'ltima etiqueta para un break *)
 local
 	val salidas: label option tigerpila.Pila = tigerpila.nuevaPila1 NONE
 in
@@ -328,37 +326,20 @@ in
 	Nx (MOVE(v,vl))
 end
 
-fun binOpIntExp {left, oper = PlusOp, right} = 
-let
+fun binOpIntExp {left, oper, right} = 
+let 
 	val l = unEx left
 	val r = unEx right
 in
-	Ex (BINOP(PLUS,l,r))
+	case oper of
+		PlusOp	  	=> Ex (BINOP(PLUS,l,r))
+		| MinusOp	=> Ex (BINOP(MINUS,l,r))
+		| TimesOp 	=> Ex (BINOP(MUL,l,r))
+		| DivideOp 	=> if (r = CONST 0) then raise Fail "División por cero" else Ex (BINOP(DIV,l,r))
+		| _ 		=> raise Fail "Error en binOpIntExp" 
 end
-	| binOpIntExp {left, oper = MinusOp, right} = 
-let
-	val l = unEx left
-	val r = unEx right
-in
-	Ex (BINOP(MINUS,l,r))
-end
-	| binOpIntExp {left, oper = TimesOp, right} = 
-let
-	val l = unEx left
-	val r = unEx right
-in
-	Ex (BINOP(MUL,l,r))
-end
-	| binOpIntExp {left, oper = DivideOp, right} = 
-let
-	val l = unEx left
-	val r = unEx right
-in
-	if (r = CONST 0) then raise Fail "División por cero" else Ex (BINOP(DIV,l,r))
-end
-	| binOpIntExp {left, oper, right} = raise Fail "Error en binOpIntExp" 
 
-fun fromOperToRelOp (EqOp : tigerabs.oper) = EQ : tigertree.relop
+fun fromOperToRelOp EqOp = EQ
 	|  fromOperToRelOp NeqOp = NE
 	|  fromOperToRelOp LtOp = LT 
 	|  fromOperToRelOp LeOp = LE
@@ -387,12 +368,10 @@ fun binOpStrExp {left, oper, right} =
 		val r = unEx right
 	in
 		case oper of
-			EqOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
-			| NeqOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
-			| LtOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
-			| LeOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
-			| GtOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
-			| GeOp => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
-			| _ => raise Fail "no deberia llegar"
+			PlusOp 		=> raise Fail "no deberia llegar"
+			| MinusOp 	=> raise Fail "no deberia llegar"
+			| TimesOp 	=> raise Fail "no deberia llegar"
+			| DivideOp 	=> raise Fail "no deberia llegar"			
+			| _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
 	end
 end
