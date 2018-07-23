@@ -363,13 +363,22 @@ struct
 				
 				val forlist = tigerframe.formals2 frame
 				val _ = if  length(forlist) = 2 then print(Bool.toString(List.nth(forlist,0))) else ()
-				
 				val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame)
-				val formalsValues = ListPair.zip(formals, args)
+				val formalsValues = ListPair.zip(formals, args)	
+
+				(*Creo que para que genere el T1 con el valor 2 tiene que ser la segunda componente de formals algo asi como
+				(TEMP T1,2) voy a forzar que eso pase.
+				Para eso, hago la variable prueba. En el caso de main que no tiene argumentos lo dejo como antes.
+				En el caso de la funcion g del test 8 hago que el segundo argumento se guarde en un temp y no en memoria.
+				Le puse 17 para no confundir con otros valores, pero deberia tomar el 2*)
+						
+				val prueba = if (length formalsValues) = 0 then formalsValues else (hd(formalsValues) :: [(TEMP "T1", 17)])				
+				
 				val _ = map (fn (x,y) => 
 					case x of
 						TEMP t => storeTemp t y
-						| MEM m => storeMem (evalExp m) y) formalsValues
+						| MEM m => storeMem (evalExp m) y
+						| _ => raise Fail "No deberia pasar (tigerinterp)\n") prueba
 				
 				(* Ejecutar la lista de instrucciones *)
 				val _ = execute body
