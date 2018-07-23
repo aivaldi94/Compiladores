@@ -71,7 +71,7 @@ fun formals2(f: frame) = #formals f
 (* Función que modificamos para que soporte el caso InReg *)
 fun formals({formals=f, ...}: frame) = 
 	let	fun aux(n, []) = []
-		| aux(n, true::t) = InFrame(n)::aux(n+argsGap, t)
+		| aux(n, h::t) = InFrame(n)::aux(n+argsGap, t)
 		(*| aux(n, false::t) = InReg(tigertemp.newtemp())::aux(n, t)*)
 	in aux(argsInicial, f) end
 

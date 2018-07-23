@@ -360,8 +360,10 @@ struct
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
 				(* val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame) *)
+				
 				val forlist = tigerframe.formals2 frame
 				val _ = if  length(forlist) = 2 then print(Bool.toString(List.nth(forlist,0))) else ()
+				
 				val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame)
 				val formalsValues = ListPair.zip(formals, args)
 				val _ = map (fn (x,y) => 
