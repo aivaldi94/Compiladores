@@ -248,7 +248,7 @@ struct
 				val ee2 = evalExp(e2)
 			in
 				case b of
-					PLUS => ee1+ee2
+					PLUS => (print ("SUMA PRIMERO: "^Int.toString(ee1)^"suma segundo: "^Int.toString(ee2)^"Resultado: "^ Int.toString(ee1+ee2)^"\n");ee1+ee2)
 					| MINUS => ee1-ee2
 					| MUL => ee1*ee2
 					| DIV => ee1 div ee2
@@ -271,6 +271,7 @@ struct
 					NAME l => l
 					| _ => raise Fail("CALL a otra cosa (no implemetado)\n")
 				val eargs = List.map evalExp args
+				val _ = print ("Primer elemento: "^Int.toString(hd(eargs)))
 				(*Si lab es de biblioteca, usar la función de la tabla*)
 				val rv = case tabBusca(lab, tabLib) of
 					SOME f => f(eargs)
@@ -352,18 +353,15 @@ struct
 					| printLista (x::xs) = let 
 											val _ = print x
 											val _ = print ("\n")
-										  in printLista xs end
-				val _ = print("ACA NO HAY NADA: \n")
-				val _ = printLista (map (fn (a,b) => a) (getTemps()))
+										  in printLista xs end				
 				(* Mover fp lo suficiente *)
 				val fpPrev = loadTemp tigerframe.fp
-				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
-				val _ = print("ACA SE CARGA: \n")
-				val _ = printLista (map (fn (a,b) => a) (getTemps()))
+				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)				
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
 				(* val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame) *)
-
+				val forlist = tigerframe.formals2 frame
+				val _ = if  length(forlist) = 2 then print(Bool.toString(List.nth(forlist,0))) else ()
 				val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame)
 				val formalsValues = ListPair.zip(formals, args)
 				val _ = map (fn (x,y) => 

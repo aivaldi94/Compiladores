@@ -11,6 +11,7 @@ val fpPrev : int
 val fpPrevLev : int
 val newFrame : {name: tigertemp.label, formals: bool list} -> frame
 val name : frame -> tigertemp.label
+val formals2 : frame -> bool list
 val string : tigertemp.label * string -> string
 val formals : frame -> access list
 val allocArg : frame -> bool -> access

@@ -203,7 +203,7 @@ end
 
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
 let
-	val sl =  MEM( BINOP(PLUS, TEMP(fp), CONST fpPrev))
+	val sl =  BINOP(PLUS, TEMP(fp), CONST fpPrev)
 	val ls = map unEx ls
 in
 	case isproc of

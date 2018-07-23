@@ -66,9 +66,13 @@ fun name(f: frame) = #name f
    "3dia\n"*)
 fun string(l, s) = l^tigertemp.makeString(s)^"\n"
 
+fun formals2(f: frame) = #formals f
+
+(* Función que modificamos para que soporte el caso InReg *)
 fun formals({formals=f, ...}: frame) = 
 	let	fun aux(n, []) = []
-		| aux(n, h::t) = InFrame(n)::aux(n+argsGap, t)
+		| aux(n, true::t) = InFrame(n)::aux(n+argsGap, t)
+		(*| aux(n, false::t) = InReg(tigertemp.newtemp())::aux(n, t)*)
 	in aux(argsInicial, f) end
 
 fun maxRegFrame(f: frame) = !(#actualReg f)
@@ -94,7 +98,7 @@ fun getFrame 0 = TEMP(fp)
 	| getFrame n = MEM(BINOP(PLUS, (getFrame (n-1)), CONST fpPrev))
 
 fun exp (InFrame k) e = MEM(BINOP(PLUS, getFrame e, CONST k))
-  | exp (InReg l) e = TEMP l
+  | exp (InReg l) e = (print("Entro en temp "^l^"\n\n");TEMP l)
 
 fun externalCall(s, l) = CALL(NAME s, l)
 
