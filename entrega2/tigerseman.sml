@@ -85,7 +85,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 		| trexp(StringExp(s, _)) = {exp=stringExp(s), ty=TString}
 		| trexp(CallExp({func, args}, nl)) = 	
 			let 
-				val (ts,t,lab,lev,ext) = case tabBusca(func, venv) of
+				val (ts,t,lab,lev : tigertrans.level,ext) = case tabBusca(func, venv) of
 							NONE => error("Funcion no existente",nl)
 							| SOME (VIntro _) => error("No es funcion 1",nl)
 							| SOME (Var _) => error("No es funcion 2",nl)

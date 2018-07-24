@@ -354,7 +354,9 @@ struct
 				val temps : (tigertemp.temp * int) list = getTemps()
 				
 				(* Mover fp lo suficiente *)
-				val fpPrev = loadTemp tigerframe.fp
+				(* Recupero la dirección del fp actual*)
+				val fpPrev : int = loadTemp tigerframe.fp
+				(* Actualizo el fp a una dirección mas abajo. Estimo que cada fp tiene una capacidad de 1024*1024 *)
 				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)

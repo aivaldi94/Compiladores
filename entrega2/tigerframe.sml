@@ -89,7 +89,8 @@ fun allocLocal (f: frame) b =
 		in	#actualLocal f:=(!(#actualLocal f)-1); ret end
 	| false => InReg(tigertemp.newtemp())
 
-(* Habría que verificar que esto ande correctamente *)	
+(* Habría que verificar que esto ande correctamente *)
+(* Para acceder a variables. ¿Siempre que accedo a variable serán hijas? *)	
 fun getFrame 0 = TEMP(fp)
 	| getFrame n = MEM(BINOP(PLUS, (getFrame (n-1)), CONST fpPrev))
 

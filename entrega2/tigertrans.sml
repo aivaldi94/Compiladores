@@ -155,7 +155,8 @@ fun intExp i = Ex (CONST i)
 
 (* A la función tigergrame.exp le paso la cantidad de niveles que debe saltar para llegar al frame donde la variable está definida*)
 (* Habría que verificar que esto ande correctamente *)	
-fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (tigerframe.exp acc (getActualLev() - nivel))
+(* nivel representa el número de nivel en el cual la variable fue definida*)
+fun simpleVar ((acc, nivel) : (access * int)) : exp = (print("Cantidad de niveles a saltar "^ Int.toString(getActualLev() - nivel) ^"\n");Ex (tigerframe.exp acc (getActualLev() - nivel)))
 
 fun varDec(acc) = simpleVar(acc, getActualLev())
 
@@ -203,9 +204,13 @@ in
 	Ex (externalCall("_initArray", [s, i]))
 end
 
+(* lev : tigertrans.level es el nivel en donde la función fue definida*)
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
 let
-	val sl =  MEM( BINOP(PLUS, TEMP(fp), CONST fpPrev))
+	val dif = getActualLev() - (#levelInt lev) 
+	val _ = print("Diferencia: "^Int.toString(dif)^"\n")
+	(*val sl = if dif = 0 then (tigerframe.getFrame 1) else raise Fail "Llamando a una función en un nivel distinto. No implementado"*)
+	val sl = TEMP fp
 	val ls = map unEx ls
 in
 	case isproc of
