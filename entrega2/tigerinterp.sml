@@ -112,8 +112,8 @@ struct
 
 		fun checkIndexArray(arr::idx::rest) =
 		let
-			val siz = loadMem (arr-tigerframe.wSz)
-			val _ = print ("SIZE"^Int.toString(siz)^"\n")
+			val siz = loadMem (arr-tigerframe.wSz)			
+			(* val _ = print ("SIZE"^Int.toString(siz)^"\n") *)
 			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuera de rango\n") else ()
 		in
 			0
@@ -271,7 +271,7 @@ struct
 					NAME l => l
 					| _ => raise Fail("CALL a otra cosa (no implemetado)\n")
 				val eargs = List.map evalExp args
-				val _ = print ("Primer elemento: "^Int.toString(hd(eargs)))
+				(* val _ = print ("Primer elemento: "^Int.toString(hd(eargs))) *)
 				(*Si lab es de biblioteca, usar la función de la tabla*)
 				val rv = case tabBusca(lab, tabLib) of
 					SOME f => f(eargs)
@@ -365,12 +365,13 @@ struct
 				val forlist = tigerframe.formals2 frame
 				val _ = if  length(forlist) = 2 then print(Bool.toString(List.nth(forlist,0))) else ()
 				*)
-				(* Veamos que onda esto: *)
+				(* Veamos que onda esto: 
 				val forlist = tigerframe.getFormals frame
 				val _ = print ("NOMBRE FRAME: "^(tigerframe.name frame)^"\n")
 				val _ = print ("LONG FORMALS FRAME: "^Int.toString(length(tigerframe.getFormals frame))^"\n")
 				val _ = print ("ELEMENTO FRAME: "^Bool.toString(List.nth(forlist,0))^"\n")
 				val _ = print ("LONG LOCALS FRAME: "^Int.toString(length(tigerframe.getLocals frame))^"\n")
+				*)
 				val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame)
 				val formalsValues = ListPair.zip(formals, args)	
 
@@ -394,9 +395,10 @@ struct
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
-				
+				(*
 				val _ = print ("temporarios\n")
 				val _ = printLista (map (fn (a,b) => a) (getTemps()))
+				*)
 			in
 				rv
 			end
