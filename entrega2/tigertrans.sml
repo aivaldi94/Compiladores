@@ -203,8 +203,16 @@ end
 
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
 let
-	(* val dif = getActualLevel() - lev.levInt	 *)
-	val sl =  BINOP(PLUS, TEMP(fp), CONST fpPrev)
+	val dif = getActualLev() - levInt (lev)	
+	val _ = print ("LA DIFERENCIA DEL CALL A "^name^" ES "^Int.toString(dif)^"\n")
+	(*
+	val sl = case dif of
+				(~1) =>  TEMP fp
+				| 0 => MEM (BINOP (PLUS, MEM (BINOP(PLUS, )), CONST (tigerframe.fpPrev)))
+				| 1 => BINOP (PLUS, TEMP fp, CONST (tigerframe.fpPrev))
+				| _ => raise Fail "CASO NO CONTEMPLADO"
+	*)
+	val sl =  BINOP(PLUS, TEMP(fp), CONST fpPrev) 
 	val ls = map unEx ls
 in
 	case isproc of
