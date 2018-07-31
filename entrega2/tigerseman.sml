@@ -424,7 +424,7 @@ datatype EnvEntry =
 			fun aux4 ([] : (recfun * venv * int) list) : Tipo list = []
 			     | aux4 (({body = b, name=nom, ... }, venv, pos) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
-							val lvl = case tabBusca (nom,venv) of
+							val lvl = case tabBusca (nom,env1) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",pos)
 								  | SOME (VIntro _) => error("No es funcion 5", pos) 
 								  | SOME (Var _) =>	error("No es funcion 6", pos)

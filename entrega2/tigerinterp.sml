@@ -236,7 +236,7 @@ struct
 				("substring", substringFun),
 				("concat", concatFun),
 				("not", notFun),
-				("getstr", getstrFun)])
+				("getchar", getstrFun)])
 
 		(* Evalúa una expresión, devuelve el valor (entero) *)
 		fun evalExp(CONST t) = t
