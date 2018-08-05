@@ -209,17 +209,17 @@ let
 	fun calcSL 0 = MEM (BINOP (PLUS, TEMP fp, CONST (tigerframe.fpPrev)))
 		| calcSL n = MEM (BINOP (PLUS, calcSL (n-1), CONST (tigerframe.fpPrev)))
 
-	(*val sl = if (dif < 0)  then (TEMP fp) else (calcSL dif)*)
+	val sl = if (dif = (~1)) then (TEMP fp) else (calcSL dif)
 	
 	
+	(*
 	val sl = case dif of
 				(~1) =>  TEMP fp
 				| 1 => MEM (BINOP (PLUS, MEM (BINOP (PLUS, TEMP fp, CONST (tigerframe.fpPrev))), CONST (tigerframe.fpPrev)))
 				| 0 => MEM (BINOP (PLUS, TEMP fp, CONST (tigerframe.fpPrev)))
-				| _ => TEMP fp
+				| _ => raise Fail "CASO NO CONTEMPLADO"
 	
-	
-	(*val sl =  BINOP(PLUS, TEMP(fp), CONST fpPrev) *)
+	val sl =  BINOP(PLUS, TEMP(fp), CONST fpPrev) *)
 	val ls = map unEx ls
 in
 	case isproc of
@@ -388,6 +388,8 @@ fun binOpStrExp {left, oper, right} =
 			| MinusOp 	=> raise Fail "no deberia llegar"
 			| TimesOp 	=> raise Fail "no deberia llegar"
 			| DivideOp 	=> raise Fail "no deberia llegar"			
-			| _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
+			(* | _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv)) *)
+			| _ => Ex (ESEQ (MOVE (TEMP rv,externalCall("_stringcmp", [l , r])),TEMP rv))
+			
 	end
 end
