@@ -389,7 +389,7 @@ fun binOpStrExp {left, oper, right} =
 			| TimesOp 	=> raise Fail "no deberia llegar"
 			| DivideOp 	=> raise Fail "no deberia llegar"			
 			(* | _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv)) *)
-			| _ => Ex (ESEQ (MOVE (TEMP rv,externalCall("_stringcmp", [l , r])),TEMP rv))
+			| _ => (print "HOLAAAAA";Ex (ESEQ (MOVE (TEMP rv,externalCall("_stringcmp", [l , r])),TEMP rv)))
 			
 	end
 end

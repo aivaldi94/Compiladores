@@ -113,7 +113,10 @@ struct
 		fun checkIndexArray(arr::idx::rest) =
 		let
 			val siz = loadMem (arr-tigerframe.wSz)			
-			(* val _ = print ("SIZE"^Int.toString(siz)^"\n") *)
+			 val _ = print ("\nSIZE"^Int.toString(siz)^"\n") 
+			val _ = print("arr "^Int.toString(arr)^"\n")
+			val _ = print("idx "^Int.toString(idx)^"\n")
+			(*val _ = print("rest "^Int.toString(rest)^"\n")*)
 			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuera de rango\n") else ()
 		in
 			0
@@ -142,7 +145,9 @@ struct
 		fun stringCompare(strPtr1::strPtr2::rest) =
 		let
 			val str1 = loadString strPtr1
+			val _ = print("STRING COMPARE 1: "^str1)
 			val str2 = loadString strPtr2
+			val _ = print("STRING COMPARE 2: "^str1)
 			val res = String.compare(str1, str2)
 		in
 			case res of
@@ -154,7 +159,7 @@ struct
 
 		fun printFun(strPtr::rest) =
 		let
-			val str = loadString strPtr
+			val str = loadString strPtr			
 			val _ = print(str)
 		in
 			0
@@ -167,6 +172,7 @@ struct
 		let
 			val str = loadString strPtr
 			val ch = hd(explode(str))
+			val _ = print("ord")
 		in
 			ord(ch)
 		end
@@ -176,6 +182,7 @@ struct
 		let
 			val ch = chr(i)
 			val str = implode([ch])
+			val _ = print("chr")
 		in
 			storeString str
 		end
@@ -321,14 +328,15 @@ struct
 				val _ = if (List.length(ffrac)<>1) then raise Fail ("No se encuentra la función, o repetida: "^f^"\n") else ()
 				val [(body, frame)] = ffrac
 				(* Mostrar qué se está haciendo, si showdebug *)
-				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentos: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()
+				val _ = print("LONG ARGS "^Int.toString(length(args)))
+				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentoss: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()
 
 				fun execute l =
 				let
 					fun exe [] = ()
 					| exe (x::xs) =
 						let
-							val _ = if showdebug then (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n")) else ()
+							val _ = if showdebug then () else ()
 						in
 							case evalStm x of
 								SOME lab =>
