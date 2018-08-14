@@ -153,8 +153,7 @@ fun intExp i = Ex (CONST i)
 
 (* A la función tigergrame.exp le paso la cantidad de niveles que debe saltar para llegar al frame donde la variable está definida*)
 (* Habría que verificar que esto ande correctamente *)	
-(* nivel representa el número de nivel en el cual la variable fue definida*)
-fun simpleVar ((acc, nivel) : (access * int)) : exp = (print("Cantidad de niveles a saltar "^ Int.toString(getActualLev() - nivel) ^"\n");Ex (tigerframe.exp acc (getActualLev() - nivel)))
+fun simpleVar ((acc, nivel) : (access * int)) : exp = Ex (tigerframe.exp acc (getActualLev() - nivel))
 
 fun varDec(acc) = simpleVar(acc, getActualLev())
 
@@ -202,26 +201,9 @@ in
 	Ex (externalCall("_initArray", [s, i]))
 end
 
-(* lev : tigertrans.level es el nivel en donde la función fue definida*)
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
 let
-	val dif = getActualLev() - levInt (lev)	
-	val _ = print ("LA DIFERENCIA DEL CALL A "^name^" ES "^Int.toString(dif)^"\n")
-	
-	fun calcSL 0 = MEM (BINOP (PLUS, TEMP fp, CONST (tigerframe.fpPrev)))
-		| calcSL n = MEM (BINOP (PLUS, calcSL (n-1), CONST (tigerframe.fpPrev)))
-
-	val sl = if (dif = (~1)) then (TEMP fp) else (calcSL dif)
-	
-	(*
-	val sl = case dif of
-				(~1) =>  TEMP fp
-				| 1 => MEM (BINOP (PLUS, MEM (BINOP (PLUS, TEMP fp, CONST (tigerframe.fpPrev))), CONST (tigerframe.fpPrev)))
-				| 0 => MEM (BINOP (PLUS, TEMP fp, CONST (tigerframe.fpPrev)))
-				| _ => raise Fail "CASO NO CONTEMPLADO"
-	
-	val sl =  BINOP(PLUS, TEMP(fp), CONST fpPrev) *)
-
+	val sl =  BINOP(PLUS, TEMP(fp), CONST fpPrev)
 	val ls = map unEx ls
 in
 	case isproc of
@@ -390,8 +372,6 @@ fun binOpStrExp {left, oper, right} =
 			| MinusOp 	=> raise Fail "no deberia llegar"
 			| TimesOp 	=> raise Fail "no deberia llegar"
 			| DivideOp 	=> raise Fail "no deberia llegar"			
-			(* | _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv)) *)
-			| _ => Ex (ESEQ (MOVE (TEMP rv,externalCall("_stringcmp", [l , r])),TEMP rv))
-			
+			| _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv))
 	end
 end

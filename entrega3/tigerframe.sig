@@ -26,7 +26,6 @@ val callersaves : tigertemp.temp list
 (* Cambié el tipo
 val exp : access -> tigertree.exp -> tigertree.exp *)
 val exp : access -> int -> tigertree.exp
-val getFrame : int -> tigertree.exp
 val externalCall : string * tigertree.exp list -> tigertree.exp
 val procEntryExit1 : frame * tigertree.stm -> tigertree.stm
 (*val procEntryExit2 : frame * tigerassem.instr list -> tigerassem.instr list*)
