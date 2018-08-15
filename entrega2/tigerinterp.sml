@@ -336,6 +336,7 @@ struct
 					fun exe [] = ()
 					| exe (x::xs) =
 						let
+						(* (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n"))*)
 							val _ = if showdebug then () else ()
 						in
 							case evalStm x of
