@@ -1,6 +1,10 @@
-/* an array type and an array variable */
 let
-  var arr1 : array of int := array of int [10] of 0
-in
-  a
+  var a : int := 2
+  function c (t: int) : int =
+      let
+                      function d (i : int) : int = i
+                   in d(t+4)
+                   end
+
+in d(1)
 end

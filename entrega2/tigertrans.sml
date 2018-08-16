@@ -205,6 +205,7 @@ end
 (* lev : tigertrans.level es el nivel en donde la función fue definida*)
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
 let
+	val _ = if ext then print ("HAY UNA EXTERNA \n") else ()
 	val dif = getActualLev() - levInt (lev)	
 	val _ = print ("LA DIFERENCIA DEL CALL A "^name^" ES "^Int.toString(dif)^"\n")
 	
@@ -225,8 +226,8 @@ let
 	val ls = map unEx ls
 in
 	case isproc of
-		true => Nx (EXP (CALL (NAME name, sl :: ls)))
-		| false => Ex (CALL (NAME name, sl :: ls))
+		true => if (ext) then Nx (EXP (CALL (NAME name,ls))) else Nx (EXP (CALL (NAME name, sl :: ls)))
+		| false => if (ext) then Ex (CALL (NAME name,ls)) else Ex (CALL (NAME name, sl :: ls))
 end
 
 fun letExp ([], body) = Ex (unEx body)
@@ -391,7 +392,7 @@ fun binOpStrExp {left, oper, right} =
 			| TimesOp 	=> raise Fail "no deberia llegar"
 			| DivideOp 	=> raise Fail "no deberia llegar"			
 			(* | _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv)) *)
-			| _ => (print "HOLAAAAA";Ex (ESEQ (MOVE (TEMP rv,externalCall("_stringcmp", [l , r])),TEMP rv)))
+			| _ => (print "HOLAAAAA\n\n";Ex (ESEQ (MOVE (TEMP rv,externalCall("_stringcmp", [l , r])),TEMP rv)))
 			
 	end
 end

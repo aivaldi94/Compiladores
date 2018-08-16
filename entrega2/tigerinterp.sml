@@ -77,14 +77,12 @@ struct
 			fun loadLabel lab = case tabBusca(lab, !tabLabels) of
 				SOME a => a
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
-			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)
-			val listLab = tabAList (!tabLabels)
-			(* val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n") *)
+			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)			
 		end
 
 		(* Guardado de strings *)
 		local
-			val stringArray = array(10, "")
+			val stringArray = array(100, "")
 			val next = ref 0;
 		in
 			fun loadString addr = sub(stringArray, loadMem addr)
@@ -97,7 +95,9 @@ struct
 					(update(stringArray, idx, str); storeMem addr idx; addr)
 				end
 		end
-		val _ = List.map (fn (lab, str) => storeLabel lab (storeString str)) stringfracs
+		val listLab = List.map (fn (lab, str) => storeLabel lab (storeString str)) stringfracs				
+		val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n") 
+		
 
 		(* Funciones de biblioteca *)
 		fun initArray(siz::init::rest) =
@@ -147,7 +147,7 @@ struct
 			val str1 = loadString strPtr1
 			val _ = print("STRING COMPARE 1: "^str1)
 			val str2 = loadString strPtr2
-			val _ = print("STRING COMPARE 2: "^str1)
+			val _ = print("STRING COMPARE 2: "^str2)
 			val res = String.compare(str1, str2)
 		in
 			case res of
