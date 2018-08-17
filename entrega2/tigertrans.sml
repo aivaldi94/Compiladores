@@ -127,7 +127,7 @@ fun stringExp(s: string) =
 	let	val l = newlabel()
 		val len = ".long "^makestring(stringLen s) : string (* .long 3*)
 		val str = ".string \""^s^"\"" : string (* .string "dia" *)
-		val _ = datosGlobs:=(!datosGlobs @ [STRING(l, len), STRING("", str)])
+		val _ = datosGlobs:=(!datosGlobs @ [STRING(l, len), STRING(l, str)])
 	in	Ex(NAME l) end
 	
 fun preFunctionDec() =

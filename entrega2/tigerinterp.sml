@@ -77,26 +77,35 @@ struct
 			fun loadLabel lab = case tabBusca(lab, !tabLabels) of
 				SOME a => a
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
-			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)			
+			fun storeLabel lab addr = tabLabels := tabRInserta(lab, addr, !tabLabels)
+			fun printLabel() = List.app (fn (s,_) => print (s^"\n")) (tabAList (!tabLabels))			
 		end
 
 		(* Guardado de strings *)
 		local
-			val stringArray = array(100, "")
+			val stringArray = array(50, "") 
+			(*val stringList = ref [] : string list ref*)
 			val next = ref 0;
 		in
 			fun loadString addr = sub(stringArray, loadMem addr)
+			(* fun loadString addr = List.nth ((!stringList), loadMem addr) *)
+			(*fun printArray() : unit = app (fn s => print (s^"\n")) (!stringList)*)
 			fun storeString str =
 				let
 					val addr = getNewMem(1)
 					val idx = !next;
 					val _ = next := !next + 1;
-				in
-					(update(stringArray, idx, str); storeMem addr idx; addr)
+				in					
+					(update(stringArray, idx, str); print("EL STRING AGREGADO "^str^"\n"); storeMem addr idx; addr)
+					
+					(*(stringList := List.take ((!stringList), idx -1) @ [str] @ List.drop ((!stringList), idx) ; storeMem addr idx; addr)*)
 				end
 		end
-		val listLab = List.map (fn (lab, str) => storeLabel lab (storeString str)) stringfracs				
-		val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n") 
+		val listLab = List.map (fn (lab, str) => (print("EL STRING AGREGADO A TABLABEL COMO "^lab^" ES "^str^"\n");storeLabel lab (storeString str))) (stringfracs : (string * string) list)
+		val _ = print("IMPRIMIENDO FUNFRACS \n\n")				
+		val _ = printLabel()
+		(*val _ = print("IMPRIMIENDO ARRAY \n\n")				
+		val _ = printArray()*)
 		
 
 		(* Funciones de biblioteca *)
@@ -180,8 +189,8 @@ struct
 
 		fun chrFun(i::rest) =
 		let
-			val ch = chr(i)
-			val str = implode([ch])
+			val ch = chr(i) (* chr toma un entero y lo pasa a char *)
+			val str = implode([ch]) (* implode convierte lista de chars a un string *)
 			val _ = print("chr")
 		in
 			storeString str
@@ -337,7 +346,7 @@ struct
 					| exe (x::xs) =
 						let
 						(* (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n"))*)
-							val _ = if showdebug then () else ()
+							val _ = if showdebug then (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n")) else ()
 						in
 							case evalStm x of
 								SOME lab =>
