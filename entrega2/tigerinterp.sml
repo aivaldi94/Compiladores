@@ -83,7 +83,7 @@ struct
 
 		(* Guardado de strings *)
 		local
-			val stringArray = array(50, "") 
+			val stringArray = array(10, "") 
 			(*val stringList = ref [] : string list ref*)
 			val next = ref 0;
 		in
@@ -122,10 +122,11 @@ struct
 		fun checkIndexArray(arr::idx::rest) =
 		let
 			val siz = loadMem (arr-tigerframe.wSz)			
-			 val _ = print ("\nSIZE"^Int.toString(siz)^"\n") 
+			(*
+			val _ = print ("\nSIZE"^Int.toString(siz)^"\n") 
 			val _ = print("arr "^Int.toString(arr)^"\n")
 			val _ = print("idx "^Int.toString(idx)^"\n")
-			(*val _ = print("rest "^Int.toString(rest)^"\n")*)
+			*)
 			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuera de rango\n") else ()
 		in
 			0
@@ -168,7 +169,7 @@ struct
 
 		fun printFun(strPtr::rest) =
 		let
-			val str = loadString strPtr			
+			val str = loadString strPtr		
 			val _ = print(str)
 		in
 			0
@@ -336,8 +337,7 @@ struct
 				val ffrac = List.filter (fn (body, frame) => (tigerframe.name(frame)=f)) funfracs
 				val _ = if (List.length(ffrac)<>1) then raise Fail ("No se encuentra la función, o repetida: "^f^"\n") else ()
 				val [(body, frame)] = ffrac
-				(* Mostrar qué se está haciendo, si showdebug *)
-				val _ = print("LONG ARGS "^Int.toString(length(args)))
+				(* Mostrar qué se está haciendo, si showdebug *)				
 				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentoss: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()
 
 				fun execute l =
