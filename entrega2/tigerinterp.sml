@@ -84,31 +84,28 @@ struct
 		(* Guardado de strings *)
 		local
 			val stringArray = array(10, "") 
-			(*val stringList = ref [] : string list ref*)
 			val next = ref 0;
 		in
 			fun loadString addr = sub(stringArray, loadMem addr)
-			(* fun loadString addr = List.nth ((!stringList), loadMem addr) *)
-			(*fun printArray() : unit = app (fn s => print (s^"\n")) (!stringList)*)
 			fun storeString str =
 				let
 					val addr = getNewMem(1)
 					val idx = !next;
 					val _ = next := !next + 1;
 				in					
-					(update(stringArray, idx, str); print("EL STRING AGREGADO "^str^"\n"); storeMem addr idx; addr)
-					
-					(*(stringList := List.take ((!stringList), idx -1) @ [str] @ List.drop ((!stringList), idx) ; storeMem addr idx; addr)*)
+					(update(stringArray, idx, str) (*;print("EL STRING AGREGADO "^str^"\n")*); storeMem addr idx; addr)
 				end
 		end
-		val listLab = List.map (fn (lab, str) => (print("EL STRING AGREGADO A TABLABEL COMO "^lab^" ES "^str^"\n");storeLabel lab (storeString str))) (stringfracs : (string * string) list)
+		val listLab = List.map (fn (lab, str) => ((* print("EL STRING AGREGADO A TABLABEL COMO "^lab^" ES "^str^"\n"); *)storeLabel lab (storeString str))) (stringfracs : (string * string) list)
+		(*
 		val _ = print("IMPRIMIENDO FUNFRACS \n\n")				
-		val _ = printLabel()
-		(*val _ = print("IMPRIMIENDO ARRAY \n\n")				
-		val _ = printArray()*)
-		
-
+		val _ = printLabel()		
+		*)
 		(* Funciones de biblioteca *)
+		fun arregloBarraN [] = []
+			| arregloBarraN (#"\\"::(#"x"::(#"0"::(#"a"::xs)))) = #"\n"::arregloBarraN xs
+			| arregloBarraN (x::xs) = x::arregloBarraN xs
+
 		fun initArray(siz::init::rest) =
 		let
 			val mem = getNewMem(siz+1)
@@ -154,9 +151,9 @@ struct
 
 		fun stringCompare(strPtr1::strPtr2::rest) =
 		let
-			val str1 = loadString strPtr1
+			val str1 = implode(arregloBarraN(explode(loadString strPtr1)))
 			val _ = print("STRING COMPARE 1: "^str1)
-			val str2 = loadString strPtr2
+			val str2 = implode(arregloBarraN(explode(loadString strPtr2)))
 			val _ = print("STRING COMPARE 2: "^str2)
 			val res = String.compare(str1, str2)
 		in
@@ -166,11 +163,12 @@ struct
 				| GREATER => 1
 		end
 		| stringCompare _ = raise Fail("No debería pasar (stringCompare)")
-
+			
 		fun printFun(strPtr::rest) =
 		let
-			val str = loadString strPtr		
-			val _ = print(str)
+			val str1 = loadString strPtr	
+			val str = arregloBarraN (explode(str1))
+			val _ = print(implode(str))
 		in
 			0
 		end
@@ -182,9 +180,9 @@ struct
 		let
 			val str = loadString strPtr
 			val ch = hd(explode(str))
-			val _ = print("ord")
+			(* val _ = print("ord") *)
 		in
-			ord(ch)
+			ord ch
 		end
 		| ordFun _ = raise Fail("No debería pasar (ordFun)")
 
@@ -192,7 +190,7 @@ struct
 		let
 			val ch = chr(i) (* chr toma un entero y lo pasa a char *)
 			val str = implode([ch]) (* implode convierte lista de chars a un string *)
-			val _ = print("chr")
+			(* val _ = print("chr") *)
 		in
 			storeString str
 		end
@@ -337,7 +335,8 @@ struct
 				val ffrac = List.filter (fn (body, frame) => (tigerframe.name(frame)=f)) funfracs
 				val _ = if (List.length(ffrac)<>1) then raise Fail ("No se encuentra la función, o repetida: "^f^"\n") else ()
 				val [(body, frame)] = ffrac
-				(* Mostrar qué se está haciendo, si showdebug *)				
+				(* Mostrar qué se está haciendo, si showdebug *)	
+				
 				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentoss: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()
 
 				fun execute l =
