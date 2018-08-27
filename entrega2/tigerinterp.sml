@@ -152,10 +152,12 @@ struct
 		fun stringCompare(strPtr1::strPtr2::rest) =
 		let
 			val str1 = implode(arregloBarraN(explode(loadString strPtr1)))
-			val _ = print("STRING COMPARE 1: "^str1)
+			val _ = print("STRING COMPARE 1: "^str1^"\n")
 			val str2 = implode(arregloBarraN(explode(loadString strPtr2)))
-			val _ = print("STRING COMPARE 2: "^str2)
+			val _ = print("STRING COMPARE 2: "^str2^"\n")
 			val res = String.compare(str1, str2)
+			val _ = if (str1 = str2) then print("IGUALES\n") else print("DISTINTAS\n")
+			val _ = if (loadString strPtr1 = loadString strPtr2) then print("IGUALES ORIG\n") else print("DISTINTASORIG\n")
 		in
 			case res of
 				LESS => ~1
@@ -313,7 +315,7 @@ struct
 				val ee1 = evalExp(e1)
 				val ee2 = evalExp(e2)
 				val b = case rop of
-					EQ => ee1=ee2
+					EQ => ee1=ee2 
 					| NE => ee1<>ee2
 					| LT => ee1<ee2
 					| GT => ee1>ee2

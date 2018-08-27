@@ -205,7 +205,7 @@ end
 (* lev : tigertrans.level es el nivel en donde la función fue definida*)
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
 let
-	(* val _ = if ext then print ("HAY UNA EXTERNA \n") else () *)
+	val _ = if ext then print ("HAY UNA EXTERNA LLAMADA "^ name ^"\n") else () 
 	val dif = getActualLev() - levInt (lev)	
 	(* val _ = print ("LA DIFERENCIA DEL CALL A "^name^" ES "^Int.toString(dif)^"\n") *)
 	
@@ -302,29 +302,35 @@ let
 	val cf = unCx test
 	val expthen = unEx then'
 	val expelse = unEx else'
-	val (t,f,r) = (newlabel(), newlabel(), newtemp())
+	val (t,f,fin,r) = (newlabel(), newlabel(), newlabel(), newtemp())
 in
-	Ex (ESEQ(seq[MOVE(TEMP r, expthen),
-			cf(t,f),
+	Ex (ESEQ(seq[cf(t,f),
+			LABEL t,
+			MOVE(TEMP r, expthen),
+			JUMP (NAME fin, [fin]),
 		    LABEL f,
 		    MOVE(TEMP r, expelse),
-		    LABEL t],
+		    LABEL fin],
 		    TEMP r))
 end
 (*COMPLETADO - DISTINTO A LA CARPETA*)
 
 fun ifThenElseExpUnit {test,then',else'} =
 let
+	val _ = print("entrando ifthenelse unit\n");
 	val cf = unCx test
 	val expthen = unNx then'
 	val expelse = unNx else'
-	val (t,f) = (newlabel(), newlabel())
+	val (t,f,fin) = (newlabel(),newlabel(),newlabel())
 in
 	Nx (seq[cf(t,f),
-		LABEL t,
-		expthen,
-		LABEL f,
-		expelse])
+			LABEL t,
+			expthen,
+			JUMP (NAME fin, [fin]),
+			LABEL f,
+			expelse,
+			JUMP (NAME fin, [fin]),
+			LABEL fin])
 		
 end
 
@@ -374,6 +380,7 @@ end
 
 fun binOpStrExp {left, oper, right} =
 	let 
+		val etiq = fromOperToRelOp oper
 		val l = unEx left
 		val r = unEx right
 		val (t,f) = (newlabel(),newlabel())
@@ -382,15 +389,14 @@ fun binOpStrExp {left, oper, right} =
 			PlusOp 		=> raise Fail "no deberia llegar"
 			| MinusOp 	=> raise Fail "no deberia llegar"
 			| TimesOp 	=> raise Fail "no deberia llegar"
-			| DivideOp 	=> raise Fail "no deberia llegar"	
-			| EqOp		=> 	Ex (ESEQ(seq[MOVE(TEMP rv, CONST 1),
-								CJUMP(EQ,CONST 0,externalCall("_stringcmp", [l , r]),t,f),
+			| DivideOp 	=> raise Fail "no deberia llegar"				
+			| _		=> Ex (ESEQ(seq[MOVE(TEMP rv, CONST 1),
+								CJUMP(etiq,CONST 0,(*CONST 0*)externalCall("_stringcmp", [l , r]),t,f),
 								LABEL f,
 								MOVE(TEMP rv, CONST 0),
 								LABEL t],
-								TEMP rv))
-			(* | _ => Ex (ESEQ (MOVE (externalCall("_stringcmp", [l , r]),TEMP rv),TEMP rv)) *)
-			| _ => (print "HOLAAAAA\n\n";Ex (ESEQ (MOVE (TEMP rv,externalCall("_stringcmp", [l , r])),TEMP rv)))
+								TEMP rv))	
+			(*| _ => raise Fail "No existe caso binOpStrExp"*)
 			
 	end
 end
