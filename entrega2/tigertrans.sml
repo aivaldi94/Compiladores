@@ -329,9 +329,7 @@ in
 			JUMP (NAME fin, [fin]),
 			LABEL f,
 			expelse,
-			JUMP (NAME fin, [fin]),
-			LABEL fin])
-		
+			LABEL fin])		
 end
 
 fun assignExp{var, exp} =
@@ -394,8 +392,10 @@ fun binOpStrExp {left, oper, right} =
 								CJUMP(etiq,CONST 0,(*CONST 0*)externalCall("_stringcmp", [l , r]),t,f),
 								LABEL f,
 								MOVE(TEMP rv, CONST 0),
-								LABEL t],
+								LABEL t
+								MOVE(TEMP rv, CONST 0)],
 								TEMP rv))	
+								
 			(*| _ => raise Fail "No existe caso binOpStrExp"*)
 			
 	end

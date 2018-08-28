@@ -315,8 +315,8 @@ struct
 				val ee1 = evalExp(e1)
 				val ee2 = evalExp(e2)
 				val b = case rop of
-					EQ => ee1=ee2 
-					| NE => ee1<>ee2
+					EQ => (print("Comparo por igual\n");ee1=ee2 )
+					| NE => (print("Comparo por distintos\n");ee1<>ee2)
 					| LT => ee1<ee2
 					| GT => ee1>ee2
 					| LE => ee1<=ee2
@@ -326,7 +326,7 @@ struct
 					| ULE => Word.fromInt(ee1)<=Word.fromInt(ee2)
 					| UGE => Word.fromInt(ee1)>=Word.fromInt(ee2)
 			in
-				if (b) then SOME lt else SOME lf
+				if (print("COMPARO:"^Bool.toString(b)^"\n");b) then (print("Va a la etiqueta true, que es "^lt^"\n");SOME lt) else (print("Va a la etiqueta false, que es "^lf^"\n");SOME lf)
 		end
 		| evalStm(SEQ(_,_)) = raise Fail("No canonizado\n")
 		| evalStm(LABEL _) = NONE

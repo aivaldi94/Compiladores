@@ -1,0 +1,220 @@
+HAY UNA EXTERNA LLAMADA print
+HAY UNA EXTERNA LLAMADA print
+entrando ifthenelse unit
+bien!
+Comienzo de ejecución...
+_tigermain:
+LABEL L11
+MOVE(
+ TEMP T0,
+ CONST 1)
+CJUMP(LT,
+ CONST 10,
+ CONST 20,
+ L1,L2)
+LABEL L2
+MOVE(
+ TEMP T0,
+ CONST 0)
+LABEL L1
+CJUMP(NE,
+ TEMP T0,
+ CONST 0,
+ L7,L8)
+LABEL L8
+EXP(
+ CALL(
+  NAME print,
+   NAME L6))
+LABEL L9
+MOVE(
+ TEMP RV,
+ CONST 0)
+JUMP( NAME L10)
+LABEL L7
+EXP(
+ CALL(
+  NAME print,
+   NAME L4))
+JUMP( NAME L9)
+LABEL L10
+Argumentoss: 
+TEMPS:
+FP -> ~1048576
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+LABEL L11
+****************
+TEMPS:
+FP -> ~1048576
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+MOVE(
+ TEMP T0,
+ CONST 1)
+****************
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+CJUMP(LT,
+ CONST 10,
+ CONST 20,
+ L1,L2)
+****************
+COMPARO:true
+Va a la etiqueta true, que es L1
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+LABEL L1
+****************
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+CJUMP(NE,
+ TEMP T0,
+ CONST 0,
+ L7,L8)
+****************
+Comparo por distintos
+COMPARO:true
+Va a la etiqueta true, que es L7
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+LABEL L7
+****************
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+EXP(
+ CALL(
+  NAME print,
+   NAME L4))
+****************
+30TEMPS:
+FP -> ~1048576
+T0 -> 1
+RV -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+JUMP( NAME L9)
+****************
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+RV -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+LABEL L9
+****************
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+RV -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+MOVE(
+ TEMP RV,
+ CONST 0)
+****************
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+RV -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+JUMP( NAME L10)
+****************
+TEMPS:
+FP -> ~1048576
+T0 -> 1
+RV -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+****************
+LABEL L10
+****************
+Fin de ejecución.
+yes!!
