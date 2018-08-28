@@ -392,8 +392,8 @@ fun binOpStrExp {left, oper, right} =
 								CJUMP(etiq,CONST 0,(*CONST 0*)externalCall("_stringcmp", [l , r]),t,f),
 								LABEL f,
 								MOVE(TEMP rv, CONST 0),
-								LABEL t
-								MOVE(TEMP rv, CONST 0)],
+								LABEL t(*,
+								MOVE(TEMP rv, CONST 1)*)],
 								TEMP rv))	
 								
 			(*| _ => raise Fail "No existe caso binOpStrExp"*)

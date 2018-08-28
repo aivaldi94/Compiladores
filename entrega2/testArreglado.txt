@@ -1,43 +1,53 @@
+ESTOY EN EXTERNALCALL
 HAY UNA EXTERNA LLAMADA print
 HAY UNA EXTERNA LLAMADA print
 entrando ifthenelse unit
 bien!
 Comienzo de ejecución...
 _tigermain:
+LABEL L13
+MOVE(
+ TEMP RV,
+ CONST 1)
+MOVE(
+ TEMP T0,
+ CALL(
+  NAME _stringcmp,
+   NAME L1,
+   NAME L2))
+CJUMP(EQ,
+ CONST 0,
+ TEMP T0,
+ L3,L4)
+LABEL L4
+MOVE(
+ TEMP RV,
+ CONST 0)
+LABEL L3
+MOVE(
+ TEMP RV,
+ CONST 1)
+CJUMP(NE,
+ TEMP RV,
+ CONST 0,
+ L9,L10)
+LABEL L10
+EXP(
+ CALL(
+  NAME print,
+   NAME L8))
 LABEL L11
 MOVE(
- TEMP T0,
- CONST 1)
-CJUMP(LT,
- CONST 10,
- CONST 20,
- L1,L2)
-LABEL L2
-MOVE(
- TEMP T0,
+ TEMP RV,
  CONST 0)
-LABEL L1
-CJUMP(NE,
- TEMP T0,
- CONST 0,
- L7,L8)
-LABEL L8
+JUMP( NAME L12)
+LABEL L9
 EXP(
  CALL(
   NAME print,
    NAME L6))
-LABEL L9
-MOVE(
- TEMP RV,
- CONST 0)
-JUMP( NAME L10)
-LABEL L7
-EXP(
- CALL(
-  NAME print,
-   NAME L4))
-JUMP( NAME L9)
-LABEL L10
+JUMP( NAME L11)
+LABEL L12
 Argumentoss: 
 TEMPS:
 FP -> ~1048576
@@ -48,8 +58,10 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
 ****************
-LABEL L11
+LABEL L13
 ****************
 TEMPS:
 FP -> ~1048576
@@ -60,14 +72,16 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
 ****************
 MOVE(
- TEMP T0,
+ TEMP RV,
  CONST 1)
 ****************
 TEMPS:
 FP -> ~1048576
-T0 -> 1
+RV -> 1
 MEM:
 0 -> 0
 4 -> 1
@@ -75,17 +89,46 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
 ****************
-CJUMP(LT,
- CONST 10,
- CONST 20,
- L1,L2)
+MOVE(
+ TEMP T0,
+ CALL(
+  NAME _stringcmp,
+   NAME L1,
+   NAME L2))
 ****************
+STRING COMPARE 1: e
+STRING COMPARE 2: e
+IGUALES
+IGUALES ORIG
+TEMPS:
+FP -> ~1048576
+RV -> 0
+T0 -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+24 -> 6
+28 -> 7
+****************
+CJUMP(EQ,
+ CONST 0,
+ TEMP T0,
+ L3,L4)
+****************
+Comparo por igual
 COMPARO:true
-Va a la etiqueta true, que es L1
+Va a la etiqueta true, que es L3
 TEMPS:
 FP -> ~1048576
-T0 -> 1
+RV -> 0
+T0 -> 0
 MEM:
 0 -> 0
 4 -> 1
@@ -93,12 +136,15 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
 ****************
-LABEL L1
+LABEL L3
 ****************
 TEMPS:
 FP -> ~1048576
-T0 -> 1
+RV -> 0
+T0 -> 0
 MEM:
 0 -> 0
 4 -> 1
@@ -106,18 +152,39 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
+****************
+MOVE(
+ TEMP RV,
+ CONST 1)
+****************
+TEMPS:
+FP -> ~1048576
+RV -> 1
+T0 -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+24 -> 6
+28 -> 7
 ****************
 CJUMP(NE,
- TEMP T0,
+ TEMP RV,
  CONST 0,
- L7,L8)
+ L9,L10)
 ****************
 Comparo por distintos
 COMPARO:true
-Va a la etiqueta true, que es L7
+Va a la etiqueta true, que es L9
 TEMPS:
 FP -> ~1048576
-T0 -> 1
+RV -> 1
+T0 -> 0
 MEM:
 0 -> 0
 4 -> 1
@@ -125,57 +192,15 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
-****************
-LABEL L7
-****************
-TEMPS:
-FP -> ~1048576
-T0 -> 1
-MEM:
-0 -> 0
-4 -> 1
-8 -> 2
-12 -> 3
-16 -> 4
-20 -> 5
-****************
-EXP(
- CALL(
-  NAME print,
-   NAME L4))
-****************
-30TEMPS:
-FP -> ~1048576
-T0 -> 1
-RV -> 0
-MEM:
-0 -> 0
-4 -> 1
-8 -> 2
-12 -> 3
-16 -> 4
-20 -> 5
-****************
-JUMP( NAME L9)
-****************
-TEMPS:
-FP -> ~1048576
-T0 -> 1
-RV -> 0
-MEM:
-0 -> 0
-4 -> 1
-8 -> 2
-12 -> 3
-16 -> 4
-20 -> 5
+24 -> 6
+28 -> 7
 ****************
 LABEL L9
 ****************
 TEMPS:
 FP -> ~1048576
-T0 -> 1
-RV -> 0
+RV -> 1
+T0 -> 0
 MEM:
 0 -> 0
 4 -> 1
@@ -183,6 +208,59 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
+****************
+EXP(
+ CALL(
+  NAME print,
+   NAME L6))
+****************
+VTEMPS:
+FP -> ~1048576
+RV -> 0
+T0 -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+24 -> 6
+28 -> 7
+****************
+JUMP( NAME L11)
+****************
+TEMPS:
+FP -> ~1048576
+RV -> 0
+T0 -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+24 -> 6
+28 -> 7
+****************
+LABEL L11
+****************
+TEMPS:
+FP -> ~1048576
+RV -> 0
+T0 -> 0
+MEM:
+0 -> 0
+4 -> 1
+8 -> 2
+12 -> 3
+16 -> 4
+20 -> 5
+24 -> 6
+28 -> 7
 ****************
 MOVE(
  TEMP RV,
@@ -190,8 +268,8 @@ MOVE(
 ****************
 TEMPS:
 FP -> ~1048576
-T0 -> 1
 RV -> 0
+T0 -> 0
 MEM:
 0 -> 0
 4 -> 1
@@ -199,13 +277,15 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
 ****************
-JUMP( NAME L10)
+JUMP( NAME L12)
 ****************
 TEMPS:
 FP -> ~1048576
-T0 -> 1
 RV -> 0
+T0 -> 0
 MEM:
 0 -> 0
 4 -> 1
@@ -213,8 +293,10 @@ MEM:
 12 -> 3
 16 -> 4
 20 -> 5
+24 -> 6
+28 -> 7
 ****************
-LABEL L10
+LABEL L12
 ****************
 Fin de ejecución.
 yes!!
