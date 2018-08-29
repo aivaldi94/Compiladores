@@ -204,8 +204,7 @@ end
 
 (* lev : tigertrans.level es el nivel en donde la función fue definida*)
 fun callExp(name,ext,isproc,lev : level, ls : exp list) = 
-let
-	val _ = if ext then print ("HAY UNA EXTERNA LLAMADA "^ name ^"\n") else () 
+let	
 	val dif = getActualLev() - levInt (lev)	
 	(* val _ = print ("LA DIFERENCIA DEL CALL A "^name^" ES "^Int.toString(dif)^"\n") *)
 	
@@ -317,7 +316,6 @@ end
 
 fun ifThenElseExpUnit {test,then',else'} =
 let
-	val _ = print("entrando ifthenelse unit\n");
 	val cf = unCx test
 	val expthen = unNx then'
 	val expelse = unNx else'
@@ -381,21 +379,20 @@ fun binOpStrExp {left, oper, right} =
 		val etiq = fromOperToRelOp oper
 		val l = unEx left
 		val r = unEx right
-		val (t,f) = (newlabel(),newlabel())
+		val (t,f,tmp) = (newlabel(),newlabel(),newtemp())
 	in
 		case oper of
 			PlusOp 		=> raise Fail "no deberia llegar"
 			| MinusOp 	=> raise Fail "no deberia llegar"
 			| TimesOp 	=> raise Fail "no deberia llegar"
 			| DivideOp 	=> raise Fail "no deberia llegar"				
-			| _		=> Ex (ESEQ(seq[MOVE(TEMP rv, CONST 1),
-								CJUMP(etiq,CONST 0,(*CONST 0*)externalCall("_stringcmp", [l , r]),t,f),
+			| _		=> Ex (ESEQ(seq[MOVE(TEMP tmp, CONST 1),
+								CJUMP(etiq,externalCall("_stringcmp", [l , r]),CONST 0,t,f),
 								LABEL f,
-								MOVE(TEMP rv, CONST 0),
-								LABEL t(*,
-								MOVE(TEMP rv, CONST 1)*)],
-								TEMP rv))	
-								
+								MOVE(TEMP tmp, CONST 0),
+								LABEL t],
+								TEMP tmp))	
+			
 			(*| _ => raise Fail "No existe caso binOpStrExp"*)
 			
 	end

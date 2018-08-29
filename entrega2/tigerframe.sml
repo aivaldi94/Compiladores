@@ -113,7 +113,7 @@ fun exp (InFrame k) e = MEM(BINOP(PLUS, getFrame e, CONST k))
 (*  | exp (InReg l) e = (print("Entro en temp "^l^"\n\n");TEMP l) *)
 	| exp (InReg l) e = (TEMP l)	
 
-fun externalCall(s, l) = (print("ESTOY EN EXTERNALCALL\n");CALL(NAME s, l))
+fun externalCall(s, l) = CALL(NAME s, l)
 
 fun procEntryExit1 (frame,body) = body
 end
