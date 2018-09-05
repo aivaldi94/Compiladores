@@ -41,23 +41,27 @@ val argregs = []
 val callersaves = []
 val calleesaves = []
 
+datatype access = InFrame of int | InReg of tigertemp.label
+
 type frame = {
 	name: string,
 	formals: bool list,
+	arguments: access list ref, (*Esto es una bolasa nuestra*)
 	locals: bool list,
 	actualArg: int ref,
 	actualLocal: int ref,
 	actualReg: int ref
 }
 type register = string
-datatype access = InFrame of int | InReg of tigertemp.label
+
 datatype frag = PROC of {body: tigertree.stm, frame: frame}
 	| STRING of tigertemp.label * string
 fun newFrame{name, formals} = {
 	name=name,
 	formals=formals,
+	arguments=ref [],
 	locals=[],
-	actualArg=ref argsInicial,
+	actualArg=ref argsInicial, (*Cantidad de veces que se llama a allocArg*)
 	actualLocal=ref localsInicial,
 	actualReg=ref regInicial
 }
@@ -69,22 +73,28 @@ fun string(l, s) = l^tigertemp.makeString(s)^"\n"
 fun getFormals(f: frame) = #formals f
 fun getLocals(f: frame) = #locals f
 
-(* Función que modificamos para que soporte el caso InReg *)
-fun formals({formals=f, ...}: frame) = 
+(* Función original*)
+(*fun formals({formals=f, ...}: frame) = 
 	let	fun aux(n, []) = []
 		| aux(n, h::t) = InFrame(n)::aux(n+argsGap, t)
 		(*| aux(n, false::t) = InReg(tigertemp.newtemp())::aux(n, t)*)
 	in aux(argsInicial, f) end
+*)
+
+(* El InFrame que se agrega al inicio corresponde al static link*)
+fun formals({arguments=ar, ...}: frame) = [InFrame (argsOffInicial)] @ !ar 
 
 fun maxRegFrame(f: frame) = !(#actualReg f)
 
 fun allocArg (f: frame) b = 
-	case b of
-	true =>
-		let	val ret = (!(#actualArg f)+argsOffInicial)*wSz
-			val _ = #actualArg f := !(#actualArg f)+1
-		in	InFrame ret end
-	| false => InReg(tigertemp.newtemp())
+	let val acc = 
+		(case b of
+		true =>
+			let	val ret = (!(#actualArg f)+argsOffInicial+1)*wSz
+				val _ = #actualArg f := !(#actualArg f)+1
+			in	InFrame ret end
+		| false => InReg(tigertemp.newtemp()))
+	in (#arguments f := !(#arguments f) @ [acc];acc) end
 	(* malloc *)
 
 fun allocLocal (f: frame) b = 
@@ -94,12 +104,14 @@ fun allocLocal (f: frame) b =
 		in	#actualLocal f:=(!(#actualLocal f)-1); ret end
 	| false => InReg(tigertemp.newtemp())
 
-(* Habría que verificar que esto ande correctamente *)	
+(* Habría que verificar que esto ande correctamente *)
+(* Para acceder a variables. ¿Siempre que accedo a variable serán hijas? *)	
 fun getFrame 0 = TEMP(fp)
 	| getFrame n = MEM(BINOP(PLUS, (getFrame (n-1)), CONST fpPrev))
 
 fun exp (InFrame k) e = MEM(BINOP(PLUS, getFrame e, CONST k))
-  | exp (InReg l) e = (print("Entro en temp "^l^"\n\n");TEMP l)
+(*  | exp (InReg l) e = (print("Entro en temp "^l^"\n\n");TEMP l) *)
+	| exp (InReg l) e = (TEMP l)	
 
 fun externalCall(s, l) = CALL(NAME s, l)
 

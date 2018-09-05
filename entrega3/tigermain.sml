@@ -2,6 +2,7 @@ open tigerlex
 open tigergrm
 open tigerescap
 open tigerseman
+open tigermunch
 open BasicIO Nonstdio
 
 fun lexstream(is: instream) =
@@ -32,19 +33,6 @@ fun main(args) =
 		
 		val _ = transProg(expr)
 		val frags = tigertrans.getResult() : tigerframe.frag list
-		(*
-		fun makelist [] = ([],[])
-			| makelist (tigerframe.PROC {body, frame} :: l) = 
-			let 
-				val (la,lb) = makelist l 
-			in (([body],frame) :: la, lb)
-			end
-			| makelist (tigerframe.STRING (lab,s) :: l) = 
-			let
-				val (la,lb) = makelist l
-			in (la, (lab,s) :: lb)
-			end
-		*)
 		val canonizar = tigercanon.traceSchedule o tigercanon.basicBlocks o tigercanon.linearize
 		fun makelist [] = ([],[])
 			| makelist (tigerframe.PROC {body, frame} :: l) = 
@@ -57,12 +45,10 @@ fun main(args) =
 				val (la,lb) = makelist l
 			in (la, (lab,s) :: lb)
 			end
-
+		(* en b tenemos la lista de PROCS*)
 		val (b,c) = makelist frags
-		val _ = print ("#[PROC]=")
-		val _ = print (Int.toString (length b))
-		val _ = print ("\n")
-		val _ = if inter then (tigerinterp.inter true b c) else ()
+		val _ = map (fn (s,f) => tigermunch.codeGen f (fst s)) b
+		val _ = if inter then (tigerinterp.inter false b c) else ()
 		in 
 		print "yes!!\n"
 	end	handle Fail s => print("Fail: "^s^"\n")

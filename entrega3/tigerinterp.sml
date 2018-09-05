@@ -77,14 +77,13 @@ struct
 			fun loadLabel lab = case tabBusca(lab, !tabLabels) of
 				SOME a => a
 				| NONE => raise Fail("Label no encontrado: "^lab^"\n")
-			fun storeLabel lab addr = tabLabels := tabInserta(lab, addr, !tabLabels)
-			val listLab = tabAList (!tabLabels)
-			(* val _ = if (length listLab) = 0 then print ("#[Labs] = 0\n") else print ("#[Labs] != 0\n") *)
+			fun storeLabel lab addr = tabLabels := tabRInserta(lab, addr, !tabLabels)
+			fun printLabel() = List.app (fn (s,_) => print (s^"\n")) (tabAList (!tabLabels))			
 		end
 
 		(* Guardado de strings *)
 		local
-			val stringArray = array(10, "")
+			val stringArray = array(10, "") 
 			val next = ref 0;
 		in
 			fun loadString addr = sub(stringArray, loadMem addr)
@@ -93,13 +92,20 @@ struct
 					val addr = getNewMem(1)
 					val idx = !next;
 					val _ = next := !next + 1;
-				in
-					(update(stringArray, idx, str); storeMem addr idx; addr)
+				in					
+					(update(stringArray, idx, str) (*;print("EL STRING AGREGADO "^str^"\n")*); storeMem addr idx; addr)
 				end
 		end
-		val _ = List.map (fn (lab, str) => storeLabel lab (storeString str)) stringfracs
-
+		val listLab = List.map (fn (lab, str) => ((* print("EL STRING AGREGADO A TABLABEL COMO "^lab^" ES "^str^"\n"); *)storeLabel lab (storeString str))) (stringfracs : (string * string) list)
+		(*
+		val _ = print("IMPRIMIENDO FUNFRACS \n\n")				
+		val _ = printLabel()		
+		*)
 		(* Funciones de biblioteca *)
+		fun arregloBarraN [] = []
+			| arregloBarraN (#"\\"::(#"x"::(#"0"::(#"a"::xs)))) = #"\n"::arregloBarraN xs
+			| arregloBarraN (x::xs) = x::arregloBarraN xs
+
 		fun initArray(siz::init::rest) =
 		let
 			val mem = getNewMem(siz+1)
@@ -112,8 +118,12 @@ struct
 
 		fun checkIndexArray(arr::idx::rest) =
 		let
-			val siz = loadMem (arr-tigerframe.wSz)
-			val _ = print ("SIZE"^Int.toString(siz)^"\n")
+			val siz = loadMem (arr-tigerframe.wSz)			
+			(*
+			val _ = print ("\nSIZE"^Int.toString(siz)^"\n") 
+			val _ = print("arr "^Int.toString(arr)^"\n")
+			val _ = print("idx "^Int.toString(idx)^"\n")
+			*)
 			val _ = if (idx>=siz orelse idx<0) then raise Fail("Índice fuera de rango\n") else ()
 		in
 			0
@@ -141,8 +151,8 @@ struct
 
 		fun stringCompare(strPtr1::strPtr2::rest) =
 		let
-			val str1 = loadString strPtr1
-			val str2 = loadString strPtr2
+			val str1 = implode(arregloBarraN(explode(loadString strPtr1)))
+			val str2 = implode(arregloBarraN(explode(loadString strPtr2)))
 			val res = String.compare(str1, str2)
 		in
 			case res of
@@ -151,11 +161,12 @@ struct
 				| GREATER => 1
 		end
 		| stringCompare _ = raise Fail("No debería pasar (stringCompare)")
-
+			
 		fun printFun(strPtr::rest) =
 		let
-			val str = loadString strPtr
-			val _ = print(str)
+			val str1 = loadString strPtr	
+			val str = arregloBarraN (explode(str1))
+			val _ = print(implode(str))
 		in
 			0
 		end
@@ -167,15 +178,17 @@ struct
 		let
 			val str = loadString strPtr
 			val ch = hd(explode(str))
+			(* val _ = print("ord") *)
 		in
-			ord(ch)
+			ord ch
 		end
 		| ordFun _ = raise Fail("No debería pasar (ordFun)")
 
 		fun chrFun(i::rest) =
 		let
-			val ch = chr(i)
-			val str = implode([ch])
+			val ch = chr(i) (* chr toma un entero y lo pasa a char *)
+			val str = implode([ch]) (* implode convierte lista de chars a un string *)
+			(* val _ = print("chr") *)
 		in
 			storeString str
 		end
@@ -213,6 +226,13 @@ struct
 		| notFun _ = raise Fail("No debería pasar (notFun)")
 
 		fun getstrFun(args) = 
+			let val c = TextIO.input1 TextIO.stdIn
+			in
+				storeString(case c of
+				SOME e => str e
+				| _ => "")
+			end
+	(*
 		let
 			val str = ((TextIO.inputLine : TextIO.instream -> string option) (TextIO.stdIn : TextIO.instream)) : string option
 		in
@@ -220,7 +240,7 @@ struct
 			  NONE => raise Fail("El string fue nulo")
 			| SOME s => storeString (s : string)
 		end
-
+*)
 		val tabLib: (tigertemp.label, int list -> int) Tabla =
 			tabInserList(tabNueva(),
 				[("_initArray", initArray),
@@ -236,7 +256,7 @@ struct
 				("substring", substringFun),
 				("concat", concatFun),
 				("not", notFun),
-				("getstr", getstrFun)])
+				("getchar", getstrFun)])
 
 		(* Evalúa una expresión, devuelve el valor (entero) *)
 		fun evalExp(CONST t) = t
@@ -271,7 +291,7 @@ struct
 					NAME l => l
 					| _ => raise Fail("CALL a otra cosa (no implemetado)\n")
 				val eargs = List.map evalExp args
-				val _ = print ("Primer elemento: "^Int.toString(hd(eargs)))
+				(* val _ = print ("Primer elemento: "^Int.toString(hd(eargs))) *)
 				(*Si lab es de biblioteca, usar la función de la tabla*)
 				val rv = case tabBusca(lab, tabLib) of
 					SOME f => f(eargs)
@@ -298,7 +318,7 @@ struct
 				val ee1 = evalExp(e1)
 				val ee2 = evalExp(e2)
 				val b = case rop of
-					EQ => ee1=ee2
+					EQ => ee1=ee2 
 					| NE => ee1<>ee2
 					| LT => ee1<ee2
 					| GT => ee1>ee2
@@ -309,7 +329,7 @@ struct
 					| ULE => Word.fromInt(ee1)<=Word.fromInt(ee2)
 					| UGE => Word.fromInt(ee1)>=Word.fromInt(ee2)
 			in
-				if (b) then SOME lt else SOME lf
+				if b then SOME lt else SOME lf
 		end
 		| evalStm(SEQ(_,_)) = raise Fail("No canonizado\n")
 		| evalStm(LABEL _) = NONE
@@ -320,14 +340,16 @@ struct
 				val ffrac = List.filter (fn (body, frame) => (tigerframe.name(frame)=f)) funfracs
 				val _ = if (List.length(ffrac)<>1) then raise Fail ("No se encuentra la función, o repetida: "^f^"\n") else ()
 				val [(body, frame)] = ffrac
-				(* Mostrar qué se está haciendo, si showdebug *)
-				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentos: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()
+				(* Mostrar qué se está haciendo, si showdebug *)	
+				
+				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentoss: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()
 
 				fun execute l =
 				let
 					fun exe [] = ()
 					| exe (x::xs) =
 						let
+						(* (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n"))*)
 							val _ = if showdebug then (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n")) else ()
 						in
 							case evalStm x of
@@ -355,9 +377,12 @@ struct
 											val _ = print ("\n")
 										  in printLista xs end				
 				(* Mover fp lo suficiente *)
-				val fpPrev = loadTemp tigerframe.fp
-				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)	
-							
+
+				(* Recupero la dirección del fp actual*)
+				val fpPrev : int = loadTemp tigerframe.fp
+				(* Actualizo el fp a una dirección mas abajo. Estimo que cada fp tiene una capacidad de 1024*1024 *)
+				val _ = storeTemp tigerframe.fp (fpPrev-1024*1024)
+
 				(* Poner argumentos donde la función los espera *)
 				(* La función original decía (TEMP (tigerframe.fp : tigertemp.temp)). Lo cambiamos a 0*)
 				
@@ -365,12 +390,13 @@ struct
 				val forlist = tigerframe.formals2 frame
 				val _ = if  length(forlist) = 2 then print(Bool.toString(List.nth(forlist,0))) else ()
 				*)
-				(* Veamos que onda esto: *)
+				(* Veamos que onda esto: 
 				val forlist = tigerframe.getFormals frame
 				val _ = print ("NOMBRE FRAME: "^(tigerframe.name frame)^"\n")
 				val _ = print ("LONG FORMALS FRAME: "^Int.toString(length(tigerframe.getFormals frame))^"\n")
 				val _ = print ("ELEMENTO FRAME: "^Bool.toString(List.nth(forlist,0))^"\n")
 				val _ = print ("LONG LOCALS FRAME: "^Int.toString(length(tigerframe.getLocals frame))^"\n")
+				*)
 				val formals = map (fn x => tigerframe.exp x 0) (tigerframe.formals frame)
 				val formalsValues = ListPair.zip(formals, args)	
 
@@ -394,9 +420,10 @@ struct
 				(* Restaurar temporarios *)
 				val _ = restoreTemps temps
 				val _ = storeTemp tigerframe.rv rv
-				
+				(*
 				val _ = print ("temporarios\n")
 				val _ = printLista (map (fn (a,b) => a) (getTemps()))
+				*)
 			in
 				rv
 			end

@@ -85,7 +85,7 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 		| trexp(StringExp(s, _)) = {exp=stringExp(s), ty=TString}
 		| trexp(CallExp({func, args}, nl)) = 	
 			let 
-				val (ts,t,lab,lev,ext) = case tabBusca(func, venv) of
+				val (ts,t,lab,lev : tigertrans.level,ext) = case tabBusca(func, venv) of
 							NONE => error("Funcion no existente",nl)
 							| SOME (VIntro _) => error("No es funcion 1",nl)
 							| SOME (Var _) => error("No es funcion 2",nl)
@@ -424,7 +424,7 @@ datatype EnvEntry =
 			fun aux4 ([] : (recfun * venv * int) list) : Tipo list = []
 			     | aux4 (({body = b, name=nom, ... }, venv, pos) :: rvs) = let
 							(* val b = (#body (hd lf)) *) (*Tiene tipo Exp*)
-							val lvl = case tabBusca (nom,venv) of
+							val lvl = case tabBusca (nom,env1) of
 									NONE => error("Agregando argumentos de una función que no está en el entorno",pos)
 								  | SOME (VIntro _) => error("No es funcion 5", pos) 
 								  | SOME (Var _) =>	error("No es funcion 6", pos)
