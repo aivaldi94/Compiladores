@@ -47,7 +47,7 @@ fun main(args) =
 			end
 		(* en b tenemos la lista de PROCS*)
 		val (b,c) = makelist frags
-		val _ = map (fn (s,f) => tigermunch.codeGen f (fst s)) b
+		val _ = map (fn (s,f) => tigermunch.codeGen f (hd s)) b
 		val _ = if inter then (tigerinterp.inter false b c) else ()
 		in 
 		print "yes!!\n"
