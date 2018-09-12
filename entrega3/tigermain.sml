@@ -47,26 +47,14 @@ fun main(args) =
 			end
 		(* en b tenemos la lista de PROCS*)
 		val (b,c) = makelist frags
-		(* FUNCION QUE IMPRIME EL ASSEM DE INSTR *)
+		
 		fun fuAux f = case f of 
 					tigerassem.OPER {assem=a,...} => a
 					| tigerassem.LABEL {assem=a,...} => a
 					| tigerassem.MOVE {assem=a,...} => a
+		val _ = print("CODEGEN\n")				
+		val _ = map (fn (i) => print((fuAux i) ^ "\n")) (List.concat (map (fn (s,f) => List.concat((map (fn (ss) => tigermunch.codeGen f ss) s))) b))
 		
-		(* FIN FUNCION QUE IMPRIME EL ASSEM DE INSTR *)
-		val _ = print("CODEGEN\n");
-		(*val _ = map (fn (s,f) => tigermunch.codeGen f (hd s)) b*)
-		(*val _ = map (fn (i) => print((fuAux i) ^ "\n")) (List.concat (map (fn (s,f) => tigermunch.codeGen f (hd s)) b))
-		 SEGUN CONCLUSIONES QUE SAQUE HACIENDO PRINTS, LA UNICO QUE SE GENERA EN LA LISTA ES LO DEL LABEL. LA LONG ES 1 
-		TIENE SENTIDO PORQUE TOMAMOS EL HEAD NOMAS*)		
-		(*val _ = map (fn (i) => print((fuAux i) ^ "\n")) (List.concat (map (fn (s,f) => List.concat((map (fn (ss) => tigermunch.codeGen f ss) s))) b))*)
-		(*
-		fun auxi ([],f) = []
-			|auxi (x::xs,f) = (map fuAux (tigermunch.codeGen f x)) @ (auxi (xs,f))
-		val lista = map auxi b
-		val lista2 =List.concat(lista)
-		val _ = map print lista2
-		*)
 		val _ = if inter then (tigerinterp.inter true b c) else ()
 		in 
 		print "yes!!\n"
