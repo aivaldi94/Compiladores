@@ -24,6 +24,12 @@ open tigertree
 val fp = "FP"				(* frame pointer *)
 val sp = "SP"				(* stack pointer *)
 val rv = "RV"				(* return value  *)
+val rdi ="RDI"
+val rsi = "RSI"
+val rdx = "RDX"
+val rcx = "RCX"
+val r8 = "R8"
+val r9 = "R9"
 val ov = "OV"				(* overflow value (edx en el 386) *)
 val wSz = 4					(* word size in bytes *)
 val log2WSz = 2				(* base two logarithm of word size in bytes *)
