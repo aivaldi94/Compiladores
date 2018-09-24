@@ -22,13 +22,13 @@ fun getActualLev() = !actualLevel
 fun levInt{parent = _,frame = _,levelInt = l}  = l
 
 val outermost: level = {parent=NONE,
-	frame=newFrame{name="_tigermain", formals=[]}, levelInt=getActualLev()}
+	frame=newFrame{name="_tigermain", nameViejo="_tigermain",formals=[]}, levelInt=getActualLev()}
 
 (* Según página 142 se debe agregar un true correspondiente al static link*)
-fun newLevel{parent={parent, frame, levelInt}, name, formals} =
+fun newLevel{parent={parent, frame, levelInt}, name,nameViejo, formals} =
 	{
 	parent=SOME frame,
-	frame=newFrame{name=name, formals=true::formals},
+	frame=newFrame{name=name, nameViejo=nameViejo,formals=true::formals},
 	levelInt=levelInt+1}
 
 fun allocArg{parent, frame, levelInt} b = tigerframe.allocArg frame b

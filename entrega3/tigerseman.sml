@@ -28,7 +28,7 @@ val tab_vars : (string, EnvEntry) Tabla = tabInserList(
 		formals=[TString], result=TUnit, extern=true}),
 	("flush", Func{level=topLevel(), label="flush",
 		formals=[], result=TUnit, extern=true}),
-	("getchar", Func{level=topLevel(), label="getstr",
+	("getchar", Func{level=topLevel(), label="getchar",
 		formals=[], result=TString, extern=true}),
 	("ord", Func{level=topLevel(), label="ord",
 		formals=[TString], result=TInt, extern=true}),
@@ -95,8 +95,8 @@ fun transExp((venv, tenv, levNest) : ( venv * tenv * tigertrans.level)) : (tiger
 				val argsExp = map (fn x => #exp (trexp x)) args : (tigertrans.exp list)			
 			in
 				case t of
-					TUnit => if eqList m then {exp=callExp(func,ext,true,lev,argsExp), ty= t} else error("Tipos erroneos",nl)
-				    | _ => if eqList m then {exp=callExp(func,ext,false,lev,argsExp), ty= t} else error("Tipos erroneos",nl) 
+					TUnit => if eqList m then {exp=callExp(lab,ext,true,lev,argsExp), ty= t} else error("Tipos erroneos",nl)
+				    | _ => if eqList m then {exp=callExp(lab,ext,false,lev,argsExp), ty= t} else error("Tipos erroneos",nl) 
 			end
 		| trexp(OpExp({left, oper=EqOp, right}, nl)) =
 			let 
@@ -384,8 +384,9 @@ datatype EnvEntry =
 		    	  let
 					val res = decideResult(r, n)
 					val form = aux0 (p, n)
-					val nlevel = tigertrans.newLevel {parent = levNest, name = nom,formals = f}
-					val lab = tigertrans.generateUniqueLab()
+					val lab = if nom = "_tigermain" then "_tigermain" else tigertrans.generateUniqueLab()
+					val nlevel = tigertrans.newLevel {parent = levNest, name = lab,nameViejo=nom,formals = f}					
+					val _ = print ("Agregando.."^nom^"como "^lab^"\n")
 					(* PREGUNTA: ¿por qué inserto la función con nom en lugar de hacerlo con lab que es único? *)
 		    	  in insertFuns(rns, fs, tabRInserta (nom, Func {level = nlevel, label = lab, formals = form, result = res, extern = false}, venv))
 		    	  end

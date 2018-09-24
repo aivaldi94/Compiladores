@@ -208,6 +208,7 @@ long not(long i)
 {
     return !i;
 }
+/* OJO que quizas hay que modificar el main por getchr*/
 string *getstr()
 {
     int i = getc(stdin);

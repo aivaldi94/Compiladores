@@ -33,7 +33,7 @@ let
 												        emit (OPER {assem="movl %'s0, (%'s1)\n", src=[t,munchExp e1], dst=[],jump=NONE}))
 												   end
 			| tigertree.MOVE (TEMP t, CALL(NAME e,args)) => (munchArgs (0,args); (emit (OPER {assem="CALL "^e^"\n",src=[],dst=[],jump=NONE})); 
-														     emit (OPER {assem = "movl %rax, %'d0\n",src=[], dst= [munchExp (TEMP t)], jump = NONE}))							   
+														     emit (OPER {assem = "movl %'d0, %rax\n",src=[], dst= [munchExp (TEMP t)], jump = NONE}))							   
 			| tigertree.MOVE (MEM(e1),e2) => emit (OPER {assem = "movl %'s1, (%'s0)\n",src=[munchExp e1, munchExp e2], dst= [], jump = NONE})
 			| tigertree.MOVE (TEMP i,e2) => emit (OPER {assem="movl %'s0, %'d0\n",src=[munchExp e2],dst=[i],jump=NONE})
 			| JUMP (NAME n, l) =>  emit (OPER {assem="jmp "^n^"\n",src=[],dst=[],jump=SOME l})
@@ -178,12 +178,12 @@ let
 						| BINOP(PLUS,CONST i,CONST j) => result (fn r => (emit (OPER{assem="movl "^ITS(i+j)^", %'d0\n",src=[], dst=[r], jump=NONE})))
 						| BINOP(MUL,CONST i,CONST j) => result (fn r => (emit (OPER{assem="movl "^ ITS(i*j)^", %'d0\n",src=[], dst=[r], jump=NONE})))
 						| BINOP(MINUS,CONST i,CONST j) => result (fn r => (emit (OPER{assem="movl "^ITS(i-j)^", %'d0\n",src=[], dst=[r], jump=NONE})))
-						| BINOP(PLUS,TEMP t,e1) => result (fn r=> (emit (OPER {assem = "movl t, %'d0\n",src=[t],dst=[r],jump=NONE});
+						| BINOP(PLUS,TEMP t,e1) => result (fn r=> (emit (OPER {assem = "movl "^t^", %'d0\n",src=[t],dst=[r],jump=NONE});
 						                                          (emit (OPER {assem ="addl %'s0, %'d0\n",src=[munchExp e1], dst=[r],jump=NONE}))))
-						| BINOP(MUL,TEMP t,e1) => result (fn r=> (emit (OPER {assem = "movl t, %'d0\n",src=[t],dst=[r],jump=NONE});
+						| BINOP(MUL,TEMP t,e1) => result (fn r=> (emit (OPER {assem = "movl "^t^", %'d0\n",src=[t],dst=[r],jump=NONE});
 						                                         (emit (OPER{assem="mul %'s0, %'d0\n",src=[munchExp e1], dst=[r],jump=NONE}))))		 
 						| BINOP(PLUS,e1, TEMP t) => result (fn r=> (emit (OPER{assem="add %'s0, %'d0\n",src=[munchExp e1], dst=[r],jump=NONE});
-						                                           (emit (OPER {assem = "movl t, %'d0\n",src=[t],dst=[r],jump=NONE}))))		 
+						                                           (emit (OPER {assem = "movl "^t^", %'d0\n",src=[t],dst=[r],jump=NONE}))))		 
 						| MEM (CONST i) => result (fn r => emit (OPER {assem="movl ($"^ITS(i)^"), %'d0\n",src=[],dst=[r],jump=NONE}))
 						| MEM (e1) => result(fn r => emit(OPER {assem="movl (%'s0), %'d0\n",src=[munchExp e1], dst=[r],jump=NONE}))	
 						| _ => result (fn r => emit (OPER {assem = "Falta\n",src=[],dst=[],jump=NONE}))

@@ -51,6 +51,7 @@ datatype access = InFrame of int | InReg of tigertemp.label
 
 type frame = {
 	name: string,
+	nameViejo: string,
 	formals: bool list,
 	arguments: access list ref, (*Esto es una bolasa nuestra*)
 	locals: bool list,
@@ -62,8 +63,9 @@ type register = string
 
 datatype frag = PROC of {body: tigertree.stm, frame: frame}
 	| STRING of tigertemp.label * string
-fun newFrame{name, formals} = {
+fun newFrame{name, nameViejo,formals} = {
 	name=name,
+	nameViejo=nameViejo,
 	formals=formals,
 	arguments=ref [],
 	locals=[],
@@ -72,6 +74,7 @@ fun newFrame{name, formals} = {
 	actualReg=ref regInicial
 }
 fun name(f: frame) = #name f
+fun nameViejo(f: frame) = #nameViejo f
 (* Representación de Tiger de un string
    "3dia\n"*)
 fun string(l, s) = l^tigertemp.makeString(s)^"\n"
