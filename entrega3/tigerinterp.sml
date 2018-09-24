@@ -36,9 +36,9 @@ struct
 			fun printMem () =
 			let
 				val ls = tabAList(!tabMem)
-				fun p (a,b) = (print(Int.toString(a)); print(" -> "); print(Int.toString(!b)); print("\n"))
+				(*fun p (a,b) = (print(Int.toString(a)); print(" -> "); print(Int.toString(!b)); print("\n"))*)
 			in
-				(print("MEM:\n"); List.app p ls)
+				()(*(print("MEM:\n"); List.app p ls)*)
 			end
 			val loadTemp = load tabTemps
 			val storeTemp = store tabTemps
@@ -54,7 +54,7 @@ struct
 				val ls = tabAList(!tabTemps)
 				fun p (a,b) = (print(a); print(" -> "); print(Int.toString(!b)); print("\n"))
 			in				
-				(print("TEMPS:\n"); List.app p ls)	
+				()(*(print("TEMPS:\n"); List.app p ls)*)
 			end
 		end
 
@@ -342,15 +342,15 @@ struct
 				val [(body, frame)] = ffrac
 				(* Mostrar qué se está haciendo, si showdebug *)	
 				
-				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentoss: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()
-
+				(*val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body; print("Argumentoss: "); List.app (fn n => (print(Int.toString(n)); print("  "))) args; print("\n")) else ()*)
+				val _ = if showdebug then (print((tigerframe.name frame)^":\n");List.app (print o tigerit.tree) body) else ()
 				fun execute l =
 				let
 					fun exe [] = ()
 					| exe (x::xs) =
 						let
-						(* (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n"))*)
-							val _ = if showdebug then (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n")) else ()
+							(*val _ = if showdebug then (printTemps(); printMem(); print("****************\n"); print(tigerit.tree(x)); print("****************\n")) else ()*)
+							val _ = ()
 						in
 							case evalStm x of
 								SOME lab =>

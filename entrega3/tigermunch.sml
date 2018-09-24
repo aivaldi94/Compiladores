@@ -96,7 +96,7 @@ let
 			| LABEL lab => emit(tigerassem.LABEL {assem=lab^":\n",lab=lab})
 			| EXP (CALL (NAME n,args)) => (munchArgs(0,args);(emit (OPER {assem="call "^n^"\n",src=[],dst=[],jump=NONE})))
 			| EXP (CALL (e,args)) => raise Fail "No deberia pasar CALL\n"
-			| _ => emit (OPER {assem = "Falta\n",src=[],dst=[],jump=NONE})
+			| _ => emit (OPER {assem = "Falta munchStm\n",src=[],dst=[],jump=NONE})
 	(*
 	fun munchStm ((SEQ (a,b)) :tigertree.stm) : unit = (munchStm a; munchStm b)
 		(*| munchStm (tigertree.MOVE(MEM(BINOP(PLUS, e1, CONST i)),e2)) = emit(OPER {assem="STORE M[´s0+"^ Int.toString(i) ^ "] <- 's1\n",src=[munchExp e1, munchExp e2],dst=[],jump=NONE})
@@ -186,7 +186,7 @@ let
 						                                           (emit (OPER {assem = "movl "^t^", %'d0\n",src=[t],dst=[r],jump=NONE}))))		 
 						| MEM (CONST i) => result (fn r => emit (OPER {assem="movl ($"^ITS(i)^"), %'d0\n",src=[],dst=[r],jump=NONE}))
 						| MEM (e1) => result(fn r => emit(OPER {assem="movl (%'s0), %'d0\n",src=[munchExp e1], dst=[r],jump=NONE}))	
-						| _ => result (fn r => emit (OPER {assem = "Falta\n",src=[],dst=[],jump=NONE}))
+						| _ => result (fn r => emit (OPER {assem = "Falta munchExp\n",src=[],dst=[],jump=NONE}))
 		     (*
 	and munchExp (CONST i) = result (fn r => emit (OPER {assem = "MOV %d0,"^ Int.toString(i) ^ "\n",src=[],dst=[r],jump=NONE})) (*Improblable que entre *)
 		| munchExp (TEMP t) = t
@@ -208,15 +208,18 @@ let
 		| munchExp (_) = (result (fn r => emit (OPER {assem = "Falta\n",src=[],dst=[],jump=NONE})))
 		*)
 	and munchArgs ((_,[]) : (int * exp list)) : unit = ()
-		| munchArgs (n,(TEMP x::xs)) = ((if (n<6) then emit (OPER {assem = "movl %"^(natToReg n)^", 's0\n",src=[munchExp (TEMP x)],dst=[natToReg n],jump=NONE}) 
-											else emit (OPER {assem = "pushl 's0\n",src=[munchExp (TEMP x)],dst=[],jump=NONE})); munchArgs(n+1,xs))
-		| munchArgs (n,(CONST i::xs)) = ((if (n<6) then emit (OPER {assem = "movl %"^(natToReg n)^", "^ITS(i)^"\n",src=[],dst=[natToReg n],jump=NONE}) 
-											else emit (OPER {assem = "pushl $"^ITS(i)^"\n",src=[],dst=[],jump=NONE})); munchArgs(n+1,xs))
-		| munchArgs (n,(NAME l::xs)) = ((if (n<6) then emit (OPER {assem = "movl %"^(natToReg n)^", "^l^"\n",src=[],dst=[natToReg n],jump=NONE}) 
-											else emit (OPER {assem = "pushl $"^l^"\n",src=[],dst=[],jump=NONE})); munchArgs(n+1,xs))
-		| munchArgs (n,(MEM(CONST i))::xs) = ((if (n<6) then emit (OPER {assem = "movl %"^(natToReg n)^", "^ITS(i)^"\n",src=[],dst=[natToReg n],jump=NONE}) 
-											else emit (OPER {assem = "pushl $"^ITS(i)^"\n",src=[],dst=[],jump=NONE})); munchArgs(n+1,xs))
-		| munchArgs _ = emit (OPER {assem = "Falta\n",src=[],dst=[],jump=NONE})
+		| munchArgs (n,((TEMP x)::xs)) 		= ((if (n<6) then emit (OPER {assem = "movl %'s0, "^(natToReg n)^"\n",src=[munchExp (TEMP x)],dst=[natToReg n],jump=NONE}) 
+														 else emit (OPER {assem = "pushl %'s0\n",src=[munchExp (TEMP x)],dst=[],jump=NONE})); munchArgs(n+1,xs))
+		| munchArgs (n,((CONST i)::xs)) 		= ((if (n<6) then emit (OPER {assem = "movl %"^ITS(i)^", "^(natToReg n)^"\n",src=[],dst=[natToReg n],jump=NONE}) 
+														 else emit (OPER {assem = "pushl $"^ITS(i)^"\n",src=[],dst=[],jump=NONE})); munchArgs(n+1,xs))
+		| munchArgs (n,((NAME l)::xs)) 		= ((if (n<6) then emit (OPER {assem = "movl %"^l^", "^(natToReg n)^"\n",src=[],dst=[natToReg n],jump=NONE}) 
+														 else emit (OPER {assem = "pushl $"^l^"\n",src=[],dst=[],jump=NONE})); munchArgs(n+1,xs))
+		| munchArgs (n,(MEM(CONST i))::xs) 	= ((if (n<6) then emit (OPER {assem = "movl %"^ITS(i)^", "^(natToReg n)^"\n",src=[],dst=[natToReg n],jump=NONE}) 
+														 else emit (OPER {assem = "pushl $"^ITS(i)^"\n",src=[],dst=[],jump=NONE})); munchArgs(n+1,xs))										
+		| munchArgs (n,(MEM e)::xs) 				= ((if (n<6) then emit (OPER {assem = "movl (%'s0), "^(natToReg n)^"\n",src=[munchExp e],dst=[natToReg n],jump=NONE}) 
+										                 else emit (OPER {assem = "pushl %'s0\n",src=[munchExp e],dst=[],jump=NONE})); munchArgs(n+1,xs))
+		| munchArgs (_,_) 					= emit (OPER {assem = "Falta munchArgs\n",src=[],dst=[],jump=NONE}) (*agregar mems*)
+		
 in 
 	(munchStm stm; List.rev (!ilist))
 end
